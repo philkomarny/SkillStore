@@ -107,14 +107,14 @@ export default function ArchitecturePage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-white rounded-xl border border-blue-200 p-5 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
-                  <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
-                    <svg className="h-5 w-5 text-white" viewBox="0 0 76 65" fill="currentColor">
-                      <path d="M37.5274 0L75.0548 65H0L37.5274 0Z" />
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
                     </svg>
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-gray-900">Vercel</p>
-                    <p className="text-[11px] text-gray-500">Web Catalog</p>
+                    <p className="text-sm font-semibold text-gray-900">Web Catalog</p>
+                    <p className="text-[11px] text-gray-500">skillstore.app</p>
                   </div>
                 </div>
                 <div className="space-y-1.5">
@@ -124,7 +124,7 @@ export default function ArchitecturePage() {
                   <Feature text="Copy install instructions" />
                 </div>
                 <div className="mt-3 bg-blue-50 rounded-lg px-3 py-2">
-                  <p className="text-[10px] text-blue-600 font-mono">skillstore-eta.vercel.app</p>
+                  <p className="text-[10px] text-blue-600 font-mono">skillstore.app</p>
                 </div>
               </div>
 
