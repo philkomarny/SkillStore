@@ -11,40 +11,42 @@ const RAW_BASE = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/$
 const REPO_ROOT = path.resolve(process.cwd(), "..");
 
 /**
- * Read marketplace.json — local filesystem at build time, GitHub API at runtime.
+ * Read marketplace.json — GitHub API first, local filesystem fallback for dev.
  */
 export async function getMarketplaceJson() {
-  // Try local filesystem first (works during build and dev)
+  // Try GitHub raw content first (works on Vercel and anywhere with network)
   try {
-    const localPath = path.join(REPO_ROOT, ".claude-plugin", "marketplace.json");
-    const data = await fs.readFile(localPath, "utf-8");
-    return JSON.parse(data);
-  } catch {
-    // Fallback to GitHub raw content (works at runtime on Vercel)
     const res = await fetch(`${RAW_BASE}/.claude-plugin/marketplace.json`, {
       next: { revalidate: 60 },
     });
-    if (!res.ok) {
-      throw new Error(`Failed to load marketplace.json: ${res.status}`);
+    if (res.ok) {
+      return await res.json();
     }
-    return res.json();
+  } catch {
+    // Network error — fall through to local
   }
+
+  // Fallback to local filesystem (works in dev when repo is local)
+  const localPath = path.join(REPO_ROOT, ".claude-plugin", "marketplace.json");
+  const data = await fs.readFile(localPath, "utf-8");
+  return JSON.parse(data);
 }
 
 /**
- * Read a SKILL.md file — local filesystem first, then GitHub.
+ * Read a SKILL.md file — GitHub first, local filesystem fallback.
  */
 export async function getSkillContent(source: string): Promise<string> {
   try {
-    const localPath = path.join(REPO_ROOT, source);
-    return await fs.readFile(localPath, "utf-8");
-  } catch {
     const res = await fetch(`${RAW_BASE}/${source}`, {
       next: { revalidate: 60 },
     });
-    if (!res.ok) {
-      throw new Error(`Failed to load ${source}: ${res.status}`);
+    if (res.ok) {
+      return await res.text();
     }
-    return res.text();
+  } catch {
+    // Network error — fall through to local
   }
+
+  const localPath = path.join(REPO_ROOT, source);
+  return await fs.readFile(localPath, "utf-8");
 }

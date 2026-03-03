@@ -4,6 +4,8 @@ import DepartmentGrid from "@/components/DepartmentGrid";
 import SkillCard from "@/components/SkillCard";
 import SearchBar from "@/components/SearchBar";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   searchParams: { q?: string };
 }
