@@ -38,7 +38,7 @@ export default function RootLayout({
                   href="/architecture"
                   className="text-sm text-gray-600 hover:text-gray-900"
                 >
-                  Architecture
+                  How It Works
                 </Link>
                 <a
                   href="https://github.com/philkomarny/SkillStore"
