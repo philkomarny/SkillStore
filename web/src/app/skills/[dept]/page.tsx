@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSkillsByDepartment } from "@/lib/skills";
+import { getRepoConfig } from "@/lib/github";
 import { DEPARTMENTS } from "@/lib/types";
 import SkillCard from "@/components/SkillCard";
 
@@ -12,6 +13,7 @@ export default async function DepartmentPage({ params }: PageProps) {
   const dept = DEPARTMENTS[params.dept];
   if (!dept) notFound();
 
+  const repo = getRepoConfig();
   const skills = await getSkillsByDepartment(params.dept);
 
   return (
@@ -43,7 +45,7 @@ export default async function DepartmentPage({ params }: PageProps) {
           <p className="text-gray-500">
             No skills in this department yet.{" "}
             <a
-              href="https://github.com/philkomarny/SkillStore/blob/main/CONTRIBUTING.md"
+              href={`${repo.repoUrl}/blob/${repo.branch}/CONTRIBUTING.md`}
               className="text-blue-600 hover:underline"
             >
               Contribute one

@@ -1,5 +1,10 @@
 import matter from "gray-matter";
-import { getMarketplaceJson, getSkillContent } from "./github";
+import {
+  getMarketplaceJson,
+  getSkillContent,
+  getContextContent,
+  getEnterpriseContextContent,
+} from "./github";
 import type { Marketplace, SkillEntry, SkillDetail } from "./types";
 
 export async function getAllSkills(): Promise<SkillEntry[]> {
@@ -16,7 +21,8 @@ export async function getSkillsByDepartment(
 
 export async function getSkillDetail(
   dept: string,
-  skillName: string
+  skillName: string,
+  enterpriseConfig?: { owner: string; repo: string; token: string } | null
 ): Promise<SkillDetail | null> {
   const skills = await getAllSkills();
   const entry = skills.find(
@@ -25,13 +31,22 @@ export async function getSkillDetail(
 
   if (!entry) return null;
 
-  const raw = await getSkillContent(entry.source);
+  // Fetch skill content and context in parallel.
+  // If enterprise config is provided, fetch context from the enterprise repo.
+  // Otherwise, try the skills repo (for self-hosted forks).
+  const [raw, contextContent] = await Promise.all([
+    getSkillContent(entry.source),
+    enterpriseConfig
+      ? getEnterpriseContextContent(entry.source, enterpriseConfig)
+      : getContextContent(entry.source),
+  ]);
   const { data, content } = matter(raw);
 
   return {
     ...entry,
     content,
     rawContent: raw,
+    contextContent,
     frontmatter: {
       name: data.name || entry.name,
       description: data.description || entry.description,

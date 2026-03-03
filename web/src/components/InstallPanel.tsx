@@ -7,6 +7,10 @@ interface InstallPanelProps {
   skillName: string;
   rawContent: string;
   source: string;
+  contextContent?: string | null;
+  repoOwner?: string;
+  repoName?: string;
+  repoBranch?: string;
 }
 
 type Tab = "desktop" | "code" | "project";
@@ -17,17 +21,27 @@ const TABS: { id: Tab; label: string; icon: string }[] = [
   { id: "project", label: "Project File", icon: "folder" },
 ];
 
+const CONTEXT_SEPARATOR =
+  "\n\n---\n\n## Institution Context\n\nThe following context is specific to your institution. Use it to personalize all outputs.\n\n";
+
 export default function InstallPanel({
   skillName,
   rawContent,
   source,
+  contextContent,
+  repoOwner = "philkomarny",
+  repoName = "SkillStore",
+  repoBranch = "main",
 }: InstallPanelProps) {
   const [activeTab, setActiveTab] = useState<Tab>("desktop");
 
   const cliCommand = `plugin install ${skillName}@skillstore`;
   const commandFilePath = `.claude/commands/${skillName}.md`;
-  const rawUrl = `https://raw.githubusercontent.com/philkomarny/SkillStore/main/${source}`;
+  const rawUrl = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${repoBranch}/${source}`;
   const curlCommand = `curl -sL "${rawUrl}" > ${commandFilePath}`;
+  const combinedContent = contextContent
+    ? rawContent + CONTEXT_SEPARATOR + contextContent
+    : rawContent;
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
@@ -100,7 +114,14 @@ export default function InstallPanel({
               </li>
             </ol>
 
-            <CopyButton text={rawContent} label="Copy skill to clipboard" />
+            {contextContent ? (
+              <div className="space-y-2 mb-4">
+                <CopyButton text={combinedContent} label="Copy skill + context" />
+                <CopyButton text={rawContent} label="Copy skill only" />
+              </div>
+            ) : (
+              <CopyButton text={rawContent} label="Copy skill to clipboard" />
+            )}
 
             <div className="bg-blue-50 rounded-lg p-3 mt-4">
               <p className="text-[11px] text-blue-800 font-medium mb-1">
@@ -183,6 +204,22 @@ export default function InstallPanel({
               </p>
               <CopyButton text={rawContent} label="Copy skill content" />
             </div>
+
+            {contextContent && (
+              <div className="border-t border-gray-100 pt-3 mb-3">
+                <p className="text-xs font-medium text-gray-700 mb-1.5">
+                  Context file
+                </p>
+                <p className="text-xs text-gray-500 mb-2">
+                  This skill includes a{" "}
+                  <code className="bg-gray-100 px-1 rounded text-[11px]">
+                    context.md
+                  </code>{" "}
+                  with institution-specific data. Save it alongside the skill.
+                </p>
+                <CopyButton text={contextContent} label="Copy context.md" />
+              </div>
+            )}
 
             <div className="bg-blue-50 rounded-lg p-3 mt-3">
               <p className="text-[11px] text-blue-700">

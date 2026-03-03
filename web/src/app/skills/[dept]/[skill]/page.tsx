@@ -1,9 +1,13 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSkillDetail } from "@/lib/skills";
+import { getRepoConfig } from "@/lib/github";
+import { getEnterpriseConfigFromSession } from "@/lib/enterprise";
 import { DEPARTMENTS } from "@/lib/types";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import InstallPanel from "@/components/InstallPanel";
+import ContextPanel from "@/components/ContextPanel";
+import ContextEditor from "@/components/ContextEditor";
 
 interface PageProps {
   params: { dept: string; skill: string };
@@ -13,8 +17,11 @@ export default async function SkillDetailPage({ params }: PageProps) {
   const dept = DEPARTMENTS[params.dept];
   if (!dept) notFound();
 
-  const skill = await getSkillDetail(params.dept, params.skill);
+  const enterpriseConfig = await getEnterpriseConfigFromSession();
+  const skill = await getSkillDetail(params.dept, params.skill, enterpriseConfig);
   if (!skill) notFound();
+
+  const repo = getRepoConfig();
 
   return (
     <div>
@@ -80,16 +87,33 @@ export default async function SkillDetailPage({ params }: PageProps) {
               </dl>
             </div>
 
+            {/* Context Panel — shown when enterprise context exists */}
+            {skill.contextContent && (
+              <ContextPanel content={skill.contextContent} />
+            )}
+
+            {/* Context Editor — add/edit context for enterprise users */}
+            <ContextEditor
+              dept={params.dept}
+              skillName={params.skill}
+              existingContent={skill.contextContent}
+              hasEnterpriseConfig={!!enterpriseConfig}
+            />
+
             {/* Install Panel */}
             <InstallPanel
               skillName={skill.name}
               rawContent={skill.rawContent}
               source={skill.source}
+              contextContent={skill.contextContent}
+              repoOwner={repo.owner}
+              repoName={repo.name}
+              repoBranch={repo.branch}
             />
 
             {/* GitHub Link */}
             <a
-              href={`https://github.com/philkomarny/SkillStore/blob/main/${skill.source}`}
+              href={`${repo.repoUrl}/blob/${repo.branch}/${skill.source}`}
               target="_blank"
               rel="noopener noreferrer"
               className="block rounded-xl border border-gray-200 bg-white p-5 hover:bg-gray-50 transition-colors"

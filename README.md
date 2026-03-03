@@ -57,6 +57,25 @@ plugin install curriculum-designer@skillstore
 |-------|------------|
 | [grant-proposal-writer](skills/finance/grant-proposal-writer/SKILL.md) | Federal and private grant proposals, budgets, and compliance narratives |
 
+## Enterprise / Private Store
+
+Fork this repo to create your own private skill catalog with institution-specific context.
+
+```bash
+# 1. Fork the repo
+gh repo fork philkomarny/SkillStore --clone
+
+# 2. Add context files alongside skills
+echo "# My School Context\n..." > skills/enrollment/prospect-outreach/context.md
+
+# 3. Deploy with your env vars
+#    SKILLSTORE_REPO_OWNER=your-org
+#    SKILLSTORE_REPO_NAME=SkillStore
+#    GITHUB_TOKEN=ghp_... (for private repos)
+```
+
+Your context.md files enhance generic skills with your school's data, voice, and programs. The web catalog detects them automatically. See the [Enterprise setup guide](https://skillstore-eta.vercel.app/enterprise) for the full walkthrough.
+
 ## Repository Structure
 
 ```
@@ -65,6 +84,9 @@ SkillStore/
 │   └── marketplace.json          ← Native Claude Code catalog index
 ├── skills/
 │   ├── enrollment/               ← Admissions & recruitment
+│   │   └── prospect-outreach/
+│   │       ├── SKILL.md          ← Skill definition (from upstream)
+│   │       └── context.md        ← Your institution context (your fork)
 │   ├── marketing/                ← Enrollment marketing
 │   ├── academic/                 ← Curriculum & accreditation
 │   ├── student-success/          ← Retention & advising

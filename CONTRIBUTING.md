@@ -11,10 +11,14 @@ Every skill lives in its own directory under the appropriate department:
 ```
 skills/<department>/<skill-name>/
 ├── SKILL.md              ← Required: the skill definition
+├── context.md            ← Optional: institution-specific context (enterprise forks)
+├── context.md.example    ← Optional: template for context files
 └── references/           ← Optional: supporting materials
     ├── templates.md
     └── examples.md
 ```
+
+> **context.md convention:** Enterprise forks add `context.md` files alongside skills to provide institution-specific data (school name, programs, voice, deadlines). These files are not included in the upstream repo — they live only in your fork. The web catalog detects them automatically and shows them in the skill detail page. See `skills/enrollment/prospect-outreach/context.md.example` for a template.
 
 ### Department Categories
 

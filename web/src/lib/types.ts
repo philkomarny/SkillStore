@@ -1,3 +1,22 @@
+import "next-auth";
+import "next-auth/jwt";
+
+declare module "next-auth" {
+  interface Session {
+    accessToken: string;
+    githubId: string;
+    githubUsername: string;
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    accessToken?: string;
+    githubId?: string;
+    githubUsername?: string;
+  }
+}
+
 export interface SkillEntry {
   name: string;
   source: string;
@@ -19,6 +38,7 @@ export interface Marketplace {
 export interface SkillDetail extends SkillEntry {
   content: string;
   rawContent: string;
+  contextContent: string | null;
   frontmatter: {
     name: string;
     description: string;

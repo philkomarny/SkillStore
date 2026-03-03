@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { getRepoConfig } from "@/lib/github";
 
 export const metadata = {
   title: "How It Works — SkillStore",
   description:
-    "Skills work out of the box. Add your business context to make them yours.",
+    "Use skills out of the box or add your institution's context. Individual or enterprise-wide.",
 };
 
 export default function ArchitecturePage() {
+  const repo = getRepoConfig();
+
   return (
     <div>
       <nav className="text-sm text-gray-500 mb-6">
@@ -19,136 +22,416 @@ export default function ArchitecturePage() {
 
       <div className="text-center mb-12">
         <h1 className="text-3xl font-bold text-gray-900 mb-3">
-          Skills work out of the box.<br />
-          <span className="text-blue-600">Context makes them yours.</span>
+          Pick a skill. Use it immediately.<br />
+          <span className="text-blue-600">Add context to make it yours.</span>
         </h1>
         <p className="text-gray-500 max-w-2xl mx-auto">
-          Every skill in the catalog is ready to use immediately. The real power
-          is adding your institution&apos;s context — your voice, your data, your
-          programs — so Claude produces output tailored to you.
+          Every skill works out of the box for any higher ed institution.
+          Individuals can add their own context. Enterprises can standardize
+          skills and context across their entire organization.
         </p>
       </div>
 
       <div className="max-w-5xl mx-auto">
 
         {/* ============================================ */}
-        {/* THE CORE CONCEPT: SKILL + CONTEXT            */}
+        {/* TWO PATHS                                    */}
         {/* ============================================ */}
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-16">
-
-          {/* --- Left: Without Context --- */}
           <div className="rounded-2xl border-2 border-gray-200 bg-white overflow-hidden">
             <div className="bg-gray-100 px-6 py-3 border-b border-gray-200">
               <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
-                Out of the Box
+                For Individuals
               </p>
             </div>
             <div className="p-6">
-              {/* Skill file */}
-              <div className="bg-gray-900 rounded-xl p-4 mb-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="w-3 h-3 rounded-full bg-red-500" />
-                  <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                  <div className="w-3 h-3 rounded-full bg-green-500" />
-                  <span className="text-[10px] font-mono text-gray-500 ml-2">prospect-outreach / SKILL.md</span>
-                </div>
-                <div className="font-mono text-[11px] leading-relaxed">
-                  <p className="text-gray-500">---</p>
-                  <p><span className="text-blue-400">name:</span> <span className="text-green-400">prospect-outreach</span></p>
-                  <p><span className="text-blue-400">description:</span> <span className="text-green-400">Generate personalized</span></p>
-                  <p><span className="text-green-400">  outreach to prospective students</span></p>
-                  <p className="text-gray-500">---</p>
-                  <p className="text-gray-400 mt-2"># Prospect Outreach</p>
-                  <p className="text-gray-400">You are an enrollment</p>
-                  <p className="text-gray-400">communications specialist...</p>
-                  <p className="text-gray-500 mt-1">## Email Structure by Stage</p>
-                  <p className="text-gray-500">## Anti-Patterns</p>
-                  <p className="text-gray-500">...</p>
-                </div>
-              </div>
+              <ol className="space-y-4">
+                <PathStep n={1} title="Browse the catalog">
+                  Find a skill by department or search. Each skill page shows
+                  what it does, how to use it, and example outputs.
+                </PathStep>
+                <PathStep n={2} title="Install in 30 seconds">
+                  Copy the skill into Claude Desktop, claude.ai, or Claude
+                  Code — whichever you use. One click, no build step.
+                </PathStep>
+                <PathStep n={3} title="Use it">
+                  The skill works immediately with good, structured output.
+                  Claude follows the expert methodology baked into the skill.
+                </PathStep>
+                <PathStep n={4} title="Add your context (optional)">
+                  Paste your school&apos;s name, programs, deadlines, and voice
+                  alongside the skill. Output becomes specific to your
+                  institution.
+                </PathStep>
+              </ol>
+            </div>
+          </div>
 
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-lg">⬇️</span>
-                <span className="text-xs text-gray-400">produces</span>
-              </div>
+          <div className="rounded-2xl border-2 border-blue-300 bg-white overflow-hidden ring-2 ring-blue-100">
+            <div className="bg-blue-600 px-6 py-3">
+              <p className="text-xs font-bold text-white uppercase tracking-wider">
+                For Enterprise
+              </p>
+            </div>
+            <div className="p-6">
+              <ol className="space-y-4">
+                <PathStep n={1} title="Choose skills for your org">
+                  Select which skills your teams should use — enrollment,
+                  marketing, academic, finance. The catalog is your menu.
+                </PathStep>
+                <PathStep n={2} title="Build institutional context">
+                  Create a private GitHub repo with context.md files — your
+                  programs, voice, data, deadlines. One file per skill.
+                </PathStep>
+                <PathStep n={3} title="Connect to SkillStore">
+                  On the{" "}
+                  <Link href="/enterprise" className="text-blue-600 underline">
+                    Enterprise page
+                  </Link>
+                  , enter your repo details. The catalog instantly shows your
+                  context alongside each skill.
+                </PathStep>
+                <PathStep n={4} title="Roll out to your team">
+                  Every team member connects the same context repo. Everyone
+                  gets the same skills + the same institutional context —
+                  standardized AI across your org.
+                </PathStep>
+              </ol>
+            </div>
+          </div>
+        </div>
 
-              <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
-                <p className="text-xs font-semibold text-gray-700 mb-2">Generic output</p>
-                <p className="text-[11px] text-gray-500 italic leading-relaxed">
-                  &ldquo;Hi [First Name], I noticed [your interest area] and
-                  wanted to share what makes [program] unique for students
-                  like you...&rdquo;
+        {/* ============================================ */}
+        {/* INDIVIDUAL: INSTALL METHODS                  */}
+        {/* ============================================ */}
+
+        <div className="mb-16">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">
+            Three ways to install a skill
+          </h2>
+          <p className="text-sm text-gray-500 text-center mb-8 max-w-lg mx-auto">
+            Same skill, any interface. Pick the one you use.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Desktop / Web */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <svg className="h-4 w-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">Claude Desktop & claude.ai</p>
+              </div>
+              <ol className="text-xs text-gray-600 space-y-2">
+                <HowStep n={1} text="Create a Project" />
+                <HowStep n={2} text='Click "Copy skill" on any skill page' />
+                <HowStep n={3} text="Paste into Custom Instructions" />
+                <HowStep n={4} text="Every chat in that Project uses the skill" />
+              </ol>
+              <div className="mt-4 bg-orange-50 rounded-lg p-3">
+                <p className="text-[10px] text-orange-700">
+                  Works in both the desktop app (macOS/Windows) and claude.ai in the browser.
                 </p>
-                <div className="mt-2 flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
-                  <span className="text-[10px] text-yellow-700">Good structure, but generic — works for any school</span>
+              </div>
+            </div>
+
+            {/* Claude Code CLI */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+                  <svg className="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">Claude Code CLI</p>
+              </div>
+              <ol className="text-xs text-gray-600 space-y-2">
+                <HowStep n={1}>
+                  <code className="font-mono bg-gray-100 px-1 rounded">plugin install skill@skillstore</code>
+                </HowStep>
+                <HowStep n={2} text="Skill is installed globally" />
+                <HowStep n={3} text="Available in all CLI sessions" />
+              </ol>
+              <div className="mt-4 bg-gray-900 rounded-lg p-3">
+                <p className="text-[10px] font-mono text-green-400">
+                  plugin marketplace add {repo.owner}/{repo.name}
+                </p>
+              </div>
+            </div>
+
+            {/* Project file */}
+            <div className="rounded-2xl border border-gray-200 bg-white p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                  <svg className="h-4 w-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold text-gray-900">Project Slash Command</p>
+              </div>
+              <ol className="text-xs text-gray-600 space-y-2">
+                <HowStep n={1} text="Download or copy the skill file" />
+                <HowStep n={2}>
+                  Save to <code className="font-mono bg-gray-100 px-1 rounded">.claude/commands/</code>
+                </HowStep>
+                <HowStep n={3}>
+                  Invoke with <code className="font-mono bg-gray-100 px-1 rounded">/skill-name</code>
+                </HowStep>
+              </ol>
+              <div className="mt-4 bg-blue-50 rounded-lg p-3">
+                <p className="text-[10px] text-blue-700">
+                  Scoped to one project. Great for team repos where everyone gets the skill via git.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ============================================ */}
+        {/* THE CORE CONCEPT: SKILL + CONTEXT            */}
+        {/* ============================================ */}
+
+        <div className="mb-16">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">
+            The difference context makes
+          </h2>
+          <p className="text-sm text-gray-500 text-center mb-8 max-w-lg mx-auto">
+            Skills produce good output on their own. Context makes the output yours.
+          </p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            {/* Without Context */}
+            <div className="rounded-2xl border-2 border-gray-200 bg-white overflow-hidden">
+              <div className="bg-gray-100 px-6 py-3 border-b border-gray-200">
+                <p className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+                  Skill Only
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="bg-gray-900 rounded-xl p-4 mb-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    <span className="text-[10px] font-mono text-gray-500 ml-2">prospect-outreach / SKILL.md</span>
+                  </div>
+                  <div className="font-mono text-[11px] leading-relaxed">
+                    <p className="text-gray-500">---</p>
+                    <p><span className="text-blue-400">name:</span> <span className="text-green-400">prospect-outreach</span></p>
+                    <p><span className="text-blue-400">description:</span> <span className="text-green-400">Generate personalized</span></p>
+                    <p><span className="text-green-400">  outreach to prospective students</span></p>
+                    <p className="text-gray-500">---</p>
+                    <p className="text-gray-400 mt-2"># Prospect Outreach</p>
+                    <p className="text-gray-400">You are an enrollment</p>
+                    <p className="text-gray-400">communications specialist...</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">&#8595;</span>
+                  <span className="text-xs text-gray-400">produces</span>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl border border-gray-200 p-4">
+                  <p className="text-xs font-semibold text-gray-700 mb-2">Generic output</p>
+                  <p className="text-[11px] text-gray-500 italic leading-relaxed">
+                    &ldquo;Hi [First Name], I noticed [your interest area] and
+                    wanted to share what makes [program] unique for students
+                    like you...&rdquo;
+                  </p>
+                  <div className="mt-2 flex items-center gap-1">
+                    <span className="inline-block w-2 h-2 rounded-full bg-yellow-400" />
+                    <span className="text-[10px] text-yellow-700">Good structure, but generic — works for any school</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* With Context */}
+            <div className="rounded-2xl border-2 border-blue-300 bg-white overflow-hidden ring-2 ring-blue-100">
+              <div className="bg-blue-600 px-6 py-3">
+                <p className="text-xs font-bold text-white uppercase tracking-wider">
+                  Skill + Your Context
+                </p>
+              </div>
+              <div className="p-6">
+                <div className="grid grid-cols-2 gap-2 mb-4">
+                  <div className="bg-gray-900 rounded-xl p-3">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <div className="w-2 h-2 rounded-full bg-red-500" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                      <div className="w-2 h-2 rounded-full bg-green-500" />
+                      <span className="text-[9px] font-mono text-gray-500 ml-1">SKILL.md</span>
+                    </div>
+                    <div className="font-mono text-[10px] leading-relaxed">
+                      <p className="text-gray-400">Prospect Outreach</p>
+                      <p className="text-gray-500">Email structure,</p>
+                      <p className="text-gray-500">funnel stages,</p>
+                      <p className="text-gray-500">templates...</p>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-950 rounded-xl p-3 border border-blue-400">
+                    <div className="flex items-center gap-1.5 mb-2">
+                      <div className="w-2 h-2 rounded-full bg-red-500" />
+                      <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                      <div className="w-2 h-2 rounded-full bg-green-500" />
+                      <span className="text-[9px] font-mono text-blue-300 ml-1">context.md</span>
+                    </div>
+                    <div className="font-mono text-[10px] leading-relaxed">
+                      <p className="text-blue-300">School: Greenfield U</p>
+                      <p className="text-blue-300">Programs: BSN, MBA</p>
+                      <p className="text-blue-300">Voice: warm, personal</p>
+                      <p className="text-blue-300">Deadlines: Mar 15...</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-lg">&#8595;</span>
+                  <span className="text-xs text-gray-400">produces</span>
+                </div>
+
+                <div className="bg-blue-50 rounded-xl border border-blue-200 p-4">
+                  <p className="text-xs font-semibold text-blue-800 mb-2">Contextual output</p>
+                  <p className="text-[11px] text-blue-700 italic leading-relaxed">
+                    &ldquo;Hi Maria, I saw you visited our BSN program page at
+                    Greenfield — our nursing students have a 96% NCLEX pass
+                    rate and start clinicals in semester two. The March 15
+                    priority deadline is coming up...&rdquo;
+                  </p>
+                  <div className="mt-2 flex items-center gap-1">
+                    <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
+                    <span className="text-[10px] text-green-700">Specific, personalized, on-brand</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* --- Right: With Context --- */}
-          <div className="rounded-2xl border-2 border-blue-300 bg-white overflow-hidden ring-2 ring-blue-100">
-            <div className="bg-blue-600 px-6 py-3">
-              <p className="text-xs font-bold text-white uppercase tracking-wider">
-                With Your Context
-              </p>
-            </div>
-            <div className="p-6">
-              {/* Skill + Context files */}
-              <div className="grid grid-cols-2 gap-2 mb-4">
-                <div className="bg-gray-900 rounded-xl p-3">
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-red-500" />
-                    <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                    <span className="text-[9px] font-mono text-gray-500 ml-1">SKILL.md</span>
-                  </div>
-                  <div className="font-mono text-[10px] leading-relaxed">
-                    <p className="text-gray-400">Prospect Outreach</p>
-                    <p className="text-gray-500">Email structure,</p>
-                    <p className="text-gray-500">funnel stages,</p>
-                    <p className="text-gray-500">templates,</p>
-                    <p className="text-gray-500">anti-patterns...</p>
-                  </div>
-                </div>
+        {/* ============================================ */}
+        {/* ENTERPRISE ROLLOUT                           */}
+        {/* ============================================ */}
 
-                <div className="bg-blue-950 rounded-xl p-3 border border-blue-400">
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <div className="w-2 h-2 rounded-full bg-red-500" />
-                    <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                    <div className="w-2 h-2 rounded-full bg-green-500" />
-                    <span className="text-[9px] font-mono text-blue-300 ml-1">context.md</span>
+        <div className="mb-16">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">
+            Enterprise: standardized AI across your institution
+          </h2>
+          <p className="text-sm text-gray-500 text-center mb-8 max-w-xl mx-auto">
+            Create institutional context once. Every team member gets the same
+            skills with the same data, voice, and standards.
+          </p>
+
+          <div className="rounded-2xl border-2 border-purple-200 bg-gradient-to-b from-purple-50 to-white p-8">
+            {/* The two-repo visual */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              {/* Public skills repo */}
+              <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                    <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
                   </div>
-                  <div className="font-mono text-[10px] leading-relaxed">
-                    <p className="text-blue-300">School: Greenfield U</p>
-                    <p className="text-blue-300">Programs: BSN, MBA...</p>
-                    <p className="text-blue-300">Voice: warm, personal</p>
-                    <p className="text-blue-300">Deadlines: Mar 15...</p>
-                    <p className="text-blue-300">Differentiators: ...</p>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Public Skill Repo</p>
+                    <p className="text-[10px] text-gray-400">philkomarny/SkillStore</p>
                   </div>
                 </div>
-              </div>
-
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-lg">⬇️</span>
-                <span className="text-xs text-gray-400">produces</span>
-              </div>
-
-              <div className="bg-blue-50 rounded-xl border border-blue-200 p-4">
-                <p className="text-xs font-semibold text-blue-800 mb-2">Contextual output</p>
-                <p className="text-[11px] text-blue-700 italic leading-relaxed">
-                  &ldquo;Hi Maria, I saw you visited our BSN program page at
-                  Greenfield — our nursing students have a 96% NCLEX pass
-                  rate and start clinicals in semester two. The March 15
-                  priority deadline is coming up...&rdquo;
+                <div className="bg-gray-900 rounded-lg p-3">
+                  <p className="text-[10px] font-mono text-green-400">skills/enrollment/SKILL.md</p>
+                  <p className="text-[10px] font-mono text-green-400">skills/marketing/SKILL.md</p>
+                  <p className="text-[10px] font-mono text-green-400">skills/academic/SKILL.md</p>
+                  <p className="text-[10px] font-mono text-gray-600">...</p>
+                </div>
+                <p className="text-[10px] text-gray-500 mt-2">
+                  Expert-crafted skills. Open source. Shared by all.
                 </p>
-                <div className="mt-2 flex items-center gap-1">
-                  <span className="inline-block w-2 h-2 rounded-full bg-green-500" />
-                  <span className="text-[10px] text-green-700">Specific, personalized, on-brand — sounds like your school</span>
+              </div>
+
+              {/* Plus sign */}
+              <div className="flex items-center justify-center">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                  <span className="text-2xl font-bold text-purple-600">+</span>
                 </div>
               </div>
+
+              {/* Private context repo */}
+              <div className="bg-white rounded-xl border border-blue-200 p-5 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg className="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Your Context Repo</p>
+                    <p className="text-[10px] text-gray-400">your-org/skillstore-context</p>
+                  </div>
+                </div>
+                <div className="bg-blue-950 rounded-lg p-3 border border-blue-400">
+                  <p className="text-[10px] font-mono text-blue-300">enrollment/prospect-outreach/context.md</p>
+                  <p className="text-[10px] font-mono text-blue-300">marketing/enrollment-campaign/context.md</p>
+                  <p className="text-[10px] font-mono text-blue-300">academic/curriculum-designer/context.md</p>
+                </div>
+                <p className="text-[10px] text-gray-500 mt-2">
+                  Your programs, voice, data, deadlines. Private to your org.
+                </p>
+              </div>
+            </div>
+
+            {/* Result */}
+            <div className="flex justify-center mb-6">
+              <svg className="h-8 w-8 text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11l5 5 5-5" />
+              </svg>
+            </div>
+
+            <div className="max-w-2xl mx-auto bg-white rounded-xl border border-purple-200 p-6 shadow-sm text-center">
+              <p className="text-sm font-semibold text-gray-900 mb-2">
+                SkillStore merges them at render time
+              </p>
+              <p className="text-xs text-gray-500 mb-4">
+                Your team sees skills enhanced with institutional context. Same
+                catalog URL. No deployment needed.
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-[10px] font-semibold text-gray-700 mb-1">Enrollment team</p>
+                  <p className="text-[10px] text-gray-500">
+                    Prospect outreach with your programs and deadlines
+                  </p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-[10px] font-semibold text-gray-700 mb-1">Marketing team</p>
+                  <p className="text-[10px] text-gray-500">
+                    Campaign briefs with your brand voice and data
+                  </p>
+                </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <p className="text-[10px] font-semibold text-gray-700 mb-1">Academic team</p>
+                  <p className="text-[10px] text-gray-500">
+                    Curriculum design with your accreditation standards
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 text-center">
+              <Link
+                href="/enterprise"
+                className="inline-flex items-center gap-2 bg-gray-900 text-white text-sm font-medium px-5 py-2.5 rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                Set up enterprise context
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>
@@ -192,116 +475,6 @@ export default function ArchitecturePage() {
         </div>
 
         {/* ============================================ */}
-        {/* HOW TO ADD CONTEXT (step by step)            */}
-        {/* ============================================ */}
-
-        <div className="mb-16">
-          <h2 className="text-xl font-bold text-gray-900 mb-2 text-center">
-            How to add context
-          </h2>
-          <p className="text-sm text-gray-500 text-center mb-8 max-w-lg mx-auto">
-            Three ways, depending on your interface.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Desktop / Web */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
-                  <svg className="h-4 w-4 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-semibold text-gray-900">Desktop & Web</p>
-              </div>
-              <ol className="text-xs text-gray-600 space-y-3">
-                <HowStep n={1} text="Create a Project in Claude Desktop or claude.ai" />
-                <HowStep n={2} text="Paste the SKILL.md content into Custom Instructions" />
-                <HowStep n={3}>
-                  Add your context: paste text into the instructions below the skill,{" "}
-                  <strong>or</strong> upload documents to the Project
-                </HowStep>
-                <HowStep n={4} text="Every chat in that Project now uses the skill + your context" />
-              </ol>
-              <div className="mt-4 bg-orange-50 rounded-lg p-3">
-                <p className="text-[10px] text-orange-700">
-                  Tip: Separate the skill and context with a clear heading like{" "}
-                  <code className="font-mono bg-orange-100 px-1 rounded">## Our Institution Context</code>
-                </p>
-              </div>
-            </div>
-
-            {/* Claude Code — project file */}
-            <div className="rounded-2xl border border-gray-200 bg-white p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
-                  <svg className="h-4 w-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-semibold text-gray-900">Claude Code</p>
-              </div>
-              <ol className="text-xs text-gray-600 space-y-3">
-                <HowStep n={1} text="Install the skill to .claude/commands/" />
-                <HowStep n={2}>
-                  Create a <code className="font-mono bg-gray-100 px-1 rounded">context.md</code> file
-                  in the same directory
-                </HowStep>
-                <HowStep n={3} text="Add your institution-specific details, data, and preferences" />
-                <HowStep n={4}>
-                  The skill automatically references <code className="font-mono bg-gray-100 px-1 rounded">context.md</code> when invoked
-                </HowStep>
-              </ol>
-              <div className="mt-4 bg-gray-900 rounded-lg p-3">
-                <p className="text-[10px] font-mono text-gray-400">
-                  .claude/commands/<br />
-                  <span className="text-green-400 ml-2">prospect-outreach.md</span><br />
-                  <span className="text-blue-400 ml-2">context.md</span>
-                </p>
-              </div>
-            </div>
-
-            {/* Enhance an existing skill */}
-            <div className="rounded-2xl border border-blue-200 bg-blue-50 p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 bg-blue-200 rounded-lg flex items-center justify-center">
-                  <svg className="h-4 w-4 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-semibold text-gray-900">Enhance a Skill</p>
-              </div>
-              <p className="text-xs text-gray-600 mb-3">
-                You don&apos;t have to use skills as-is. Edit them to fit your needs:
-              </p>
-              <ul className="text-xs text-gray-600 space-y-2">
-                <li className="flex gap-2">
-                  <span className="text-blue-500 mt-0.5">+</span>
-                  <span>Add department-specific templates</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-500 mt-0.5">+</span>
-                  <span>Include your school&apos;s tone guidelines</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-500 mt-0.5">+</span>
-                  <span>Add anti-patterns specific to your institution</span>
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-blue-500 mt-0.5">+</span>
-                  <span>Embed enrollment data or program details inline</span>
-                </li>
-              </ul>
-              <div className="mt-4 bg-blue-100 rounded-lg p-3">
-                <p className="text-[10px] text-blue-700">
-                  The catalog skill is the starting point. Your context is what makes it powerful.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ============================================ */}
         {/* EXAMPLE CONTEXT.MD                           */}
         {/* ============================================ */}
 
@@ -318,7 +491,7 @@ export default function ArchitecturePage() {
               <div className="w-3 h-3 rounded-full bg-red-500" />
               <div className="w-3 h-3 rounded-full bg-yellow-500" />
               <div className="w-3 h-3 rounded-full bg-green-500" />
-              <span className="text-xs font-mono text-gray-500 ml-2">context.md</span>
+              <span className="text-xs font-mono text-gray-500 ml-2">enrollment/prospect-outreach/context.md</span>
             </div>
             <pre className="font-mono text-[11px] leading-relaxed text-gray-300 whitespace-pre-wrap">{`# Greenfield University — Enrollment Context
 
@@ -387,21 +560,21 @@ Students also consider: UVM, Champlain College, Saint Michael's
                 icon="desktop"
                 name="Claude Desktop"
                 sub="macOS / Windows"
-                method="Project → Custom Instructions + context.md"
+                method="Project + Custom Instructions"
                 color="orange"
               />
               <InterfaceCard
                 icon="globe"
                 name="claude.ai"
                 sub="Web interface"
-                method="Project → Custom Instructions + uploads"
+                method="Project + Custom Instructions"
                 color="orange"
               />
               <InterfaceCard
                 icon="terminal"
                 name="Claude Code"
                 sub="CLI / Terminal"
-                method=".claude/commands/ + context.md"
+                method=".claude/commands/ + context"
                 color="orange"
               />
             </div>
@@ -427,14 +600,14 @@ Students also consider: UVM, Champlain College, Saint Michael's
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-gray-900">Web Catalog</p>
-                    <p className="text-[11px] text-gray-500">skillstore.app</p>
+                    <p className="text-[11px] text-gray-500">skillstore-eta.vercel.app</p>
                   </div>
                 </div>
                 <div className="space-y-1.5">
                   <Feature text="Browse by department" />
                   <Feature text="Search skills" />
-                  <Feature text="Read full documentation" />
                   <Feature text="Copy install instructions" />
+                  <Feature text="Enterprise context overlay" />
                 </div>
               </div>
 
@@ -461,48 +634,55 @@ Students also consider: UVM, Champlain College, Saint Michael's
           </div>
         </div>
 
-        <Arrow label="reads from GitHub" />
+        <Arrow label="reads from" />
 
-        {/* --- LAYER 3: Source of Truth --- */}
+        {/* --- LAYER 3: Source --- */}
         <div className="relative mb-2">
           <LayerLabel text="Source" />
           <div className="bg-gradient-to-r from-gray-50 to-slate-50 border border-gray-200 rounded-2xl p-6 ml-8">
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-4">
               Source of Truth
             </p>
-            <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
-                  <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
-                  </svg>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                    <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                  </div>
+                  <p className="text-sm font-semibold text-gray-900">Public Skills</p>
                 </div>
-                <div>
-                  <p className="text-base font-semibold text-gray-900">GitHub — philkomarny/SkillStore</p>
-                  <p className="text-xs text-gray-500">No database needed. GitHub is the database.</p>
+                <p className="text-[11px] text-gray-500 mb-2">
+                  {repo.owner}/{repo.name}
+                </p>
+                <div className="bg-gray-900 rounded px-2 py-1.5 mb-1">
+                  <p className="text-[10px] font-mono text-green-400">skills/&lt;dept&gt;/&lt;skill&gt;/SKILL.md</p>
+                </div>
+                <div className="bg-gray-900 rounded px-2 py-1.5">
+                  <p className="text-[10px] font-mono text-green-400">.claude-plugin/marketplace.json</p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase mb-2">Catalog Index</p>
-                  <div className="bg-gray-900 rounded px-2 py-1.5">
-                    <p className="text-[10px] font-mono text-green-400">.claude-plugin/marketplace.json</p>
+              <div className="bg-white rounded-xl border border-blue-200 p-5 shadow-sm">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg className="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
                   </div>
-                  <p className="text-[10px] text-gray-500 mt-2">
-                    Names, paths, versions, tags
-                  </p>
+                  <p className="text-sm font-semibold text-gray-900">Enterprise Context</p>
                 </div>
-
-                <div className="bg-gray-50 rounded-lg p-3">
-                  <p className="text-[10px] font-bold text-gray-400 uppercase mb-2">Skill Files</p>
-                  <div className="bg-gray-900 rounded px-2 py-1.5">
-                    <p className="text-[10px] font-mono text-green-400">skills/&lt;dept&gt;/&lt;skill&gt;/SKILL.md</p>
-                  </div>
-                  <p className="text-[10px] text-gray-500 mt-2">
-                    Instructions, templates, anti-patterns
-                  </p>
+                <p className="text-[11px] text-gray-500 mb-2">
+                  your-org/skillstore-context (private)
+                </p>
+                <div className="bg-blue-950 rounded px-2 py-1.5 border border-blue-400">
+                  <p className="text-[10px] font-mono text-blue-300">&lt;dept&gt;/&lt;skill&gt;/context.md</p>
                 </div>
+                <p className="text-[10px] text-gray-500 mt-2">
+                  Your data, your voice, your programs. Connected via{" "}
+                  <Link href="/enterprise" className="text-blue-600 underline">/enterprise</Link>
+                </p>
               </div>
             </div>
           </div>
@@ -514,7 +694,7 @@ Students also consider: UVM, Champlain College, Saint Michael's
 
         <div className="mt-12 ml-8 bg-gray-900 rounded-2xl p-6 text-white">
           <h2 className="text-sm font-semibold mb-4">Key Design Decisions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <p className="text-xs font-semibold text-blue-400 mb-1">Skills are portable</p>
               <p className="text-[11px] text-gray-400">
@@ -525,21 +705,50 @@ Students also consider: UVM, Champlain College, Saint Michael's
             <div>
               <p className="text-xs font-semibold text-green-400 mb-1">Context is yours</p>
               <p className="text-[11px] text-gray-400">
-                Your context.md never leaves your machine or Project. The catalog
-                provides the methodology; you provide the specifics.
+                Your context.md stays in your private repo. The catalog provides
+                methodology; you provide the specifics.
               </p>
             </div>
             <div>
               <p className="text-xs font-semibold text-orange-400 mb-1">No build step</p>
               <p className="text-[11px] text-gray-400">
-                Push a SKILL.md to main and it&apos;s live in 60 seconds. Add
-                context.md locally and it&apos;s active immediately.
+                Push a SKILL.md and it&apos;s live. Push a context.md and your
+                team sees it immediately.
+              </p>
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-purple-400 mb-1">Enterprise-ready</p>
+              <p className="text-[11px] text-gray-400">
+                Same catalog URL for everyone. Connect your private context repo
+                for standardized AI across your institution.
               </p>
             </div>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+function PathStep({
+  n,
+  title,
+  children,
+}: {
+  n: number;
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <li className="flex gap-3">
+      <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center text-xs font-bold mt-0.5">
+        {n}
+      </span>
+      <div>
+        <p className="text-sm font-semibold text-gray-900 mb-0.5">{title}</p>
+        <p className="text-xs text-gray-500">{children}</p>
+      </div>
+    </li>
   );
 }
 

@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { getAllSkills, getDepartments, searchSkills } from "@/lib/skills";
+import { getRepoConfig } from "@/lib/github";
 import DepartmentGrid from "@/components/DepartmentGrid";
 import SkillCard from "@/components/SkillCard";
 import SearchBar from "@/components/SearchBar";
@@ -11,6 +12,7 @@ interface PageProps {
 }
 
 export default async function HomePage({ searchParams }: PageProps) {
+  const repo = getRepoConfig();
   const [allSkills, departments] = await Promise.all([
     getAllSkills(),
     getDepartments(),
@@ -86,7 +88,7 @@ export default async function HomePage({ searchParams }: PageProps) {
         </p>
         <div className="space-y-2">
           <code className="block bg-gray-800 rounded-lg px-4 py-2 text-sm font-mono text-green-400">
-            plugin marketplace add philkomarny/SkillStore
+            plugin marketplace add {repo.owner}/{repo.name}
           </code>
           <code className="block bg-gray-800 rounded-lg px-4 py-2 text-sm font-mono text-green-400">
             plugin install curriculum-designer@skillstore
