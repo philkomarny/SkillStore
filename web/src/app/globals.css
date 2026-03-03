@@ -1,0 +1,60 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  .prose-skill h1 {
+    @apply text-2xl font-bold mt-8 mb-4;
+  }
+  .prose-skill h2 {
+    @apply text-xl font-semibold mt-6 mb-3 border-b border-gray-200 pb-2;
+  }
+  .prose-skill h3 {
+    @apply text-lg font-medium mt-4 mb-2;
+  }
+  .prose-skill p {
+    @apply mb-3 leading-relaxed;
+  }
+  .prose-skill ul {
+    @apply list-disc pl-6 mb-3;
+  }
+  .prose-skill ol {
+    @apply list-decimal pl-6 mb-3;
+  }
+  .prose-skill li {
+    @apply mb-1;
+  }
+  .prose-skill code {
+    @apply bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  .prose-skill pre {
+    @apply bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4;
+  }
+  .prose-skill pre code {
+    @apply bg-transparent p-0 text-gray-100;
+  }
+  .prose-skill table {
+    @apply w-full border-collapse mb-4;
+  }
+  .prose-skill th {
+    @apply bg-gray-100 text-left p-2 border border-gray-200 font-medium text-sm;
+  }
+  .prose-skill td {
+    @apply p-2 border border-gray-200 text-sm;
+  }
+  .prose-skill blockquote {
+    @apply border-l-4 border-gray-300 pl-4 italic text-gray-600 mb-3;
+  }
+  .prose-skill strong {
+    @apply font-semibold;
+  }
+  .prose-skill hr {
+    @apply my-6 border-gray-200;
+  }
+}

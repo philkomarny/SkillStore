@@ -1,0 +1,73 @@
+{
+  "name": "SkillStore",
+  "description": "Enterprise skill catalog for Claude Code — curated, versioned skills for higher education institutions.",
+  "version": "1.0.0",
+  "author": "philkomarny",
+  "repository": "https://github.com/philkomarny/SkillStore",
+  "skills": [
+    {
+      "name": "prospect-outreach",
+      "source": "skills/enrollment/prospect-outreach/SKILL.md",
+      "description": "Generate personalized outreach to prospective students across recruitment funnel stages.",
+      "version": "1.0.0",
+      "category": "enrollment",
+      "tags": ["recruitment", "prospecting", "email", "admissions"]
+    },
+    {
+      "name": "application-reviewer",
+      "source": "skills/enrollment/application-reviewer/SKILL.md",
+      "description": "Review and score student applications with holistic evaluation rubrics.",
+      "version": "1.0.0",
+      "category": "enrollment",
+      "tags": ["admissions", "applications", "holistic-review", "scoring"]
+    },
+    {
+      "name": "enrollment-campaign",
+      "source": "skills/marketing/enrollment-campaign/SKILL.md",
+      "description": "Analyze enrollment marketing campaign performance and optimize recruitment spend.",
+      "version": "1.0.0",
+      "category": "marketing",
+      "tags": ["enrollment-marketing", "campaigns", "ROI", "recruitment"]
+    },
+    {
+      "name": "content-brief",
+      "source": "skills/marketing/content-brief/SKILL.md",
+      "description": "Create content briefs for program pages, recruitment materials, and institutional content.",
+      "version": "1.0.0",
+      "category": "marketing",
+      "tags": ["content", "briefs", "SEO", "program-pages"]
+    },
+    {
+      "name": "curriculum-designer",
+      "source": "skills/academic/curriculum-designer/SKILL.md",
+      "description": "Design and map course curricula with learning outcomes, assessments, and competency alignment.",
+      "version": "1.0.0",
+      "category": "academic",
+      "tags": ["curriculum", "learning-outcomes", "course-design", "competencies"]
+    },
+    {
+      "name": "accreditation-writer",
+      "source": "skills/academic/accreditation-writer/SKILL.md",
+      "description": "Write self-study reports, compliance narratives, and accreditation documentation.",
+      "version": "1.0.0",
+      "category": "academic",
+      "tags": ["accreditation", "self-study", "compliance", "institutional-effectiveness"]
+    },
+    {
+      "name": "early-alert-responder",
+      "source": "skills/student-success/early-alert-responder/SKILL.md",
+      "description": "Triage student early alerts, draft intervention plans, and generate retention reports.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["retention", "early-alert", "advising", "intervention"]
+    },
+    {
+      "name": "grant-proposal-writer",
+      "source": "skills/finance/grant-proposal-writer/SKILL.md",
+      "description": "Write grant proposals, budgets, and compliance narratives for federal and private funding.",
+      "version": "1.0.0",
+      "category": "finance",
+      "tags": ["grants", "proposals", "budgets", "federal-funding"]
+    }
+  ]
+}
