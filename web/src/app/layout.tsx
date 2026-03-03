@@ -34,6 +34,12 @@ export default function RootLayout({
                 >
                   Catalog
                 </Link>
+                <Link
+                  href="/architecture"
+                  className="text-sm text-gray-600 hover:text-gray-900"
+                >
+                  Architecture
+                </Link>
                 <a
                   href="https://github.com/philkomarny/SkillStore"
                   target="_blank"
