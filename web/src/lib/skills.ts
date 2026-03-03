@@ -31,6 +31,7 @@ export async function getSkillDetail(
   return {
     ...entry,
     content,
+    rawContent: raw,
     frontmatter: {
       name: data.name || entry.name,
       description: data.description || entry.description,

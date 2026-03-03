@@ -18,6 +18,7 @@ export interface Marketplace {
 
 export interface SkillDetail extends SkillEntry {
   content: string;
+  rawContent: string;
   frontmatter: {
     name: string;
     description: string;

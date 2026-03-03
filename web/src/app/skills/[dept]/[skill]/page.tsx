@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { getSkillDetail } from "@/lib/skills";
 import { DEPARTMENTS } from "@/lib/types";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
-import CopyButton from "@/components/CopyButton";
+import InstallPanel from "@/components/InstallPanel";
 
 interface PageProps {
   params: { dept: string; skill: string };
@@ -15,8 +15,6 @@ export default async function SkillDetailPage({ params }: PageProps) {
 
   const skill = await getSkillDetail(params.dept, params.skill);
   if (!skill) notFound();
-
-  const installCommand = `plugin install ${skill.name}@skillstore`;
 
   return (
     <div>
@@ -82,18 +80,12 @@ export default async function SkillDetailPage({ params }: PageProps) {
               </dl>
             </div>
 
-            {/* Install Card */}
-            <div className="rounded-xl border border-gray-200 bg-white p-5">
-              <h2 className="text-sm font-semibold text-gray-900 mb-3">
-                Install
-              </h2>
-              <div className="bg-gray-900 rounded-lg p-3 mb-2">
-                <code className="text-xs font-mono text-green-400 break-all">
-                  {installCommand}
-                </code>
-              </div>
-              <CopyButton text={installCommand} label="Copy command" />
-            </div>
+            {/* Install Panel */}
+            <InstallPanel
+              skillName={skill.name}
+              rawContent={skill.rawContent}
+              source={skill.source}
+            />
 
             {/* GitHub Link */}
             <a
