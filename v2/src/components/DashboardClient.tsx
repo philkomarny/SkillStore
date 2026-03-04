@@ -37,6 +37,28 @@ export default function DashboardClient({
     setSelectedContextId((prev) => (prev === id ? null : id));
   }, []);
 
+  const handleDeleteSkill = useCallback(
+    async (id: string) => {
+      const res = await fetch(`/api/user-skills/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        if (selectedSkillId === id) setSelectedSkillId(null);
+        router.refresh();
+      }
+    },
+    [selectedSkillId, router]
+  );
+
+  const handleDeleteContext = useCallback(
+    async (id: string) => {
+      const res = await fetch(`/api/context/profiles/${id}`, { method: "DELETE" });
+      if (res.ok) {
+        if (selectedContextId === id) setSelectedContextId(null);
+        router.refresh();
+      }
+    },
+    [selectedContextId, router]
+  );
+
   const handleProfilesChanged = useCallback(() => {
     router.refresh();
   }, [router]);
@@ -60,6 +82,7 @@ export default function DashboardClient({
             skills={skills}
             selectedSkillId={selectedSkillId}
             onSelectSkill={handleSelectSkill}
+            onDeleteSkill={handleDeleteSkill}
           />
         </div>
 
@@ -70,6 +93,7 @@ export default function DashboardClient({
             selectedContextId={selectedContextId}
             onSelectContext={handleSelectContext}
             onNewContext={() => setShowContextBuilder(true)}
+            onDeleteContext={handleDeleteContext}
           />
 
           {showContextBuilder && (
