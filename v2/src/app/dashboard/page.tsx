@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { getUserProfile } from "@/lib/users";
 import { getClient } from "@/lib/supabase";
-import ContextUploader from "@/components/ContextUploader";
+import RefinePanel from "@/components/RefinePanel";
 
 export const metadata = {
   title: "Your Refinery — eduSkillsMP",
@@ -129,11 +129,11 @@ export default async function DashboardPage({
             </div>
           )}
 
-          {/* Upload files for refinement */}
-          <ContextUploader
+          {/* Upload files and refine */}
+          <RefinePanel
+            userSkillId={activeSkill.id}
             skillSlug={activeSkill.base_skill_slug}
-            skillDescription={activeSkill.description || ""}
-            existingContext={activeSkill.context_summary}
+            skillName={activeSkill.name}
           />
         </div>
       ) : (
