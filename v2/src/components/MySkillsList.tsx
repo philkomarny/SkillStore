@@ -13,12 +13,14 @@ interface MySkillsListProps {
   skills: any[];
   selectedSkillId: string | null;
   onSelectSkill: (id: string) => void;
+  onViewSkill?: (id: string, name: string) => void;
 }
 
 export default function MySkillsList({
   skills,
   selectedSkillId,
   onSelectSkill,
+  onViewSkill,
 }: MySkillsListProps) {
   if (skills.length === 0) {
     return (
@@ -54,37 +56,59 @@ export default function MySkillsList({
           const isSelected = skill.id === selectedSkillId;
           const style = STATUS_STYLES[skill.status] || STATUS_STYLES.draft;
           return (
-            <button
+            <div
               key={skill.id}
-              onClick={() => onSelectSkill(skill.id)}
-              className={`w-full px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 transition-colors text-left ${
+              className={`flex items-center transition-colors ${
                 isSelected ? "bg-blue-50 border-l-2 border-blue-600" : ""
               }`}
             >
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium text-gray-900 truncate">
-                    {skill.name}
-                  </span>
-                  <span
-                    className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${style.bg} ${style.text}`}
-                  >
-                    {style.label}
-                  </span>
-                  <span className="text-[10px] text-gray-400 font-mono">
-                    v{skill.version}
-                  </span>
+              {/* Clickable skill row — toggles selection for refinement */}
+              <button
+                onClick={() => onSelectSkill(skill.id)}
+                className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 transition-colors text-left min-w-0"
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-medium text-gray-900 truncate">
+                      {skill.name}
+                    </span>
+                    <span
+                      className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${style.bg} ${style.text}`}
+                    >
+                      {style.label}
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-mono">
+                      v{skill.version}
+                    </span>
+                  </div>
+                  {skill.description && (
+                    <p className="text-xs text-gray-400 truncate mt-0.5">
+                      {skill.description}
+                    </p>
+                  )}
                 </div>
-                {skill.description && (
-                  <p className="text-xs text-gray-400 truncate mt-0.5">
-                    {skill.description}
-                  </p>
-                )}
-              </div>
-              <span className="text-[11px] text-gray-400 ml-3 whitespace-nowrap">
-                {new Date(skill.updated_at).toLocaleDateString()}
-              </span>
-            </button>
+                <span className="text-[11px] text-gray-400 ml-3 whitespace-nowrap">
+                  {new Date(skill.updated_at).toLocaleDateString()}
+                </span>
+              </button>
+
+              {/* View icon — opens skill viewer */}
+              {onViewSkill && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onViewSkill(skill.id, skill.name);
+                  }}
+                  className="px-3 py-3.5 text-gray-400 hover:text-blue-600 transition-colors"
+                  title="View skill content"
+                >
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                  </svg>
+                </button>
+              )}
+            </div>
           );
         })}
       </div>

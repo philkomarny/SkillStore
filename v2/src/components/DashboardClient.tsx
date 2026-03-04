@@ -3,7 +3,10 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import MySkillsList from "@/components/MySkillsList";
+import MyContextsList from "@/components/MyContextsList";
 import RefineryWorkspace from "@/components/RefineryWorkspace";
+import ContextBuilder from "@/components/ContextBuilder";
+import SkillViewer from "@/components/SkillViewer";
 
 interface DashboardClientProps {
   skills: any[];
@@ -17,10 +20,19 @@ export default function DashboardClient({
   initialSkillId,
 }: DashboardClientProps) {
   const router = useRouter();
+
+  // Selection state for refinement
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(
     initialSkillId || null
   );
   const [selectedContextId, setSelectedContextId] = useState<string | null>(null);
+
+  // Context builder visibility
+  const [showContextBuilder, setShowContextBuilder] = useState(false);
+
+  // Skill viewer state
+  const [viewingSkillId, setViewingSkillId] = useState<string | null>(null);
+  const [viewingSkillName, setViewingSkillName] = useState<string>("");
 
   const handleSelectSkill = useCallback((id: string) => {
     setSelectedSkillId((prev) => (prev === id ? null : id));
@@ -30,39 +42,78 @@ export default function DashboardClient({
     setSelectedContextId((prev) => (prev === id ? null : id));
   }, []);
 
+  const handleViewSkill = useCallback((id: string, name: string) => {
+    setViewingSkillId((prev) => (prev === id ? null : id));
+    setViewingSkillName(name);
+  }, []);
+
+  const handleCloseViewer = useCallback(() => {
+    setViewingSkillId(null);
+    setViewingSkillName("");
+  }, []);
+
   const handleProfilesChanged = useCallback(() => {
-    // Refresh server component data
     router.refresh();
   }, [router]);
 
+  const handleContextCreated = useCallback(
+    (profile: any) => {
+      setShowContextBuilder(false);
+      setSelectedContextId(profile.id);
+      router.refresh();
+    },
+    [router]
+  );
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* Left column: My Skills */}
-      <div className="lg:col-span-5">
-        <MySkillsList
-          skills={skills}
-          selectedSkillId={selectedSkillId}
-          onSelectSkill={handleSelectSkill}
-        />
+    <div className="space-y-6">
+      {/* Row 1: My Skills + My Contexts — equal columns */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left: My Skills */}
+        <div>
+          <MySkillsList
+            skills={skills}
+            selectedSkillId={selectedSkillId}
+            onSelectSkill={handleSelectSkill}
+            onViewSkill={handleViewSkill}
+          />
+        </div>
+
+        {/* Right: My Contexts + optional ContextBuilder */}
+        <div className="space-y-4">
+          <MyContextsList
+            contextProfiles={contextProfiles}
+            selectedContextId={selectedContextId}
+            onSelectContext={handleSelectContext}
+            onNewContext={() => setShowContextBuilder(true)}
+          />
+
+          {showContextBuilder && (
+            <ContextBuilder
+              onCreated={handleContextCreated}
+              onCancel={() => setShowContextBuilder(false)}
+            />
+          )}
+        </div>
       </div>
 
-      {/* Right column: The Refinery */}
-      <div className="lg:col-span-7">
-        <div className="flex items-center gap-2 mb-3">
-          <div className="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
-            R
-          </div>
-          <h2 className="text-sm font-semibold text-gray-900">The Refinery</h2>
-        </div>
-        <RefineryWorkspace
-          skills={skills}
-          contextProfiles={contextProfiles}
-          selectedSkillId={selectedSkillId}
-          selectedContextId={selectedContextId}
-          onSelectContext={handleSelectContext}
-          onProfilesChanged={handleProfilesChanged}
+      {/* Row 2: The Refinery — full width */}
+      <RefineryWorkspace
+        skills={skills}
+        contextProfiles={contextProfiles}
+        selectedSkillId={selectedSkillId}
+        selectedContextId={selectedContextId}
+        onProfilesChanged={handleProfilesChanged}
+      />
+
+      {/* Row 3: Skill Viewer — conditionally shown, full width */}
+      {viewingSkillId && (
+        <SkillViewer
+          skillId={viewingSkillId}
+          skillName={viewingSkillName}
+          onClose={handleCloseViewer}
         />
-      </div>
+      )}
     </div>
   );
 }
