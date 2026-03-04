@@ -41,8 +41,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return session;
     },
     async redirect({ url, baseUrl }) {
-      // After sign-in, send users to their dashboard (the Refinery)
-      if (url.startsWith(baseUrl)) return url;
+      // If the URL already points to /dashboard, allow it (preserves ?skill= params)
+      if (url.startsWith(`${baseUrl}/dashboard`)) return url;
+      // For all other internal URLs (callbackUrl from sign-in pages, etc.), go to dashboard
+      if (url.startsWith(baseUrl)) return `${baseUrl}/dashboard`;
+      // External URLs → dashboard
       return `${baseUrl}/dashboard`;
     },
   },
