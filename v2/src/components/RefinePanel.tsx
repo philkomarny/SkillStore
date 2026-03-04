@@ -14,6 +14,7 @@ interface UploadedFile {
   name: string;
   size: number;
   status: "uploading" | "uploaded" | "error";
+  errorMsg?: string;
 }
 
 export default function RefinePanel({
@@ -64,16 +65,21 @@ export default function RefinePanel({
               )
             );
           } else {
+            let errMsg = `Upload failed (${res.status})`;
+            try {
+              const data = await res.json();
+              errMsg = data.error || errMsg;
+            } catch {}
             setFiles((prev) =>
               prev.map((f) =>
-                f.name === file.name ? { ...f, status: "error" } : f
+                f.name === file.name ? { ...f, status: "error", errorMsg: errMsg } : f
               )
             );
           }
-        } catch {
+        } catch (err: any) {
           setFiles((prev) =>
             prev.map((f) =>
-              f.name === file.name ? { ...f, status: "error" } : f
+              f.name === file.name ? { ...f, status: "error", errorMsg: err?.message || "Network error" } : f
             )
           );
         }
@@ -228,7 +234,7 @@ export default function RefinePanel({
                       ? "Uploading..."
                       : file.status === "uploaded"
                       ? "Ready"
-                      : "Error"}
+                      : file.errorMsg || "Error"}
                   </span>
                 </div>
               ))}
