@@ -40,5 +40,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.githubUsername = token.githubUsername as string;
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // After sign-in, send users to their dashboard (the Refinery)
+      if (url.startsWith(baseUrl)) return url;
+      return `${baseUrl}/dashboard`;
+    },
   },
 });

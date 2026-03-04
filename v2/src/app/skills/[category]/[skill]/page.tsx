@@ -6,7 +6,6 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import InstallPanel from "@/components/InstallPanel";
 import VerificationBadge from "@/components/VerificationBadge";
 import VouchButton from "@/components/VouchButton";
-import ContextUploader from "@/components/ContextUploader";
 
 export async function generateMetadata({
   params,
@@ -121,12 +120,22 @@ export default async function SkillDetailPage({
             contextContent={skill.contextContent}
           />
 
-          {/* Context uploader */}
-          <ContextUploader
-            skillSlug={skill.slug}
-            skillDescription={skill.description}
-            existingContext={skill.contextContent}
-          />
+          {/* Add to Refinery CTA */}
+          <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-5">
+            <h3 className="text-sm font-semibold text-gray-900 mb-2">
+              Personalize This Skill
+            </h3>
+            <p className="text-xs text-gray-500 mb-3">
+              Import this skill into your Refinery to customize it with your
+              documents, language, and processes.
+            </p>
+            <Link
+              href={`/dashboard?skill=${skill.slug}`}
+              className="block w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white text-center hover:bg-blue-700 transition-colors"
+            >
+              Add to My Refinery
+            </Link>
+          </div>
         </div>
       </div>
     </div>
