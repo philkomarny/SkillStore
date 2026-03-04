@@ -98,8 +98,12 @@ export default function RefinePanel({
         // Refresh the page to show updated skill data
         router.refresh();
       } else {
-        const data = await res.json();
-        setError(data.error || "Refinement failed");
+        try {
+          const data = await res.json();
+          setError(data.error || `Refinement failed (${res.status})`);
+        } catch {
+          setError(`Server error ${res.status}: ${res.statusText}`);
+        }
       }
     } catch (err: any) {
       setError(err?.message || "Something went wrong during refinement. The request may have timed out.");
