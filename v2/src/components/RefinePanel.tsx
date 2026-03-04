@@ -49,39 +49,79 @@ export default function RefinePanel({
         };
         setFiles((prev) => [...prev, entry]);
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("skillSlug", skillSlug);
-
-        try {
-          const res = await fetch("/api/context/upload", {
-            method: "POST",
-            body: formData,
-          });
-          if (res.ok) {
-            setFiles((prev) =>
-              prev.map((f) =>
-                f.name === file.name ? { ...f, status: "uploaded" } : f
-              )
-            );
-          } else {
-            let errMsg = `Upload failed (${res.status})`;
-            try {
-              const data = await res.json();
-              errMsg = data.error || errMsg;
-            } catch {}
-            setFiles((prev) =>
-              prev.map((f) =>
-                f.name === file.name ? { ...f, status: "error", errorMsg: errMsg } : f
-              )
-            );
-          }
-        } catch (err: any) {
+        const markError = (msg: string) => {
           setFiles((prev) =>
             prev.map((f) =>
-              f.name === file.name ? { ...f, status: "error", errorMsg: err?.message || "Network error" } : f
+              f.name === file.name ? { ...f, status: "error", errorMsg: msg } : f
             )
           );
+        };
+
+        try {
+          // Step 1: Get a signed upload URL from the server (small JSON, no file body)
+          const signRes = await fetch("/api/context/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "sign",
+              skillSlug,
+              fileName: file.name,
+              fileType: file.type,
+              fileSize: file.size,
+            }),
+          });
+
+          if (!signRes.ok) {
+            let errMsg = `Failed to prepare upload (${signRes.status})`;
+            try { const d = await signRes.json(); errMsg = d.error || errMsg; } catch {}
+            markError(errMsg);
+            continue;
+          }
+
+          const { signedUrl, storagePath, contentType } = await signRes.json();
+
+          // Step 2: Upload file directly to Supabase (bypasses Vercel 4.5MB limit)
+          const uploadRes = await fetch(signedUrl, {
+            method: "PUT",
+            headers: { "Content-Type": contentType },
+            body: file,
+          });
+
+          if (!uploadRes.ok) {
+            let errMsg = `Upload to storage failed (${uploadRes.status})`;
+            try { const d = await uploadRes.json(); errMsg = d.message || d.error || errMsg; } catch {}
+            markError(errMsg);
+            continue;
+          }
+
+          // Step 3: Tell the server to record in DB
+          const confirmRes = await fetch("/api/context/upload", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "confirm",
+              skillSlug,
+              fileName: file.name,
+              fileType: contentType,
+              fileSize: file.size,
+              storagePath,
+            }),
+          });
+
+          if (!confirmRes.ok) {
+            let errMsg = `Failed to record upload (${confirmRes.status})`;
+            try { const d = await confirmRes.json(); errMsg = d.error || errMsg; } catch {}
+            markError(errMsg);
+            continue;
+          }
+
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.name === file.name ? { ...f, status: "uploaded" } : f
+            )
+          );
+        } catch (err: any) {
+          markError(err?.message || "Network error");
         }
       }
     },
