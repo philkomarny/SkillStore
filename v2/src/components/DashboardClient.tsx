@@ -6,7 +6,6 @@ import MySkillsList from "@/components/MySkillsList";
 import MyContextsList from "@/components/MyContextsList";
 import RefineryWorkspace from "@/components/RefineryWorkspace";
 import ContextBuilder from "@/components/ContextBuilder";
-import SkillViewer from "@/components/SkillViewer";
 
 interface DashboardClientProps {
   skills: any[];
@@ -30,26 +29,12 @@ export default function DashboardClient({
   // Context builder visibility
   const [showContextBuilder, setShowContextBuilder] = useState(false);
 
-  // Skill viewer state
-  const [viewingSkillId, setViewingSkillId] = useState<string | null>(null);
-  const [viewingSkillName, setViewingSkillName] = useState<string>("");
-
   const handleSelectSkill = useCallback((id: string) => {
     setSelectedSkillId((prev) => (prev === id ? null : id));
   }, []);
 
   const handleSelectContext = useCallback((id: string) => {
     setSelectedContextId((prev) => (prev === id ? null : id));
-  }, []);
-
-  const handleViewSkill = useCallback((id: string, name: string) => {
-    setViewingSkillId((prev) => (prev === id ? null : id));
-    setViewingSkillName(name);
-  }, []);
-
-  const handleCloseViewer = useCallback(() => {
-    setViewingSkillId(null);
-    setViewingSkillName("");
   }, []);
 
   const handleProfilesChanged = useCallback(() => {
@@ -75,7 +60,6 @@ export default function DashboardClient({
             skills={skills}
             selectedSkillId={selectedSkillId}
             onSelectSkill={handleSelectSkill}
-            onViewSkill={handleViewSkill}
           />
         </div>
 
@@ -97,7 +81,7 @@ export default function DashboardClient({
         </div>
       </div>
 
-      {/* Row 2: The Refinery — full width */}
+      {/* Row 2: Refine — full width */}
       <RefineryWorkspace
         skills={skills}
         contextProfiles={contextProfiles}
@@ -105,15 +89,6 @@ export default function DashboardClient({
         selectedContextId={selectedContextId}
         onProfilesChanged={handleProfilesChanged}
       />
-
-      {/* Row 3: Skill Viewer — conditionally shown, full width */}
-      {viewingSkillId && (
-        <SkillViewer
-          skillId={viewingSkillId}
-          skillName={viewingSkillName}
-          onClose={handleCloseViewer}
-        />
-      )}
     </div>
   );
 }
