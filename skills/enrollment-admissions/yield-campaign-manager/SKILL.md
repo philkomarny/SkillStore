@@ -1,11 +1,10 @@
 ---
-name: yield-campaign-manager
-description: >
-  Design and execute multi-channel yield campaigns to convert admitted students into deposited students.
-  TRIGGER when user needs to plan yield strategies, segment admitted student populations, or create deposit-driving communications.
-version: 1.0.0
-category: enrollment-admissions
-tags: [yield, enrollment-management, admitted-students, deposit-conversion]
+name: "yield-campaign-manager"
+description: "Design and execute multi-channel yield campaigns to convert admitted students into deposited students. TRIGGER when user needs to plan yield strategies, segment admitted student populations, or create deposit-driving communications."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [yield, enrollment-management, admitted-students, deposit-conversion]
 ---
 
 # Yield Campaign Manager

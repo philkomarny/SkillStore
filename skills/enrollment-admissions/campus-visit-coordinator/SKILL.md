@@ -1,11 +1,10 @@
 ---
-name: campus-visit-coordinator
-description: >
-  Plan campus visit programs, create visit day schedules, and design outreach for prospective students and families.
-  TRIGGER when user needs to organize campus visits, draft visit communications, or create virtual tour scripts.
-version: 1.0.0
-category: enrollment-admissions
-tags: [campus-visit, prospective-students, recruitment, virtual-tours]
+name: "campus-visit-coordinator"
+description: "Plan campus visit programs, create visit day schedules, and design outreach for prospective students and families. TRIGGER when user needs to organize campus visits, draft visit communications, or create virtual tour scripts."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [campus-visit, open-house, prospective-students, recruitment, virtual-tours]
 ---
 
 # Campus Visit Coordinator

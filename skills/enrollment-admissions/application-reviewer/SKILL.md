@@ -1,11 +1,10 @@
 ---
-name: application-reviewer
-description: >
-  Review and score student applications with holistic evaluation rubrics.
-  TRIGGER when user needs help evaluating applications or building review criteria.
-version: 1.0.0
-category: enrollment-admissions
-tags: [admissions, applications, holistic-review, scoring]
+name: "application-reviewer"
+description: "Review and score student applications with holistic evaluation rubrics. TRIGGER when user needs help evaluating applications or building review criteria."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [admissions, applications, holistic-review, scoring]
 ---
 
 # Application Reviewer

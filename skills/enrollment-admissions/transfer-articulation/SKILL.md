@@ -1,11 +1,10 @@
 ---
-name: transfer-articulation
-description: >
-  Evaluate course equivalencies, draft articulation agreements, and create transfer guides for incoming students.
-  TRIGGER when user needs to build transfer pathways, assess credit equivalencies, or communicate transfer policies.
-version: 1.0.0
-category: enrollment-admissions
-tags: [transfer-students, articulation, credit-evaluation, transfer-pathways]
+name: "transfer-articulation"
+description: "Evaluate course equivalencies, draft articulation agreements, and create transfer guides for incoming students. TRIGGER when user needs to build transfer pathways, assess credit equivalencies, or communicate transfer policies."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [transfer-students, articulation, credit-evaluation, transfer-pathways]
 ---
 
 # Transfer Articulation Assistant

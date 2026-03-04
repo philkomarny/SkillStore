@@ -1,11 +1,10 @@
 ---
-name: financial-aid-communicator
-description: >
-  Draft financial aid award letters, FAFSA guidance, and scholarship notifications that help families understand their aid packages.
-  TRIGGER when user needs to create clear, compliant financial aid communications for students and families.
-version: 1.0.0
-category: enrollment-admissions
-tags: [financial-aid, award-letters, FAFSA, scholarships]
+name: "financial-aid-communicator"
+description: "Draft financial aid award letters, FAFSA guidance, and scholarship notifications that help families understand their aid packages. TRIGGER when user needs to create clear, compliant financial aid communications for students and families."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [financial-aid, award-letters, FAFSA, scholarships]
 ---
 
 # Financial Aid Communicator

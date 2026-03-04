@@ -1,11 +1,10 @@
 ---
-name: international-recruitment
-description: >
-  Draft recruitment materials for international student markets, create country-specific outreach, and assist with I-20/visa communications.
-  TRIGGER when user needs to recruit international students, create cross-cultural communications, or support visa-related processes.
-version: 1.0.0
-category: enrollment-admissions
-tags: [international-students, recruitment, I-20, global-enrollment]
+name: "international-recruitment"
+description: "Draft recruitment materials for international student markets, create country-specific outreach, and assist with I-20/visa communications. TRIGGER when user needs to recruit international students, create cross-cultural communications, or support visa-related processes."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [international-students, recruitment, I-20, global-enrollment]
 ---
 
 # International Student Recruitment Specialist

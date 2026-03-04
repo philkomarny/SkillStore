@@ -1,11 +1,10 @@
 ---
-name: prospect-outreach
-description: >
-  Generate personalized outreach to prospective students across recruitment funnel stages.
-  TRIGGER when user needs to draft recruitment emails, follow-ups, or nurture sequences.
-version: 1.0.0
-category: enrollment-admissions
-tags: [recruitment, prospecting, email, admissions]
+name: "prospect-outreach"
+description: "Generate personalized outreach to prospective students across recruitment funnel stages. TRIGGER when user needs to draft recruitment emails, follow-ups, or nurture sequences."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [recruitment, prospecting, email, sms, admissions]
 ---
 
 # Prospect Outreach

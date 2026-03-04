@@ -1,11 +1,10 @@
 ---
-name: waitlist-strategy
-description: >
-  Manage waitlist communications, create conversion strategies, and draft status update templates for waitlisted applicants.
-  TRIGGER when user needs to design waitlist processes, communicate with waitlisted students, or optimize waitlist conversion.
-version: 1.0.0
-category: enrollment-admissions
-tags: [waitlist, admissions, enrollment-management, applicant-communications]
+name: "waitlist-strategy"
+description: "Manage waitlist communications, create conversion strategies, and draft status update templates for waitlisted applicants. TRIGGER when user needs to design waitlist processes, communicate with waitlisted students, or optimize waitlist conversion."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [waitlist, admissions, enrollment-management, applicant-communications]
 ---
 
 # Waitlist Strategy Manager

@@ -1,11 +1,10 @@
 ---
-name: admitted-student-onboarding
-description: >
-  Create onboarding communications and task sequences for newly admitted students from deposit through first day of classes.
-  TRIGGER when user needs to design pre-enrollment checklists, orientation communications, or onboarding workflows.
-version: 1.0.0
-category: enrollment-admissions
-tags: [onboarding, orientation, pre-enrollment, new-students]
+name: "admitted-student-onboarding"
+description: "Create onboarding communications and task sequences for newly admitted students from deposit through first day of classes. TRIGGER when user needs to design pre-enrollment checklists, orientation communications, or onboarding workflows."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [onboarding, orientation, pre-enrollment, new-students]
 ---
 
 # Admitted Student Onboarding Designer

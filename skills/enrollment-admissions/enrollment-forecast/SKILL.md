@@ -1,11 +1,10 @@
 ---
-name: enrollment-forecast
-description: >
-  Build enrollment projection models, analyze demographic trends, and create enrollment reports for institutional planning.
-  TRIGGER when user needs to project enrollment, analyze funnel data, or report on enrollment trends.
-version: 1.0.0
-category: enrollment-admissions
-tags: [enrollment-projections, data-analysis, institutional-planning, demographics]
+name: "enrollment-forecast"
+description: "Build enrollment projection models, analyze demographic trends, and create enrollment reports for institutional planning. TRIGGER when user needs to project enrollment, analyze funnel data, or report on enrollment trends."
+metadata:
+  version: 1.0.0
+  category: enrollment-admissions
+  tags: [enrollment-projections, data-analysis, institutional-planning, demographics]
 ---
 
 # Enrollment Forecast Analyst
