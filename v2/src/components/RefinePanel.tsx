@@ -101,8 +101,8 @@ export default function RefinePanel({
         const data = await res.json();
         setError(data.error || "Refinement failed");
       }
-    } catch {
-      setError("Something went wrong during refinement");
+    } catch (err: any) {
+      setError(err?.message || "Something went wrong during refinement. The request may have timed out.");
     } finally {
       setRefining(false);
     }

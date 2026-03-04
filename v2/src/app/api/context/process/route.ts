@@ -4,6 +4,9 @@ import { getUserProfile } from "@/lib/users";
 import { getClient } from "@/lib/supabase";
 import { extractText, generateContext } from "@/lib/context-processor";
 
+// Allow up to 60s for file processing + Claude API call
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
