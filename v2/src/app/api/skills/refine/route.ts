@@ -95,7 +95,8 @@ export async function POST(req: Request) {
 
         const buffer = Buffer.from(await fileData.arrayBuffer());
 
-        if (file.file_type.startsWith("image/")) {
+        if (file.file_type.startsWith("image/") || file.file_type === "application/pdf") {
+          // Send images and PDFs as base64 — Claude reads them directly
           processedFiles.push({
             name: file.file_name,
             text: "",

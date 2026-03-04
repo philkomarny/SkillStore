@@ -10,6 +10,8 @@ function getAnthropic(): Anthropic {
 
 /**
  * Extract text from various file types.
+ * PDFs and images are NOT handled here — they're sent directly to Claude
+ * as document/image content blocks for much better extraction.
  */
 export async function extractText(
   buffer: Buffer,
@@ -25,12 +27,6 @@ export async function extractText(
     return buffer.toString("utf-8");
   }
 
-  if (mimeType === "application/pdf" || fileName.endsWith(".pdf")) {
-    const pdfParse = (await import("pdf-parse" as any)).default || (await import("pdf-parse" as any));
-    const data = await pdfParse(buffer);
-    return data.text;
-  }
-
   if (
     mimeType ===
       "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
@@ -41,12 +37,64 @@ export async function extractText(
     return result.value;
   }
 
-  // For images, return empty — they'll be sent to Claude Vision directly
+  // PDFs and images return empty — they'll be sent to Claude directly
+  if (mimeType === "application/pdf" || fileName.endsWith(".pdf")) {
+    return "";
+  }
   if (mimeType.startsWith("image/")) {
     return "";
   }
 
   return buffer.toString("utf-8");
+}
+
+/**
+ * Build content blocks for files to send to Claude.
+ * PDFs are sent as document blocks, images as image blocks, text inline.
+ */
+function buildFileContentBlocks(
+  files: Array<{ name: string; text: string; mimeType: string; base64?: string }>
+): Anthropic.ContentBlockParam[] {
+  const blocks: Anthropic.ContentBlockParam[] = [];
+
+  for (const file of files) {
+    if (file.base64 && file.mimeType === "application/pdf") {
+      // Send PDF directly to Claude as a document block
+      blocks.push({
+        type: "document",
+        source: {
+          type: "base64",
+          media_type: "application/pdf",
+          data: file.base64,
+        },
+      } as any);
+      blocks.push({
+        type: "text",
+        text: `[PDF document: ${file.name}]`,
+      });
+    } else if (file.base64 && file.mimeType.startsWith("image/")) {
+      // Send image to Claude Vision
+      blocks.push({
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: file.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp",
+          data: file.base64,
+        },
+      });
+      blocks.push({
+        type: "text",
+        text: `[Image file: ${file.name}]`,
+      });
+    } else if (file.text) {
+      blocks.push({
+        type: "text",
+        text: `\n---\nFile: ${file.name}\n\n${file.text.slice(0, 50000)}\n---\n`,
+      });
+    }
+  }
+
+  return blocks;
 }
 
 /**
@@ -56,9 +104,6 @@ export async function generateContext(
   skillDescription: string,
   files: Array<{ name: string; text: string; mimeType: string; base64?: string }>
 ): Promise<string> {
-  const messages: Anthropic.MessageParam[] = [];
-
-  // Build the content blocks
   const contentBlocks: Anthropic.ContentBlockParam[] = [
     {
       type: "text",
@@ -79,37 +124,13 @@ Format the output as clean markdown with clear sections. Be specific and actiona
 
 Here are the uploaded files:`,
     },
+    ...buildFileContentBlocks(files),
   ];
-
-  for (const file of files) {
-    if (file.base64 && file.mimeType.startsWith("image/")) {
-      // Send image to Claude Vision
-      contentBlocks.push({
-        type: "image",
-        source: {
-          type: "base64",
-          media_type: file.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp",
-          data: file.base64,
-        },
-      });
-      contentBlocks.push({
-        type: "text",
-        text: `[Image file: ${file.name}]`,
-      });
-    } else if (file.text) {
-      contentBlocks.push({
-        type: "text",
-        text: `\n---\nFile: ${file.name}\n\n${file.text.slice(0, 50000)}\n---\n`,
-      });
-    }
-  }
-
-  messages.push({ role: "user", content: contentBlocks });
 
   const response = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",
     max_tokens: 4096,
-    messages,
+    messages: [{ role: "user", content: contentBlocks }],
   });
 
   const textBlock = response.content.find((b) => b.type === "text");
@@ -169,27 +190,8 @@ Format your response EXACTLY like this:
     text: `\n\n## User's Documents:\n`,
   });
 
-  for (const file of files) {
-    if (file.base64 && file.mimeType.startsWith("image/")) {
-      contentBlocks.push({
-        type: "image",
-        source: {
-          type: "base64",
-          media_type: file.mimeType as "image/jpeg" | "image/png" | "image/gif" | "image/webp",
-          data: file.base64,
-        },
-      });
-      contentBlocks.push({
-        type: "text",
-        text: `[Image file: ${file.name}]`,
-      });
-    } else if (file.text) {
-      contentBlocks.push({
-        type: "text",
-        text: `\n---\nFile: ${file.name}\n\n${file.text.slice(0, 50000)}\n---\n`,
-      });
-    }
-  }
+  // Add file content blocks (PDFs as documents, images as images, text inline)
+  contentBlocks.push(...buildFileContentBlocks(files));
 
   const response = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",
