@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
+import InstallPanel from "@/components/InstallPanel";
 
 interface SkillViewerProps {
   skillId: string;
@@ -14,10 +16,9 @@ export default function SkillViewer({
   onClose,
 }: SkillViewerProps) {
   const [content, setContent] = useState<string | null>(null);
-  const [version, setVersion] = useState<number | null>(null);
+  const [userSkill, setUserSkill] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -26,6 +27,7 @@ export default function SkillViewer({
       setLoading(true);
       setError(null);
       setContent(null);
+      setUserSkill(null);
 
       try {
         const res = await fetch(`/api/user-skills/${skillId}`);
@@ -38,7 +40,7 @@ export default function SkillViewer({
         const data = await res.json();
         if (!cancelled) {
           setContent(data.content || "No content available.");
-          setVersion(data.userSkill?.version ?? null);
+          setUserSkill(data.userSkill || null);
         }
       } catch (err: any) {
         if (!cancelled) {
@@ -57,103 +59,105 @@ export default function SkillViewer({
     };
   }, [skillId]);
 
-  const handleCopy = async () => {
-    if (!content) return;
-    try {
-      await navigator.clipboard.writeText(content);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      // Fallback for older browsers
-      const textarea = document.createElement("textarea");
-      textarea.value = content;
-      document.body.appendChild(textarea);
-      textarea.select();
-      document.execCommand("copy");
-      document.body.removeChild(textarea);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
   return (
     <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
+      {/* Header with close button */}
       <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
         <div className="flex items-center gap-2 min-w-0">
-          <h2 className="text-sm font-semibold text-gray-900 truncate">
+          <h2 className="text-lg font-bold text-gray-900 truncate">
             {skillName}
           </h2>
-          {version != null && (
-            <span className="text-[10px] text-gray-400 font-mono">
-              v{version}
+          {userSkill?.version != null && (
+            <span className="text-xs text-gray-400 font-mono">
+              v{userSkill.version}
+            </span>
+          )}
+          {userSkill?.status === "refined" && (
+            <span className="inline-flex items-center rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-medium text-green-700">
+              Refined
             </span>
           )}
         </div>
-        <div className="flex items-center gap-2 ml-3">
-          <button
-            onClick={handleCopy}
-            disabled={!content || loading}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-40 transition-colors"
-          >
-            {copied ? (
-              <>
-                <svg className="w-3.5 h-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                Copied!
-              </>
-            ) : (
-              <>
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                </svg>
-                Copy
-              </>
-            )}
-          </button>
-          <button
-            onClick={onClose}
-            className="rounded-lg p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        <button
+          onClick={onClose}
+          className="rounded-lg p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 transition-colors"
+          title="Close"
+        >
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Loading state */}
+      {loading && (
+        <div className="flex items-center justify-center py-16">
+          <svg className="animate-spin h-6 w-6 text-gray-400" viewBox="0 0 24 24">
+            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
         </div>
-      </div>
+      )}
 
-      <div className="px-5 py-4">
-        {loading && (
-          <div className="flex items-center justify-center py-8">
-            <svg className="animate-spin h-5 w-5 text-gray-400" viewBox="0 0 24 24">
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-                fill="none"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-              />
-            </svg>
+      {/* Error state */}
+      {error && (
+        <div className="px-5 py-8 text-center">
+          <p className="text-sm text-red-500">{error}</p>
+        </div>
+      )}
+
+      {/* Loaded: two-column layout matching marketplace */}
+      {!loading && !error && content && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-5">
+          {/* Main content — rendered markdown */}
+          <div className="lg:col-span-2">
+            {userSkill?.description && (
+              <p className="text-gray-500 mb-4">{userSkill.description}</p>
+            )}
+
+            <div className="prose-skill border-t border-gray-100 pt-6">
+              <MarkdownRenderer content={content} />
+            </div>
           </div>
-        )}
 
-        {error && (
-          <p className="text-xs text-red-500 py-4">{error}</p>
-        )}
+          {/* Sidebar — install panel */}
+          <div className="space-y-6">
+            {/* Meta info */}
+            <div className="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
+              {userSkill?.version != null && (
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Version</span>
+                  <span className="text-sm font-mono text-gray-700">
+                    {userSkill.version}
+                  </span>
+                </div>
+              )}
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-500">Status</span>
+                <span className="text-sm text-gray-700 capitalize">
+                  {userSkill?.status || "draft"}
+                </span>
+              </div>
+              {userSkill?.updated_at && (
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-gray-500">Updated</span>
+                  <span className="text-sm text-gray-700">
+                    {new Date(userSkill.updated_at).toLocaleDateString()}
+                  </span>
+                </div>
+              )}
+            </div>
 
-        {!loading && !error && content && (
-          <pre className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap font-mono bg-gray-50 rounded-lg p-4 max-h-96 overflow-y-auto">
-            {content}
-          </pre>
-        )}
-      </div>
+            {/* Install panel — same as marketplace */}
+            <InstallPanel
+              skillName={userSkill?.skill_slug || skillName}
+              skillSlug={userSkill?.skill_slug || skillName}
+              rawContent={content}
+              source=""
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
