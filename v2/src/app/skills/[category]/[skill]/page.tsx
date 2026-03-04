@@ -1,0 +1,134 @@
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { getSkillDetail } from "@/lib/skills";
+import { CATEGORIES } from "@/lib/types";
+import MarkdownRenderer from "@/components/MarkdownRenderer";
+import InstallPanel from "@/components/InstallPanel";
+import VerificationBadge from "@/components/VerificationBadge";
+import VouchButton from "@/components/VouchButton";
+import ContextUploader from "@/components/ContextUploader";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { category: string; skill: string };
+}) {
+  const detail = await getSkillDetail(params.skill);
+  if (!detail) return {};
+  return {
+    title: `${detail.name} — SkillStore`,
+    description: detail.description,
+  };
+}
+
+export default async function SkillDetailPage({
+  params,
+}: {
+  params: { category: string; skill: string };
+}) {
+  const cat = CATEGORIES[params.category];
+  if (!cat) notFound();
+
+  const skill = await getSkillDetail(params.skill);
+  if (!skill) notFound();
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+      {/* Breadcrumb */}
+      <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
+        <Link href="/skills" className="hover:text-blue-600">
+          Skills
+        </Link>
+        <span>/</span>
+        <Link href={`/skills/${params.category}`} className="hover:text-blue-600">
+          {cat.label}
+        </Link>
+        <span>/</span>
+        <span className="text-gray-900 font-medium">{skill.name}</span>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main content */}
+        <div className="lg:col-span-2">
+          <div className="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">{skill.name}</h1>
+              <p className="text-gray-500">{skill.description}</p>
+            </div>
+            <VouchButton
+              skillSlug={skill.slug}
+              initialCount={skill.vouchCount || 0}
+            />
+          </div>
+
+          {/* Tags */}
+          {skill.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mb-6">
+              {skill.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-block rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Skill content */}
+          <div className="prose-skill border-t border-gray-100 pt-6">
+            <MarkdownRenderer content={skill.content} />
+          </div>
+        </div>
+
+        {/* Sidebar */}
+        <div className="space-y-6">
+          {/* Meta info */}
+          <div className="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">Verification</span>
+              <VerificationBadge level={skill.verificationLevel || 0} size="md" />
+            </div>
+            {skill.version && (
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-500">Version</span>
+                <span className="text-sm font-mono text-gray-700">{skill.version}</span>
+              </div>
+            )}
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">Category</span>
+              <span className="text-sm text-gray-700">
+                {cat.icon} {cat.label}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">Downloads</span>
+              <span className="text-sm text-gray-700">{skill.downloadCount}</span>
+            </div>
+            {skill.submittedBy && (
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-500">Submitted by</span>
+                <span className="text-sm text-gray-700">{skill.submittedBy}</span>
+              </div>
+            )}
+          </div>
+
+          {/* Install panel */}
+          <InstallPanel
+            skillName={skill.slug}
+            rawContent={skill.rawContent}
+            source={skill.source}
+            contextContent={skill.contextContent}
+          />
+
+          {/* Context uploader */}
+          <ContextUploader
+            skillSlug={skill.slug}
+            skillDescription={skill.description}
+            existingContext={skill.contextContent}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}

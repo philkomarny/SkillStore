@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: var(--font-inter, system-ui, sans-serif);
+}
+
+/* Markdown rendering styles for skill content */
+.prose-skill {
+  @apply text-gray-700 leading-relaxed;
+}
+
+.prose-skill h1 {
+  @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
+}
+
+.prose-skill h2 {
+  @apply text-xl font-semibold text-gray-900 mt-6 mb-3;
+}
+
+.prose-skill h3 {
+  @apply text-lg font-semibold text-gray-800 mt-5 mb-2;
+}
+
+.prose-skill p {
+  @apply mb-4;
+}
+
+.prose-skill ul {
+  @apply list-disc pl-6 mb-4 space-y-1;
+}
+
+.prose-skill ol {
+  @apply list-decimal pl-6 mb-4 space-y-1;
+}
+
+.prose-skill li {
+  @apply text-gray-700;
+}
+
+.prose-skill code {
+  @apply bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.prose-skill pre {
+  @apply bg-gray-900 text-gray-100 rounded-lg p-4 mb-4 overflow-x-auto;
+}
+
+.prose-skill pre code {
+  @apply bg-transparent text-gray-100 p-0;
+}
+
+.prose-skill blockquote {
+  @apply border-l-4 border-blue-300 pl-4 italic text-gray-600 my-4;
+}
+
+.prose-skill a {
+  @apply text-blue-600 hover:text-blue-800 underline;
+}
+
+.prose-skill hr {
+  @apply border-gray-200 my-6;
+}
+
+.prose-skill table {
+  @apply w-full border-collapse mb-4;
+}
+
+.prose-skill th {
+  @apply bg-gray-50 border border-gray-200 px-3 py-2 text-left text-sm font-semibold text-gray-700;
+}
+
+.prose-skill td {
+  @apply border border-gray-200 px-3 py-2 text-sm;
+}
+
+.prose-skill strong {
+  @apply font-semibold text-gray-900;
+}
