@@ -38,6 +38,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.accessToken = token.accessToken as string;
       session.githubId = token.githubId as string;
       session.githubUsername = token.githubUsername as string;
+      // Ensure user.id is set so dashboard auth checks work
+      if (token.sub) session.user.id = token.sub;
+      if (token.githubId) session.user.id = token.githubId as string;
       return session;
     },
     async redirect({ url, baseUrl }) {
