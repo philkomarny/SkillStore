@@ -161,6 +161,28 @@ export const VERIFICATION_BADGES: Record<number, VerificationBadge> = {
   },
 };
 
+// --- User Skills (Refinery) ---
+
+export type UserSkillStatus = "draft" | "refining" | "refined" | "shared";
+
+export interface UserSkill {
+  id: string;
+  userId: string;
+  baseSkillSlug: string;
+  name: string;
+  description?: string;
+  category?: string;
+  tags?: string[];
+  version: number;
+  status: UserSkillStatus;
+  storagePath?: string;
+  contextSummary?: string;
+  isShareable: boolean;
+  vouchCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // --- Users ---
 
 export interface UserProfile {
