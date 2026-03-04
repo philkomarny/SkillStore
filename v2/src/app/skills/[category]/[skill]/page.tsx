@@ -6,6 +6,7 @@ import MarkdownRenderer from "@/components/MarkdownRenderer";
 import InstallPanel from "@/components/InstallPanel";
 import VerificationBadge from "@/components/VerificationBadge";
 import VouchButton from "@/components/VouchButton";
+import DownloadBadge from "@/components/DownloadBadge";
 
 export async function generateMetadata({
   params,
@@ -102,7 +103,7 @@ export default async function SkillDetailPage({
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs text-gray-500">Downloads</span>
-              <span className="text-sm text-gray-700">{skill.downloadCount}</span>
+              <DownloadBadge count={skill.downloadCount || 0} />
             </div>
             {skill.submittedBy && (
               <div className="flex items-center justify-between">
@@ -115,6 +116,7 @@ export default async function SkillDetailPage({
           {/* Install panel */}
           <InstallPanel
             skillName={skill.slug}
+            skillSlug={skill.slug}
             rawContent={skill.rawContent}
             source={skill.source}
             contextContent={skill.contextContent}

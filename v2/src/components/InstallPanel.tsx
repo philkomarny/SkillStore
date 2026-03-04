@@ -5,6 +5,7 @@ import CopyButton from "./CopyButton";
 
 interface InstallPanelProps {
   skillName: string;
+  skillSlug: string;
   rawContent: string;
   source: string;
   contextContent?: string | null;
@@ -26,6 +27,7 @@ const CONTEXT_SEPARATOR =
 
 export default function InstallPanel({
   skillName,
+  skillSlug,
   rawContent,
   source,
   contextContent,
@@ -34,6 +36,10 @@ export default function InstallPanel({
   repoBranch = "main",
 }: InstallPanelProps) {
   const [activeTab, setActiveTab] = useState<Tab>("desktop");
+
+  const trackDownload = () => {
+    fetch(`/api/skills/${skillSlug}/download`, { method: "POST" }).catch(() => {});
+  };
 
   const commandFilePath = `.claude/commands/${skillName}.md`;
   const rawUrl = `https://raw.githubusercontent.com/${repoOwner}/${repoName}/${repoBranch}/${source}`;
@@ -96,11 +102,11 @@ export default function InstallPanel({
 
             {contextContent ? (
               <div className="space-y-2 mb-4">
-                <CopyButton text={combinedContent} label="Copy skill + context" />
-                <CopyButton text={rawContent} label="Copy skill only" />
+                <CopyButton text={combinedContent} label="Copy skill + context" onCopy={trackDownload} />
+                <CopyButton text={rawContent} label="Copy skill only" onCopy={trackDownload} />
               </div>
             ) : (
-              <CopyButton text={rawContent} label="Copy skill to clipboard" />
+              <CopyButton text={rawContent} label="Copy skill to clipboard" onCopy={trackDownload} />
             )}
           </div>
         )}
@@ -118,6 +124,7 @@ export default function InstallPanel({
             <CopyButton
               text={`mkdir -p .claude/commands && ${curlCommand}`}
               label="Copy command"
+              onCopy={trackDownload}
             />
 
             <div className="bg-blue-50 rounded-lg p-3 mt-4">
@@ -145,11 +152,11 @@ export default function InstallPanel({
 
             {contextContent ? (
               <div className="space-y-2">
-                <CopyButton text={combinedContent} label="Copy skill + context" />
-                <CopyButton text={rawContent} label="Copy skill only" />
+                <CopyButton text={combinedContent} label="Copy skill + context" onCopy={trackDownload} />
+                <CopyButton text={rawContent} label="Copy skill only" onCopy={trackDownload} />
               </div>
             ) : (
-              <CopyButton text={rawContent} label="Copy skill content" />
+              <CopyButton text={rawContent} label="Copy skill content" onCopy={trackDownload} />
             )}
 
             <div className="bg-blue-50 rounded-lg p-3 mt-4">
