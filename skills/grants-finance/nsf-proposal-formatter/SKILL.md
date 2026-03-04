@@ -1,11 +1,10 @@
 ---
-name: nsf-proposal-formatter
-description: >
-  Format and structure NSF grant proposals following current GPG guidelines and directorate requirements.
-  TRIGGER when user needs to write, format, or review an NSF proposal.
-version: 1.0.0
-category: grants-finance
-tags: [nsf, grant-proposal, broader-impacts, federal-funding]
+name: "nsf-proposal-formatter"
+description: "Format and structure NSF grant proposals following current GPG guidelines and directorate requirements. TRIGGER when user needs to write, format, or review an NSF proposal."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [nsf, grant-proposal, broader-impacts, federal-funding]
 ---
 
 # NSF Proposal Formatter

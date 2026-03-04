@@ -1,11 +1,10 @@
 ---
-name: annual-financial-report
-description: >
-  Create annual financial reports for academic departments with variance analysis and narrative explanations.
-  TRIGGER when user needs to write a departmental or institutional annual financial report.
-version: 1.0.0
-category: grants-finance
-tags: [financial-reporting, budget-analysis, variance-analysis, fiscal-management]
+name: "annual-financial-report"
+description: "Create annual financial reports for academic departments with variance analysis and narrative explanations. TRIGGER when user needs to write a departmental or institutional annual financial report."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [financial-reporting, budget-analysis, variance-analysis, fiscal-management]
 ---
 
 # Annual Financial Report Writer

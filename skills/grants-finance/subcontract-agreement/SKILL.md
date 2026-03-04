@@ -1,11 +1,10 @@
 ---
-name: subcontract-agreement
-description: >
-  Draft subcontract and subaward agreements for sponsored research including scope, budget, and compliance.
-  TRIGGER when user needs to create or review a subaward or subcontract for a grant.
-version: 1.0.0
-category: grants-finance
-tags: [subaward, subcontract, sponsored-research, compliance]
+name: "subcontract-agreement"
+description: "Draft subcontract and subaward agreements for sponsored research including scope, budget, and compliance. TRIGGER when user needs to create or review a subaward or subcontract for a grant."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [subaward, subcontract, sponsored-research, compliance]
 ---
 
 # Subcontract Agreement Drafter

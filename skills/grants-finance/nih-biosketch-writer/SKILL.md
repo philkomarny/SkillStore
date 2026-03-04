@@ -1,11 +1,10 @@
 ---
-name: nih-biosketch-writer
-description: >
-  Create and format NIH biosketches following the current SciENcv format with all required sections.
-  TRIGGER when user needs to write, update, or review an NIH biosketch.
-version: 1.0.0
-category: grants-finance
-tags: [nih, biosketch, sciencv, researcher-profile]
+name: "nih-biosketch-writer"
+description: "Create and format NIH biosketches following the current SciENcv format with all required sections. TRIGGER when user needs to write, update, or review an NIH biosketch."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [nih, biosketch, sciencv, researcher-profile]
 ---
 
 # NIH Biosketch Writer

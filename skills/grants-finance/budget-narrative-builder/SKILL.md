@@ -1,11 +1,10 @@
 ---
-name: budget-narrative-builder
-description: >
-  Write budget justification narratives for grants and institutional budgets, connecting line items to project objectives.
-  TRIGGER when user needs to write or review a budget justification or budget narrative.
-version: 1.0.0
-category: grants-finance
-tags: [budget-justification, budget-narrative, grants, financial-planning]
+name: "budget-narrative-builder"
+description: "Write budget justification narratives for grants and institutional budgets, connecting line items to project objectives. TRIGGER when user needs to write or review a budget justification or budget narrative."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [budget-justification, budget-narrative, grants, financial-planning]
 ---
 
 # Budget Narrative Builder

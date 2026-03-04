@@ -1,11 +1,10 @@
 ---
-name: audit-response-writer
-description: >
-  Draft responses to internal and external audit findings with corrective action plans and evidence.
-  TRIGGER when user needs to write a management response to an audit finding or recommendation.
-version: 1.0.0
-category: grants-finance
-tags: [audit-response, corrective-action, compliance, internal-controls]
+name: "audit-response-writer"
+description: "Draft responses to internal and external audit findings with corrective action plans and evidence. TRIGGER when user needs to write a management response to an audit finding or recommendation."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [audit-response, corrective-action, compliance, internal-controls]
 ---
 
 # Audit Response Writer

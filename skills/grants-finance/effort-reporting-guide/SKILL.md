@@ -1,11 +1,10 @@
 ---
-name: effort-reporting-guide
-description: >
-  Help faculty and staff understand and complete effort reporting for federally sponsored projects.
-  TRIGGER when user needs help with effort certification, effort calculation, or compliance.
-version: 1.0.0
-category: grants-finance
-tags: [effort-reporting, compliance, federal-regulations, cost-accounting]
+name: "effort-reporting-guide"
+description: "Help faculty and staff understand and complete effort reporting for federally sponsored projects. TRIGGER when user needs help with effort certification, effort calculation, or compliance."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [effort-reporting, compliance, federal-regulations, cost-accounting]
 ---
 
 # Effort Reporting Guide

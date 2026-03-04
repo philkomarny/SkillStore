@@ -1,11 +1,10 @@
 ---
-name: cost-share-calculator
-description: >
-  Calculate and document cost-sharing commitments for grant proposals including in-kind and matching funds.
-  TRIGGER when user needs to determine, calculate, or document cost sharing for a grant.
-version: 1.0.0
-category: grants-finance
-tags: [cost-sharing, matching-funds, in-kind, grant-compliance]
+name: "cost-share-calculator"
+description: "Calculate and document cost-sharing commitments for grant proposals including in-kind and matching funds. TRIGGER when user needs to determine, calculate, or document cost sharing for a grant."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [cost-sharing, matching-funds, in-kind, grant-compliance]
 ---
 
 # Cost Share Calculator

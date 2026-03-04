@@ -1,11 +1,10 @@
 ---
-name: endowment-stewardship
-description: >
-  Write endowment stewardship reports for donors with fund performance, impact stories, and usage summaries.
-  TRIGGER when user needs to create a donor stewardship report or endowment impact summary.
-version: 1.0.0
-category: grants-finance
-tags: [endowment, stewardship, donor-relations, fund-management]
+name: "endowment-stewardship"
+description: "Write endowment stewardship reports for donors with fund performance, impact stories, and usage summaries. TRIGGER when user needs to create a donor stewardship report or endowment impact summary."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [endowment, stewardship, donor-relations, fund-management]
 ---
 
 # Endowment Stewardship Report Writer

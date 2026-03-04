@@ -1,11 +1,10 @@
 ---
-name: grant-proposal-writer
-description: >
-  Write grant proposals, budgets, and compliance narratives for federal and private funding.
-  TRIGGER when user needs to write or review a grant proposal.
-version: 1.0.0
-category: grants-finance
-tags: [grants, proposals, budgets, federal-funding]
+name: "grant-proposal-writer"
+description: "Write grant proposals, budgets, and compliance narratives for federal and private funding. TRIGGER when user needs to write or review a grant proposal."
+metadata:
+  version: 1.0.0
+  category: grants-finance
+  tags: [grants, proposals, budgets, federal-funding]
 ---
 
 # Grant Proposal Writer
