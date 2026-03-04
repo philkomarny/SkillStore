@@ -16,7 +16,7 @@ export async function generateMetadata({
   const detail = await getSkillDetail(params.skill);
   if (!detail) return {};
   return {
-    title: `${detail.name} — SkillStore`,
+    title: `${detail.name} — eduSkillsMP`,
     description: detail.description,
   };
 }

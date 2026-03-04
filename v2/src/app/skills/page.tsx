@@ -6,7 +6,7 @@ import SkillCard from "@/components/SkillCard";
 import CategoryGrid from "@/components/CategoryGrid";
 
 export const metadata = {
-  title: "Browse Skills — SkillStore",
+  title: "Browse Skills — eduSkillsMP",
 };
 
 export default async function BrowsePage({

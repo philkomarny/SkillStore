@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "How It Works — SkillStore",
+  title: "How It Works — eduSkillsMP",
   description: "Learn how to browse, install, and personalize Claude skills.",
 };
 
@@ -9,7 +9,7 @@ export default function HowItWorksPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 py-16">
       <h1 className="text-3xl font-bold text-gray-900 mb-3 text-center">
-        How SkillStore Works
+        How eduSkillsMP Works
       </h1>
       <p className="text-gray-500 text-center mb-12 max-w-lg mx-auto">
         A skill is a markdown instruction file that gives Claude specialized expertise.

@@ -10,7 +10,7 @@ export async function generateMetadata({ params }: { params: { category: string 
   const cat = CATEGORIES[params.category];
   if (!cat) return {};
   return {
-    title: `${cat.label} Skills — SkillStore`,
+    title: `${cat.label} Skills — eduSkillsMP`,
     description: cat.description,
   };
 }

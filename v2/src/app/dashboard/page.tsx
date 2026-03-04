@@ -5,7 +5,7 @@ import { getUserProfile } from "@/lib/users";
 import { supabase } from "@/lib/supabase";
 
 export const metadata = {
-  title: "Dashboard — SkillStore",
+  title: "Dashboard — eduSkillsMP",
 };
 
 export default async function DashboardPage() {

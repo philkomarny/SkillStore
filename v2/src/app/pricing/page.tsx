@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Pricing — SkillStore",
+  title: "Pricing — eduSkillsMP",
   description: "Choose your plan for verified Claude skills.",
 };
 

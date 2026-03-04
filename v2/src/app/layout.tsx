@@ -8,7 +8,7 @@ import AuthButton from "@/components/AuthButton";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "SkillStore — The Skills Marketplace for Claude",
+  title: "eduSkillsMP — The Edu Skills Marketplace for Claude",
   description:
     "Browse, install, and personalize verified skills for Claude. The open marketplace for AI prompt engineering.",
 };
@@ -27,7 +27,7 @@ export default function RootLayout({
             <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
                 <Link href="/" className="text-lg font-bold text-gray-900 tracking-tight">
-                  SkillStore
+                  eduSkillsMP
                 </Link>
                 <nav className="hidden sm:flex items-center gap-5 text-sm text-gray-600">
                   <Link href="/skills" className="hover:text-gray-900 transition-colors">
@@ -62,7 +62,7 @@ export default function RootLayout({
           {/* Footer */}
           <footer className="border-t border-gray-100 py-8">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-              <span>SkillStore — Open skills marketplace for Claude</span>
+              <span>eduSkillsMP — The Edu Skills Marketplace for Claude</span>
               <div className="flex items-center gap-4">
                 <Link href="/pricing" className="hover:text-gray-600 transition-colors">
                   Pricing

@@ -22,7 +22,7 @@ export default async function HomePage() {
       {/* Hero */}
       <section className="py-20 px-4 text-center">
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-gray-900 mb-4">
-          The Skills Marketplace
+          The Edu Skills Marketplace
           <br />
           <span className="text-blue-600">for Claude</span>
         </h1>
