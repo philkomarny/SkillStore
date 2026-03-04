@@ -1,11 +1,10 @@
 ---
-name: policy-manual-drafter
-description: >
-  Write institutional policy documents with proper structure, approval workflows, and revision history.
-  TRIGGER when user needs to draft, revise, or structure an institutional policy, procedure, or guideline.
-version: 1.0.0
-category: compliance-accreditation
-tags: [policy-development, institutional-policy, procedures, governance]
+name: "policy-manual-drafter"
+description: "Write institutional policy documents with proper structure, approval workflows, and revision history. TRIGGER when user needs to draft, revise, or structure an institutional policy, procedure, or guideline."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [policy-development, institutional-policy, procedures, governance]
 ---
 
 # Policy Manual Drafter

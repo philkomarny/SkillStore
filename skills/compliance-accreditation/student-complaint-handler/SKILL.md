@@ -1,11 +1,10 @@
 ---
-name: student-complaint-handler
-description: >
-  Draft student complaint response letters, track resolution processes, and create complaint trend reports.
-  TRIGGER when user needs to respond to student complaints, build complaint tracking systems, or analyze complaint trends.
-version: 1.0.0
-category: compliance-accreditation
-tags: [student-complaints, grievance, complaint-resolution, consumer-protection]
+name: "student-complaint-handler"
+description: "Draft student complaint response letters, track resolution processes, and create complaint trend reports. TRIGGER when user needs to respond to student complaints, build complaint tracking systems, or analyze complaint trends."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [student-complaints, grievance, complaint-resolution, consumer-protection]
 ---
 
 # Student Complaint Handler

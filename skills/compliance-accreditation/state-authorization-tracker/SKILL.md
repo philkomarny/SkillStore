@@ -1,11 +1,10 @@
 ---
-name: state-authorization-tracker
-description: >
-  Track state authorization requirements for distance education and draft compliance documentation.
-  TRIGGER when user needs help with state authorization, SARA participation, or distance education compliance.
-version: 1.0.0
-category: compliance-accreditation
-tags: [state-authorization, sara, distance-education, reciprocity]
+name: "state-authorization-tracker"
+description: "Track state authorization requirements for distance education and draft compliance documentation. TRIGGER when user needs help with state authorization, SARA participation, or distance education compliance."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [state-authorization, sara, distance-education, reciprocity]
 ---
 
 # State Authorization Tracker

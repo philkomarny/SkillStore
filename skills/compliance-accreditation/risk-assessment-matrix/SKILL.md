@@ -1,11 +1,10 @@
 ---
-name: risk-assessment-matrix
-description: >
-  Create institutional risk assessment matrices, risk registers, and mitigation plans for enterprise risk management.
-  TRIGGER when user needs to assess institutional risks, build a risk register, or draft mitigation strategies.
-version: 1.0.0
-category: compliance-accreditation
-tags: [risk-management, erm, risk-register, mitigation]
+name: "risk-assessment-matrix"
+description: "Create institutional risk assessment matrices, risk registers, and mitigation plans for enterprise risk management. TRIGGER when user needs to assess institutional risks, build a risk register, or draft mitigation strategies."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [risk-management, erm, risk-register, mitigation]
 ---
 
 # Risk Assessment Matrix

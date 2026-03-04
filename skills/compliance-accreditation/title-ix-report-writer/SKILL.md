@@ -1,11 +1,10 @@
 ---
-name: title-ix-report-writer
-description: >
-  Draft Title IX annual reports, climate survey summaries, training documentation, and policy communications.
-  TRIGGER when user needs to write Title IX reports, policy documents, or training materials.
-version: 1.0.0
-category: compliance-accreditation
-tags: [title-ix, sexual-misconduct, compliance-reporting, gender-equity]
+name: "title-ix-report-writer"
+description: "Draft Title IX annual reports, climate survey summaries, training documentation, and policy communications. TRIGGER when user needs to write Title IX reports, policy documents, or training materials."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [title-ix, sexual-misconduct, compliance-reporting, gender-equity]
 ---
 
 # Title IX Report Writer

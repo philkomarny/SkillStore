@@ -1,11 +1,10 @@
 ---
-name: clery-act-reporter
-description: >
-  Draft Clery Act annual security reports, crime log entries, timely warnings, and emergency notifications.
-  TRIGGER when user needs help with Clery Act compliance, ASR drafting, or campus safety notifications.
-version: 1.0.0
-category: compliance-accreditation
-tags: [clery-act, campus-safety, annual-security-report, timely-warning]
+name: "clery-act-reporter"
+description: "Draft Clery Act annual security reports, crime log entries, timely warnings, and emergency notifications. TRIGGER when user needs help with Clery Act compliance, ASR drafting, or campus safety notifications."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [clery-act, campus-safety, annual-security-report, timely-warning]
 ---
 
 # Clery Act Reporter

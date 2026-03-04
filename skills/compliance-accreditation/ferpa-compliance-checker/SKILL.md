@@ -1,11 +1,10 @@
 ---
-name: ferpa-compliance-checker
-description: >
-  Review communications, policies, and data practices for FERPA compliance and draft compliant language.
-  TRIGGER when user needs to check FERPA compliance, draft privacy notices, or handle student record requests.
-version: 1.0.0
-category: compliance-accreditation
-tags: [ferpa, student-privacy, education-records, compliance]
+name: "ferpa-compliance-checker"
+description: "Review communications, policies, and data practices for FERPA compliance and draft compliant language. TRIGGER when user needs to check FERPA compliance, draft privacy notices, or handle student record requests."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [ferpa, student-privacy, education-records, compliance]
 ---
 
 # FERPA Compliance Checker

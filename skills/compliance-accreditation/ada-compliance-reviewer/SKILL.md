@@ -1,11 +1,10 @@
 ---
-name: ada-compliance-reviewer
-description: >
-  Review campus facilities, digital content, and programs for ADA/Section 504 compliance and draft remediation plans.
-  TRIGGER when user needs to assess accessibility compliance, draft accommodation plans, or create remediation documentation.
-version: 1.0.0
-category: compliance-accreditation
-tags: [ada, section-504, accessibility, digital-accessibility]
+name: "ada-compliance-reviewer"
+description: "Review campus facilities, digital content, and programs for ADA/Section 504 compliance and draft remediation plans. TRIGGER when user needs to assess accessibility compliance, draft accommodation plans, or create remediation documentation."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [ada, section-504, accessibility, digital-accessibility]
 ---
 
 # ADA Compliance Reviewer

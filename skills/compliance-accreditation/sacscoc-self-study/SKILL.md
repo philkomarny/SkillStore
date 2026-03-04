@@ -1,11 +1,10 @@
 ---
-name: sacscoc-self-study
-description: >
-  Write SACSCOC self-study narratives, compliance certifications, and QEP documents.
-  TRIGGER when user needs help preparing for SACSCOC reaffirmation, writing compliance narratives, or developing a Quality Enhancement Plan.
-version: 1.0.0
-category: compliance-accreditation
-tags: [sacscoc, self-study, reaffirmation, qep]
+name: "sacscoc-self-study"
+description: "Write SACSCOC self-study narratives, compliance certifications, and QEP documents. TRIGGER when user needs help preparing for SACSCOC reaffirmation, writing compliance narratives, or developing a Quality Enhancement Plan."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [sacscoc, self-study, reaffirmation, qep]
 ---
 
 # SACSCOC Self-Study Writer

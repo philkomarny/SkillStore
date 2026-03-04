@@ -1,11 +1,10 @@
 ---
-name: board-report-writer
-description: >
-  Write reports and presentations for boards of trustees and regents with dashboards and executive summaries.
-  TRIGGER when user needs to draft board reports, executive summaries, consent agendas, or trustee communications.
-version: 1.0.0
-category: compliance-accreditation
-tags: [board-of-trustees, governance, executive-summary, institutional-reporting]
+name: "board-report-writer"
+description: "Write reports and presentations for boards of trustees and regents with dashboards and executive summaries. TRIGGER when user needs to draft board reports, executive summaries, consent agendas, or trustee communications."
+metadata:
+  version: 1.0.0
+  category: compliance-accreditation
+  tags: [board-of-trustees, governance, executive-summary, institutional-reporting]
 ---
 
 # Board Report Writer
