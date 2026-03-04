@@ -1,57 +1,249 @@
 {
-  "name": "SkillStore",
-  "description": "Enterprise skill catalog for Claude Code — curated, versioned skills for higher education institutions.",
-  "version": "1.0.0",
+  "name": "eduSkillsMP",
+  "description": "The Edu Skills Marketplace for Claude — curated, verified skills for higher education institutions.",
+  "version": "2.0.0",
   "author": "philkomarny",
   "repository": "https://github.com/philkomarny/SkillStore",
   "skills": [
     {
       "name": "prospect-outreach",
-      "source": "skills/enrollment/prospect-outreach/SKILL.md",
+      "source": "skills/enrollment-admissions/prospect-outreach/SKILL.md",
       "description": "Generate personalized outreach to prospective students across recruitment funnel stages.",
       "version": "1.0.0",
-      "category": "enrollment",
+      "category": "enrollment-admissions",
       "tags": ["recruitment", "prospecting", "email", "admissions"]
     },
     {
       "name": "application-reviewer",
-      "source": "skills/enrollment/application-reviewer/SKILL.md",
+      "source": "skills/enrollment-admissions/application-reviewer/SKILL.md",
       "description": "Review and score student applications with holistic evaluation rubrics.",
       "version": "1.0.0",
-      "category": "enrollment",
+      "category": "enrollment-admissions",
       "tags": ["admissions", "applications", "holistic-review", "scoring"]
     },
     {
+      "name": "yield-campaign-manager",
+      "source": "skills/enrollment-admissions/yield-campaign-manager/SKILL.md",
+      "description": "Design and execute multi-channel yield campaigns to convert admitted students into deposited students.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["yield", "enrollment-management", "admitted-students", "deposit-conversion"]
+    },
+    {
+      "name": "transfer-articulation",
+      "source": "skills/enrollment-admissions/transfer-articulation/SKILL.md",
+      "description": "Evaluate course equivalencies, draft articulation agreements, and create transfer guides for incoming students.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["transfer-students", "articulation", "credit-evaluation", "transfer-pathways"]
+    },
+    {
+      "name": "financial-aid-communicator",
+      "source": "skills/enrollment-admissions/financial-aid-communicator/SKILL.md",
+      "description": "Draft financial aid award letters, FAFSA guidance, and scholarship notifications that help families understand their aid packages.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["financial-aid", "award-letters", "FAFSA", "scholarships"]
+    },
+    {
+      "name": "campus-visit-coordinator",
+      "source": "skills/enrollment-admissions/campus-visit-coordinator/SKILL.md",
+      "description": "Plan campus visit programs, create visit day schedules, and design outreach for prospective students and families.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["campus-visit", "prospective-students", "recruitment", "virtual-tours"]
+    },
+    {
+      "name": "enrollment-forecast",
+      "source": "skills/enrollment-admissions/enrollment-forecast/SKILL.md",
+      "description": "Build enrollment projection models, analyze demographic trends, and create enrollment reports for institutional planning.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["enrollment-projections", "data-analysis", "institutional-planning", "demographics"]
+    },
+    {
+      "name": "admitted-student-onboarding",
+      "source": "skills/enrollment-admissions/admitted-student-onboarding/SKILL.md",
+      "description": "Create onboarding communications and task sequences for newly admitted students from deposit through first day of classes.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["onboarding", "orientation", "pre-enrollment", "new-students"]
+    },
+    {
+      "name": "international-recruitment",
+      "source": "skills/enrollment-admissions/international-recruitment/SKILL.md",
+      "description": "Draft recruitment materials for international student markets, create country-specific outreach, and assist with I-20/visa communications.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["international-students", "recruitment", "I-20", "global-enrollment"]
+    },
+    {
+      "name": "waitlist-strategy",
+      "source": "skills/enrollment-admissions/waitlist-strategy/SKILL.md",
+      "description": "Manage waitlist communications, create conversion strategies, and draft status update templates for waitlisted applicants.",
+      "version": "1.0.0",
+      "category": "enrollment-admissions",
+      "tags": ["waitlist", "admissions", "enrollment-management", "applicant-communications"]
+    },
+    {
       "name": "enrollment-campaign",
-      "source": "skills/marketing/enrollment-campaign/SKILL.md",
+      "source": "skills/marketing-communications/enrollment-campaign/SKILL.md",
       "description": "Analyze enrollment marketing campaign performance and optimize recruitment spend.",
       "version": "1.0.0",
-      "category": "marketing",
+      "category": "marketing-communications",
       "tags": ["enrollment-marketing", "campaigns", "ROI", "recruitment"]
     },
     {
       "name": "content-brief",
-      "source": "skills/marketing/content-brief/SKILL.md",
+      "source": "skills/marketing-communications/content-brief/SKILL.md",
       "description": "Create content briefs for program pages, recruitment materials, and institutional content.",
       "version": "1.0.0",
-      "category": "marketing",
+      "category": "marketing-communications",
       "tags": ["content", "briefs", "SEO", "program-pages"]
     },
     {
+      "name": "brand-voice-guide",
+      "source": "skills/marketing-communications/brand-voice-guide/SKILL.md",
+      "description": "Define and document institutional brand voice, tone guidelines, and messaging frameworks.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["brand-voice", "tone", "messaging", "style-guide"]
+    },
+    {
+      "name": "social-media-calendar",
+      "source": "skills/marketing-communications/social-media-calendar/SKILL.md",
+      "description": "Plan and create social media content calendars for higher education institutions.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["social-media", "content-calendar", "higher-ed", "platform-strategy"]
+    },
+    {
+      "name": "crisis-communications",
+      "source": "skills/marketing-communications/crisis-communications/SKILL.md",
+      "description": "Draft crisis communication plans, holding statements, and stakeholder messaging for campus emergencies.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["crisis-communications", "emergency", "media-response", "stakeholder-messaging"]
+    },
+    {
+      "name": "alumni-storyteller",
+      "source": "skills/marketing-communications/alumni-storyteller/SKILL.md",
+      "description": "Craft compelling alumni success stories, donor spotlights, and impact narratives for advancement marketing.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["alumni", "storytelling", "advancement", "donor-relations"]
+    },
+    {
+      "name": "program-page-optimizer",
+      "source": "skills/marketing-communications/program-page-optimizer/SKILL.md",
+      "description": "Optimize academic program web pages for SEO and conversion with better headlines, CTAs, and structure.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["SEO", "program-pages", "conversion", "web-optimization"]
+    },
+    {
+      "name": "email-newsletter-creator",
+      "source": "skills/marketing-communications/email-newsletter-creator/SKILL.md",
+      "description": "Design and write email newsletters for university audiences including prospects, students, alumni, and donors.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["email", "newsletters", "drip-campaigns", "audience-segmentation"]
+    },
+    {
+      "name": "event-promotion",
+      "source": "skills/marketing-communications/event-promotion/SKILL.md",
+      "description": "Create promotional plans and content for campus events including open houses, commencement, and galas.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["events", "promotion", "campus-events", "multichannel-marketing"]
+    },
+    {
+      "name": "media-relations",
+      "source": "skills/marketing-communications/media-relations/SKILL.md",
+      "description": "Draft press releases, media pitches, talking points, and interview prep for institutional news.",
+      "version": "1.0.0",
+      "category": "marketing-communications",
+      "tags": ["media-relations", "press-releases", "public-relations", "spokesperson"]
+    },
+    {
       "name": "curriculum-designer",
-      "source": "skills/academic/curriculum-designer/SKILL.md",
+      "source": "skills/academic-programs/curriculum-designer/SKILL.md",
       "description": "Design and map course curricula with learning outcomes, assessments, and competency alignment.",
       "version": "1.0.0",
-      "category": "academic",
+      "category": "academic-programs",
       "tags": ["curriculum", "learning-outcomes", "course-design", "competencies"]
     },
     {
       "name": "accreditation-writer",
-      "source": "skills/academic/accreditation-writer/SKILL.md",
+      "source": "skills/academic-programs/accreditation-writer/SKILL.md",
       "description": "Write self-study reports, compliance narratives, and accreditation documentation.",
       "version": "1.0.0",
-      "category": "academic",
+      "category": "academic-programs",
       "tags": ["accreditation", "self-study", "compliance", "institutional-effectiveness"]
+    },
+    {
+      "name": "learning-outcome-mapper",
+      "source": "skills/academic-programs/learning-outcome-mapper/SKILL.md",
+      "description": "Map course and program learning outcomes to institutional goals, accreditation standards, and competency frameworks.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["learning-outcomes", "alignment", "competency-mapping", "accreditation"]
+    },
+    {
+      "name": "program-review-writer",
+      "source": "skills/academic-programs/program-review-writer/SKILL.md",
+      "description": "Write academic program review self-study reports including data analysis, SWOT assessments, and improvement plans.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["program-review", "self-study", "academic-audit", "continuous-improvement"]
+    },
+    {
+      "name": "syllabus-builder",
+      "source": "skills/academic-programs/syllabus-builder/SKILL.md",
+      "description": "Create complete course syllabi with learning outcomes, schedules, policies, assessments, and accessibility statements.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["syllabus", "course-design", "policies", "accessibility"]
+    },
+    {
+      "name": "faculty-evaluation-rubric",
+      "source": "skills/academic-programs/faculty-evaluation-rubric/SKILL.md",
+      "description": "Design evaluation rubrics for faculty teaching, scholarship, and service for tenure review and peer observation.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["faculty-evaluation", "tenure", "peer-review", "teaching-assessment"]
+    },
+    {
+      "name": "assessment-plan-designer",
+      "source": "skills/academic-programs/assessment-plan-designer/SKILL.md",
+      "description": "Create assessment plans for courses and programs with direct and indirect measures, rubrics, and closing-the-loop documentation.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["assessment", "outcomes-assessment", "rubrics", "closing-the-loop"]
+    },
+    {
+      "name": "new-program-proposal",
+      "source": "skills/academic-programs/new-program-proposal/SKILL.md",
+      "description": "Draft new academic program proposals including needs assessment, market analysis, curriculum outline, and financial projections.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["program-proposal", "new-program", "market-analysis", "curriculum-planning"]
+    },
+    {
+      "name": "articulation-agreement",
+      "source": "skills/academic-programs/articulation-agreement/SKILL.md",
+      "description": "Draft articulation agreements between institutions including course equivalency tables, transfer pathways, and dual enrollment frameworks.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["articulation", "transfer", "dual-enrollment", "course-equivalency"]
+    },
+    {
+      "name": "academic-catalog-editor",
+      "source": "skills/academic-programs/academic-catalog-editor/SKILL.md",
+      "description": "Write and edit academic catalog entries including program descriptions, admission requirements, degree plans, and course descriptions.",
+      "version": "1.0.0",
+      "category": "academic-programs",
+      "tags": ["academic-catalog", "course-descriptions", "degree-plans", "academic-policy"]
     },
     {
       "name": "early-alert-responder",
@@ -62,12 +254,396 @@
       "tags": ["retention", "early-alert", "advising", "intervention"]
     },
     {
+      "name": "academic-advisor-notes",
+      "source": "skills/student-success/academic-advisor-notes/SKILL.md",
+      "description": "Write professional advising session notes, action plans, and follow-up communications.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["advising", "notes", "action-plans", "student-communication"]
+    },
+    {
+      "name": "retention-risk-analyzer",
+      "source": "skills/student-success/retention-risk-analyzer/SKILL.md",
+      "description": "Analyze student risk indicators, generate retention reports, and draft intervention recommendations.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["retention", "risk-analysis", "intervention", "student-success"]
+    },
+    {
+      "name": "career-readiness-coach",
+      "source": "skills/student-success/career-readiness-coach/SKILL.md",
+      "description": "Create resume reviews, cover letter feedback, interview prep, and career exploration resources.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["career-services", "resume", "interview-prep", "career-readiness"]
+    },
+    {
+      "name": "degree-audit-assistant",
+      "source": "skills/student-success/degree-audit-assistant/SKILL.md",
+      "description": "Review degree audits, identify remaining requirements, plan course sequences, and draft academic plans.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["degree-audit", "course-planning", "graduation", "academic-plan"]
+    },
+    {
+      "name": "tutoring-session-planner",
+      "source": "skills/student-success/tutoring-session-planner/SKILL.md",
+      "description": "Design tutoring and supplemental instruction sessions, create study guides, and draft learning support materials.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["tutoring", "supplemental-instruction", "study-guides", "learning-support"]
+    },
+    {
+      "name": "student-conduct-writer",
+      "source": "skills/student-success/student-conduct-writer/SKILL.md",
+      "description": "Draft student conduct letters, hearing summaries, and sanction communications.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["student-conduct", "due-process", "sanctions", "Title-IX"]
+    },
+    {
+      "name": "first-year-experience",
+      "source": "skills/student-success/first-year-experience/SKILL.md",
+      "description": "Design first-year experience programming including orientation, FYE courses, and peer mentor training.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["first-year-experience", "orientation", "peer-mentoring", "student-transition"]
+    },
+    {
+      "name": "disability-accommodation",
+      "source": "skills/student-success/disability-accommodation/SKILL.md",
+      "description": "Draft accommodation letters, accessible syllabus language, and accommodation plan documentation.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["disability-services", "accommodations", "accessibility", "ADA"]
+    },
+    {
+      "name": "mentorship-program-designer",
+      "source": "skills/student-success/mentorship-program-designer/SKILL.md",
+      "description": "Design peer and faculty mentoring programs with matching criteria, training, and assessment frameworks.",
+      "version": "1.0.0",
+      "category": "student-success",
+      "tags": ["mentoring", "peer-mentoring", "faculty-mentoring", "program-design"]
+    },
+    {
       "name": "grant-proposal-writer",
-      "source": "skills/finance/grant-proposal-writer/SKILL.md",
+      "source": "skills/grants-finance/grant-proposal-writer/SKILL.md",
       "description": "Write grant proposals, budgets, and compliance narratives for federal and private funding.",
       "version": "1.0.0",
-      "category": "finance",
+      "category": "grants-finance",
       "tags": ["grants", "proposals", "budgets", "federal-funding"]
+    },
+    {
+      "name": "budget-narrative-builder",
+      "source": "skills/grants-finance/budget-narrative-builder/SKILL.md",
+      "description": "Write budget justification narratives for grants and institutional budgets, connecting line items to project objectives.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["budget-justification", "budget-narrative", "grants", "financial-planning"]
+    },
+    {
+      "name": "nsf-proposal-formatter",
+      "source": "skills/grants-finance/nsf-proposal-formatter/SKILL.md",
+      "description": "Format and structure NSF grant proposals following current GPG guidelines and directorate requirements.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["nsf", "grant-proposal", "broader-impacts", "federal-funding"]
+    },
+    {
+      "name": "nih-biosketch-writer",
+      "source": "skills/grants-finance/nih-biosketch-writer/SKILL.md",
+      "description": "Create and format NIH biosketches following the current SciENcv format with all required sections.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["nih", "biosketch", "sciencv", "researcher-profile"]
+    },
+    {
+      "name": "subcontract-agreement",
+      "source": "skills/grants-finance/subcontract-agreement/SKILL.md",
+      "description": "Draft subcontract and subaward agreements for sponsored research including scope, budget, and compliance.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["subaward", "subcontract", "sponsored-research", "compliance"]
+    },
+    {
+      "name": "effort-reporting-guide",
+      "source": "skills/grants-finance/effort-reporting-guide/SKILL.md",
+      "description": "Help faculty and staff understand and complete effort reporting for federally sponsored projects.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["effort-reporting", "compliance", "federal-regulations", "cost-accounting"]
+    },
+    {
+      "name": "cost-share-calculator",
+      "source": "skills/grants-finance/cost-share-calculator/SKILL.md",
+      "description": "Calculate and document cost-sharing commitments for grant proposals including in-kind and matching funds.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["cost-sharing", "matching-funds", "in-kind", "grant-compliance"]
+    },
+    {
+      "name": "annual-financial-report",
+      "source": "skills/grants-finance/annual-financial-report/SKILL.md",
+      "description": "Create annual financial reports for academic departments with variance analysis and narrative explanations.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["financial-reporting", "budget-analysis", "variance-analysis", "fiscal-management"]
+    },
+    {
+      "name": "endowment-stewardship",
+      "source": "skills/grants-finance/endowment-stewardship/SKILL.md",
+      "description": "Write endowment stewardship reports for donors with fund performance, impact stories, and usage summaries.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["endowment", "stewardship", "donor-relations", "fund-management"]
+    },
+    {
+      "name": "audit-response-writer",
+      "source": "skills/grants-finance/audit-response-writer/SKILL.md",
+      "description": "Draft responses to internal and external audit findings with corrective action plans and evidence.",
+      "version": "1.0.0",
+      "category": "grants-finance",
+      "tags": ["audit-response", "corrective-action", "compliance", "internal-controls"]
+    },
+    {
+      "name": "irb-protocol-writer",
+      "source": "skills/research-data/irb-protocol-writer/SKILL.md",
+      "description": "Draft IRB protocols for human subjects research including study descriptions, consent forms, and risk assessments.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["irb", "human-subjects", "ethics", "compliance"]
+    },
+    {
+      "name": "literature-review-assistant",
+      "source": "skills/research-data/literature-review-assistant/SKILL.md",
+      "description": "Help researchers structure and write literature reviews with systematic search strategies and synthesis frameworks.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["literature-review", "research-synthesis", "academic-writing", "systematic-review"]
+    },
+    {
+      "name": "survey-instrument-designer",
+      "source": "skills/research-data/survey-instrument-designer/SKILL.md",
+      "description": "Design survey instruments for institutional research with question design, response scales, and validity frameworks.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["survey-design", "assessment", "institutional-research", "measurement"]
+    },
+    {
+      "name": "data-visualization-narrator",
+      "source": "skills/research-data/data-visualization-narrator/SKILL.md",
+      "description": "Create narrative descriptions and interpretations of data visualizations for institutional reports and presentations.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["data-visualization", "reporting", "data-storytelling", "dashboards"]
+    },
+    {
+      "name": "institutional-research-report",
+      "source": "skills/research-data/institutional-research-report/SKILL.md",
+      "description": "Write institutional research reports including enrollment trends, retention analysis, and peer comparison studies.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["institutional-research", "enrollment", "retention", "peer-comparison"]
+    },
+    {
+      "name": "research-poster-creator",
+      "source": "skills/research-data/research-poster-creator/SKILL.md",
+      "description": "Design academic research poster content with structured sections and visual hierarchy for conference presentations.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["research-poster", "conference", "academic-writing", "presentation"]
+    },
+    {
+      "name": "statistical-analysis-guide",
+      "source": "skills/research-data/statistical-analysis-guide/SKILL.md",
+      "description": "Guide researchers through statistical test selection, assumption checking, and APA-format reporting.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["statistics", "data-analysis", "quantitative-methods", "apa-reporting"]
+    },
+    {
+      "name": "faculty-research-profile",
+      "source": "skills/research-data/faculty-research-profile/SKILL.md",
+      "description": "Write faculty research profiles, bio sketches, and expertise summaries for websites and grant applications.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["faculty-profile", "biosketch", "research-expertise", "academic-bio"]
+    },
+    {
+      "name": "data-governance-policy",
+      "source": "skills/research-data/data-governance-policy/SKILL.md",
+      "description": "Draft data governance policies, data dictionaries, and classification frameworks for institutional data management.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["data-governance", "data-management", "data-classification", "policy"]
+    },
+    {
+      "name": "peer-review-responder",
+      "source": "skills/research-data/peer-review-responder/SKILL.md",
+      "description": "Help researchers draft point-by-point responses to peer reviewer comments for journal manuscript revisions.",
+      "version": "1.0.0",
+      "category": "research-data",
+      "tags": ["peer-review", "manuscript-revision", "academic-publishing", "journal-response"]
+    },
+    {
+      "name": "sacscoc-self-study",
+      "source": "skills/compliance-accreditation/sacscoc-self-study/SKILL.md",
+      "description": "Write SACSCOC self-study narratives, compliance certifications, and QEP documents.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["sacscoc", "self-study", "reaffirmation", "qep"]
+    },
+    {
+      "name": "ferpa-compliance-checker",
+      "source": "skills/compliance-accreditation/ferpa-compliance-checker/SKILL.md",
+      "description": "Review communications, policies, and data practices for FERPA compliance and draft compliant language.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["ferpa", "student-privacy", "education-records", "compliance"]
+    },
+    {
+      "name": "title-ix-report-writer",
+      "source": "skills/compliance-accreditation/title-ix-report-writer/SKILL.md",
+      "description": "Draft Title IX annual reports, climate survey summaries, training documentation, and policy communications.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["title-ix", "sexual-misconduct", "compliance-reporting", "gender-equity"]
+    },
+    {
+      "name": "clery-act-reporter",
+      "source": "skills/compliance-accreditation/clery-act-reporter/SKILL.md",
+      "description": "Draft Clery Act annual security reports, crime log entries, timely warnings, and emergency notifications.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["clery-act", "campus-safety", "annual-security-report", "timely-warning"]
+    },
+    {
+      "name": "state-authorization-tracker",
+      "source": "skills/compliance-accreditation/state-authorization-tracker/SKILL.md",
+      "description": "Track state authorization requirements for distance education and draft compliance documentation.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["state-authorization", "sara", "distance-education", "reciprocity"]
+    },
+    {
+      "name": "policy-manual-drafter",
+      "source": "skills/compliance-accreditation/policy-manual-drafter/SKILL.md",
+      "description": "Write institutional policy documents with proper structure, approval workflows, and revision history.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["policy-development", "institutional-policy", "procedures", "governance"]
+    },
+    {
+      "name": "ada-compliance-reviewer",
+      "source": "skills/compliance-accreditation/ada-compliance-reviewer/SKILL.md",
+      "description": "Review campus facilities, digital content, and programs for ADA/Section 504 compliance and draft remediation plans.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["ada", "section-504", "accessibility", "digital-accessibility"]
+    },
+    {
+      "name": "board-report-writer",
+      "source": "skills/compliance-accreditation/board-report-writer/SKILL.md",
+      "description": "Write reports and presentations for boards of trustees and regents with dashboards and executive summaries.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["board-of-trustees", "governance", "executive-summary", "institutional-reporting"]
+    },
+    {
+      "name": "risk-assessment-matrix",
+      "source": "skills/compliance-accreditation/risk-assessment-matrix/SKILL.md",
+      "description": "Create institutional risk assessment matrices, risk registers, and mitigation plans for enterprise risk management.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["risk-management", "erm", "risk-register", "mitigation"]
+    },
+    {
+      "name": "student-complaint-handler",
+      "source": "skills/compliance-accreditation/student-complaint-handler/SKILL.md",
+      "description": "Draft student complaint response letters, track resolution processes, and create complaint trend reports.",
+      "version": "1.0.0",
+      "category": "compliance-accreditation",
+      "tags": ["student-complaints", "grievance", "complaint-resolution", "consumer-protection"]
+    },
+    {
+      "name": "helpdesk-ticket-responder",
+      "source": "skills/it-operations/helpdesk-ticket-responder/SKILL.md",
+      "description": "Draft professional helpdesk ticket responses, knowledge base articles, and escalation communications for campus IT support.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["helpdesk", "ticket-response", "knowledge-base", "it-support"]
+    },
+    {
+      "name": "sis-integration-guide",
+      "source": "skills/it-operations/sis-integration-guide/SKILL.md",
+      "description": "Document SIS integration specifications, data mapping guides, and API documentation for Banner, Colleague, or PeopleSoft.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["sis", "integration", "data-mapping", "api-documentation"]
+    },
+    {
+      "name": "lms-course-builder",
+      "source": "skills/it-operations/lms-course-builder/SKILL.md",
+      "description": "Create LMS course templates, module structures, and setup guides for Canvas, Blackboard, or Moodle course development.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["lms", "course-design", "canvas", "instructional-technology"]
+    },
+    {
+      "name": "campus-network-troubleshooter",
+      "source": "skills/it-operations/campus-network-troubleshooter/SKILL.md",
+      "description": "Create network troubleshooting guides, outage communication templates, and network documentation for campus IT infrastructure.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["network", "troubleshooting", "infrastructure", "outage-communication"]
+    },
+    {
+      "name": "it-security-policy",
+      "source": "skills/it-operations/it-security-policy/SKILL.md",
+      "description": "Draft IT security policies, acceptable use policies, incident response plans, and data classification guidelines for higher education.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["security-policy", "acceptable-use", "incident-response", "data-classification"]
+    },
+    {
+      "name": "data-migration-planner",
+      "source": "skills/it-operations/data-migration-planner/SKILL.md",
+      "description": "Plan and document data migration projects including mapping specifications, validation checklists, and rollback procedures.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["data-migration", "project-planning", "data-mapping", "system-conversion"]
+    },
+    {
+      "name": "vendor-rfp-writer",
+      "source": "skills/it-operations/vendor-rfp-writer/SKILL.md",
+      "description": "Write RFP documents for technology procurement including requirements specifications, evaluation criteria, and vendor comparison matrices.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["rfp", "procurement", "vendor-evaluation", "technology-acquisition"]
+    },
+    {
+      "name": "business-continuity-plan",
+      "source": "skills/it-operations/business-continuity-plan/SKILL.md",
+      "description": "Draft IT business continuity and disaster recovery plans including BIA, recovery procedures, and testing schedules.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["business-continuity", "disaster-recovery", "bia", "risk-management"]
+    },
+    {
+      "name": "change-management-template",
+      "source": "skills/it-operations/change-management-template/SKILL.md",
+      "description": "Create change management documentation including change requests, impact assessments, communication plans, and rollback procedures.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["change-management", "itil", "change-request", "impact-assessment"]
+    },
+    {
+      "name": "user-training-guide",
+      "source": "skills/it-operations/user-training-guide/SKILL.md",
+      "description": "Create end-user training guides, quick reference cards, and onboarding documentation for campus technology systems.",
+      "version": "1.0.0",
+      "category": "it-operations",
+      "tags": ["training", "documentation", "onboarding", "user-guides"]
     }
   ]
 }
