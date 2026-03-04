@@ -1,4 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
+import sharp from "sharp";
 
 let _anthropic: Anthropic | null = null;
 function getAnthropic(): Anthropic {
@@ -6,6 +7,64 @@ function getAnthropic(): Anthropic {
     _anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
   }
   return _anthropic;
+}
+
+/**
+ * Claude's API limit is 5MB per image (base64-encoded).
+ * Base64 adds ~33% overhead, so raw image must be under ~3.5MB.
+ * We compress to JPEG and resize large images to stay well within limits.
+ */
+const MAX_IMAGE_BYTES = 3_500_000; // 3.5MB raw → ~4.7MB base64 (under 5MB limit)
+
+async function compressImageForClaude(
+  buffer: Buffer,
+  mimeType: string
+): Promise<{ data: string; mediaType: "image/jpeg" | "image/png" | "image/webp" }> {
+  // First, try the original image if it's small enough
+  if (buffer.length <= MAX_IMAGE_BYTES) {
+    return {
+      data: buffer.toString("base64"),
+      mediaType: mimeType as "image/jpeg" | "image/png" | "image/webp",
+    };
+  }
+
+  // Image too large — resize and compress to JPEG
+  console.log(`Compressing image: ${(buffer.length / 1024 / 1024).toFixed(1)}MB → targeting <3.5MB`);
+
+  let quality = 85;
+  let width = 2048; // max dimension
+
+  // Try progressively smaller sizes/qualities until under limit
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const compressed = await sharp(buffer)
+      .resize({ width, height: width, fit: "inside", withoutEnlargement: true })
+      .jpeg({ quality, mozjpeg: true })
+      .toBuffer();
+
+    if (compressed.length <= MAX_IMAGE_BYTES) {
+      console.log(`Compressed to ${(compressed.length / 1024 / 1024).toFixed(1)}MB (${width}px, q${quality})`);
+      return {
+        data: compressed.toString("base64"),
+        mediaType: "image/jpeg",
+      };
+    }
+
+    // Reduce for next attempt
+    width = Math.round(width * 0.7);
+    quality = Math.max(50, quality - 10);
+  }
+
+  // Final fallback: aggressive compression
+  const final = await sharp(buffer)
+    .resize({ width: 1024, height: 1024, fit: "inside", withoutEnlargement: true })
+    .jpeg({ quality: 40, mozjpeg: true })
+    .toBuffer();
+
+  console.log(`Final compress: ${(final.length / 1024 / 1024).toFixed(1)}MB (1024px, q40)`);
+  return {
+    data: final.toString("base64"),
+    mediaType: "image/jpeg",
+  };
 }
 
 /**
@@ -49,8 +108,16 @@ export async function extractText(
 }
 
 /**
+ * Compress an image buffer for Claude API if needed.
+ * Exported so route handlers can call it when building processedFiles.
+ */
+export { compressImageForClaude };
+
+/**
  * Build content blocks for files to send to Claude.
  * PDFs are sent as document blocks, images as image blocks, text inline.
+ * Images should already be compressed via compressImageForClaude() before
+ * being passed here — the base64 and mimeType in the file object are used as-is.
  */
 function buildFileContentBlocks(
   files: Array<{ name: string; text: string; mimeType: string; base64?: string }>
@@ -73,7 +140,7 @@ function buildFileContentBlocks(
         text: `[PDF document: ${file.name}]`,
       });
     } else if (file.base64 && file.mimeType.startsWith("image/")) {
-      // Send image to Claude Vision
+      // Send image to Claude Vision (already compressed by caller)
       blocks.push({
         type: "image",
         source: {

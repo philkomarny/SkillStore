@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getUserProfile } from "@/lib/users";
 import { getClient } from "@/lib/supabase";
-import { extractText, generateContext } from "@/lib/context-processor";
+import { extractText, generateContext, compressImageForClaude } from "@/lib/context-processor";
 
 // Allow up to 300s for file processing + Claude API call (Vercel Pro)
 export const maxDuration = 300;
@@ -53,8 +53,17 @@ export async function POST(request: NextRequest) {
 
     const buffer = Buffer.from(await fileData.arrayBuffer());
 
-    if (file.file_type.startsWith("image/") || file.file_type === "application/pdf") {
-      // Send images and PDFs as base64 — Claude reads them directly
+    if (file.file_type.startsWith("image/")) {
+      // Compress image to fit Claude's 5MB base64 limit
+      const { data: imgBase64, mediaType } = await compressImageForClaude(buffer, file.file_type);
+      processedFiles.push({
+        name: file.file_name,
+        text: "",
+        mimeType: mediaType,
+        base64: imgBase64,
+      });
+    } else if (file.file_type === "application/pdf") {
+      // Send PDF as base64 — Claude reads them natively
       processedFiles.push({
         name: file.file_name,
         text: "",
