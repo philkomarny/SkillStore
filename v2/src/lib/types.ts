@@ -183,6 +183,21 @@ export interface UserSkill {
   updatedAt: string;
 }
 
+// --- Context Profiles ---
+
+export type ContextProfileStatus = "draft" | "building" | "ready";
+
+export interface ContextProfile {
+  id: string;
+  userId: string;
+  name: string;
+  contextMarkdown: string | null;
+  version: number;
+  status: ContextProfileStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
 // --- Users ---
 
 export interface UserProfile {

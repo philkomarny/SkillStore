@@ -165,31 +165,37 @@ function buildFileContentBlocks(
 }
 
 /**
- * Process uploaded files with Claude API to generate context.md.
+ * Process uploaded files with Claude API to generate a reusable context profile.
+ * This context is standalone — not tied to any specific skill — so it can
+ * be applied to any skill during refinement.
  */
 export async function generateContext(
-  skillDescription: string,
+  profileName: string,
   files: Array<{ name: string; text: string; mimeType: string; base64?: string }>
 ): Promise<string> {
   const contentBlocks: Anthropic.ContentBlockParam[] = [
     {
       type: "text",
-      text: `You are helping a user personalize a Claude skill for their specific needs.
+      text: `You are helping a higher education professional build a reusable context profile from their documents.
 
-The skill is: ${skillDescription}
+The context profile is named: "${profileName}"
 
-The user has uploaded the following documents. Analyze them and generate a context.md file that personalizes this skill. Extract key information such as:
-- Organization/institution details (name, mission, values)
+Analyze the uploaded documents and generate a comprehensive context profile as clean markdown. This context will later be combined with various AI skill templates to personalize them, so extract ALL relevant information including:
+
+- Organization/institution details (name, mission, values, type, size)
 - Brand voice and tone guidelines
-- Specific terminology and nomenclature
-- Relevant data points, metrics, or statistics
-- Processes, workflows, and preferences
+- Specific terminology, acronyms, and nomenclature
+- Key data points, metrics, statistics, and dates
+- Processes, workflows, and standard procedures
 - Target audiences and stakeholders
-- Key people, departments, or teams
+- Key people, departments, teams, and their roles
+- Communication styles and preferences
+- Goals, priorities, and strategic initiatives
+- Compliance requirements and policies
 
-Format the output as clean markdown with clear sections. Be specific and actionable — include actual names, values, and details from the documents, not generic placeholders.
+Format the output as clean markdown with clear, labeled sections. Be specific and actionable — include actual names, values, and details from the documents, not generic placeholders. The more specific detail you capture, the better the skill refinements will be.
 
-Here are the uploaded files:`,
+Here are the uploaded documents:`,
     },
     ...buildFileContentBlocks(files),
   ];
@@ -205,35 +211,36 @@ Here are the uploaded files:`,
 }
 
 /**
- * Refine a skill by rewriting it with the user's context baked in.
+ * Refine a skill using pre-built context markdown.
  * This is the core Refinery operation — takes the original skill content
- * and user-uploaded documents, returns a fully rewritten skill file.
+ * and a pre-built context profile (not raw files), returns a fully rewritten skill.
+ *
+ * Much simpler than the old refineSkill() because all file processing
+ * happened during context profile creation. No downloads or compression needed.
  */
-export async function refineSkill(
+export async function refineSkillWithContext(
   originalSkillContent: string,
   skillName: string,
-  files: Array<{ name: string; text: string; mimeType: string; base64?: string }>
+  contextMarkdown: string
 ): Promise<{ refinedContent: string; contextSummary: string }> {
-  const contentBlocks: Anthropic.ContentBlockParam[] = [];
-
-  // System-level instruction as the first text block
-  contentBlocks.push({
-    type: "text",
-    text: `You are the eduSkillsMP Refinery — a skill refinement engine for higher education professionals.
+  const contentBlocks: Anthropic.ContentBlockParam[] = [
+    {
+      type: "text",
+      text: `You are the eduSkillsMP Refinery — a skill refinement engine for higher education professionals.
 
 You will receive:
 1. An original Claude skill file (markdown with instructions for Claude)
-2. One or more documents uploaded by the user (their institutional context)
+2. A context profile containing the user's institutional information
 
 Your job is to REWRITE the skill file so that the user's specific context is baked directly into the instructions. This is NOT about appending context — it's about rewriting every relevant section so the skill speaks in the user's language, references their institution, uses their data, and follows their processes.
 
 Rules:
 - Preserve the skill's overall structure, purpose, and markdown formatting
-- Replace generic references with specific ones from the user's documents
+- Replace generic references with specific ones from the context profile
 - Incorporate the user's terminology, acronyms, department names, and processes
-- Include specific data points, metrics, names, and details found in their documents
+- Include specific data points, metrics, names, and details found in the context
 - Keep the skill functional as a Claude instruction file — it must still work when used
-- If the user's documents don't contain relevant info for a section, leave it mostly unchanged
+- If the context doesn't contain relevant info for a section, leave it mostly unchanged
 - Do NOT add a separate "context" or "appendix" section — weave the context INTO the instructions
 
 After the rewritten skill, add a separator and provide a brief context summary (3-5 bullet points) of the key details you incorporated.
@@ -245,20 +252,16 @@ Format your response EXACTLY like this:
 ---CONTEXT_SUMMARY_START---
 [3-5 bullet points summarizing key context incorporated]
 ---CONTEXT_SUMMARY_END---`,
-  });
-
-  contentBlocks.push({
-    type: "text",
-    text: `\n\n## Original Skill: "${skillName}"\n\n\`\`\`markdown\n${originalSkillContent}\n\`\`\``,
-  });
-
-  contentBlocks.push({
-    type: "text",
-    text: `\n\n## User's Documents:\n`,
-  });
-
-  // Add file content blocks (PDFs as documents, images as images, text inline)
-  contentBlocks.push(...buildFileContentBlocks(files));
+    },
+    {
+      type: "text",
+      text: `\n\n## Original Skill: "${skillName}"\n\n\`\`\`markdown\n${originalSkillContent}\n\`\`\``,
+    },
+    {
+      type: "text",
+      text: `\n\n## User's Context Profile:\n\n${contextMarkdown}`,
+    },
+  ];
 
   const response = await getAnthropic().messages.create({
     model: "claude-sonnet-4-20250514",

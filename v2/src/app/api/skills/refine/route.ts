@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getUserProfile } from "@/lib/users";
 import { getClient } from "@/lib/supabase";
-import { extractText, refineSkill, compressImageForClaude } from "@/lib/context-processor";
+import { refineSkillWithContext } from "@/lib/context-processor";
 
-// Allow up to 300s for PDF extraction + Claude API call (Vercel Pro)
+// Allow up to 300s for Claude API call (Vercel Pro)
 export const maxDuration = 300;
 
 export async function POST(req: Request) {
@@ -14,9 +14,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    const { userSkillId } = await req.json();
-    if (!userSkillId) {
-      return NextResponse.json({ error: "userSkillId required" }, { status: 400 });
+    const { userSkillId, contextProfileId } = await req.json();
+    if (!userSkillId || !contextProfileId) {
+      return NextResponse.json(
+        { error: "userSkillId and contextProfileId are required" },
+        { status: 400 }
+      );
     }
 
     const profile = await getUserProfile(session.user.id);
@@ -38,7 +41,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Skill not found" }, { status: 404 });
     }
 
-    // Mark as refining
+    // Fetch the context profile
+    const { data: contextProfile, error: ctxError } = (await supabase
+      .from("context_profiles")
+      .select("*")
+      .eq("id", contextProfileId)
+      .eq("user_id", profile.id)
+      .single()) as { data: any; error: any };
+
+    if (ctxError || !contextProfile) {
+      return NextResponse.json({ error: "Context profile not found" }, { status: 404 });
+    }
+
+    if (contextProfile.status !== "ready" || !contextProfile.context_markdown) {
+      return NextResponse.json(
+        { error: "Context profile is not ready. Build it first by uploading documents." },
+        { status: 400 }
+      );
+    }
+
+    // Mark skill as refining
     await (supabase.from("user_skills") as any)
       .update({ status: "refining", updated_at: new Date().toISOString() })
       .eq("id", userSkillId);
@@ -55,94 +77,17 @@ export async function POST(req: Request) {
     }
 
     if (!currentContent) {
-      return NextResponse.json({ error: "No skill content found" }, { status: 400 });
-    }
-
-    // Get unprocessed context files for this user + skill
-    const { data: contextFiles } = (await supabase
-      .from("context_files")
-      .select("*")
-      .eq("user_id", profile.id)
-      .eq("skill_slug", userSkill.base_skill_slug)
-      .eq("processed", false)) as { data: any[] | null };
-
-    if (!contextFiles || contextFiles.length === 0) {
-      // Reset status
       await (supabase.from("user_skills") as any)
         .update({ status: userSkill.status, updated_at: new Date().toISOString() })
         .eq("id", userSkillId);
-      return NextResponse.json({ error: "No files to process. Upload documents first." }, { status: 400 });
+      return NextResponse.json({ error: "No skill content found" }, { status: 400 });
     }
 
-    // Download and extract text from each file
-    const processedFiles: Array<{
-      name: string;
-      text: string;
-      mimeType: string;
-      base64?: string;
-    }> = [];
-
-    for (const file of contextFiles) {
-      try {
-        const { data: fileData } = await supabase.storage
-          .from("context-uploads")
-          .download(file.storage_path);
-
-        if (!fileData) {
-          console.error(`Failed to download file: ${file.storage_path}`);
-          continue;
-        }
-
-        const buffer = Buffer.from(await fileData.arrayBuffer());
-
-        if (file.file_type.startsWith("image/")) {
-          // Compress image to fit Claude's 5MB base64 limit, then send as Vision block
-          const { data: imgBase64, mediaType } = await compressImageForClaude(buffer, file.file_type);
-          processedFiles.push({
-            name: file.file_name,
-            text: "",
-            mimeType: mediaType,
-            base64: imgBase64,
-          });
-        } else if (file.file_type === "application/pdf") {
-          // Send PDF as base64 document block — Claude reads them natively
-          processedFiles.push({
-            name: file.file_name,
-            text: "",
-            mimeType: file.file_type,
-            base64: buffer.toString("base64"),
-          });
-        } else {
-          const text = await extractText(buffer, file.file_type, file.file_name);
-          processedFiles.push({
-            name: file.file_name,
-            text,
-            mimeType: file.file_type,
-          });
-        }
-      } catch (fileErr: any) {
-        console.error(`Error processing file ${file.file_name}:`, fileErr?.message || fileErr);
-        // Continue with other files instead of crashing
-        processedFiles.push({
-          name: file.file_name,
-          text: `[Error extracting text from ${file.file_name}]`,
-          mimeType: file.file_type,
-        });
-      }
-    }
-
-    if (processedFiles.length === 0) {
-      await (supabase.from("user_skills") as any)
-        .update({ status: "draft", updated_at: new Date().toISOString() })
-        .eq("id", userSkillId);
-      return NextResponse.json({ error: "Could not process any uploaded files" }, { status: 400 });
-    }
-
-    // Call the AI refinement engine
-    const { refinedContent, contextSummary } = await refineSkill(
+    // Call the AI refinement engine with pre-built context markdown
+    const { refinedContent, contextSummary } = await refineSkillWithContext(
       currentContent,
       userSkill.name,
-      processedFiles
+      contextProfile.context_markdown
     );
 
     // Store new version in storage
@@ -171,15 +116,10 @@ export async function POST(req: Request) {
         status: "refined",
         storage_path: storagePath,
         context_summary: contextSummary,
+        last_context_profile_id: contextProfileId,
         updated_at: new Date().toISOString(),
       })
       .eq("id", userSkillId);
-
-    // Mark context files as processed
-    const fileIds = contextFiles.map((f: any) => f.id);
-    await (supabase.from("context_files") as any)
-      .update({ processed: true })
-      .in("id", fileIds);
 
     return NextResponse.json({
       refinedContent,
@@ -188,7 +128,6 @@ export async function POST(req: Request) {
     });
   } catch (err: any) {
     console.error("Refinement error:", err?.message || err);
-    // Try to return a useful error message
     const message = err?.message || "Unknown error";
     return NextResponse.json(
       { error: `Refinement failed: ${message}` },

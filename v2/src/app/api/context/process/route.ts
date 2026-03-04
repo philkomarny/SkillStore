@@ -19,20 +19,40 @@ export async function POST(request: NextRequest) {
   }
 
   const supabase = getClient();
-  const { skillSlug, skillDescription } = await request.json();
-  if (!skillSlug) {
-    return NextResponse.json({ error: "Missing skillSlug" }, { status: 400 });
+  const { contextProfileId } = await request.json();
+  if (!contextProfileId) {
+    return NextResponse.json({ error: "Missing contextProfileId" }, { status: 400 });
   }
 
-  // Get unprocessed files for this user + skill
+  // Verify profile ownership
+  const { data: contextProfile, error: profileError } = (await supabase
+    .from("context_profiles")
+    .select("*")
+    .eq("id", contextProfileId)
+    .eq("user_id", profile.id)
+    .single()) as { data: any; error: any };
+
+  if (profileError || !contextProfile) {
+    return NextResponse.json({ error: "Context profile not found" }, { status: 404 });
+  }
+
+  // Mark as building
+  await (supabase.from("context_profiles") as any)
+    .update({ status: "building", updated_at: new Date().toISOString() })
+    .eq("id", contextProfileId);
+
+  // Get unprocessed files for this context profile
   const { data: files } = (await supabase
     .from("context_files")
     .select("*")
-    .eq("user_id", profile.id)
-    .eq("skill_slug", skillSlug)
+    .eq("context_profile_id", contextProfileId)
     .eq("processed", false)) as { data: any[] | null };
 
   if (!files || files.length === 0) {
+    // Reset status
+    await (supabase.from("context_profiles") as any)
+      .update({ status: contextProfile.status || "draft", updated_at: new Date().toISOString() })
+      .eq("id", contextProfileId);
     return NextResponse.json({ error: "No files to process" }, { status: 400 });
   }
 
@@ -45,67 +65,71 @@ export async function POST(request: NextRequest) {
   }> = [];
 
   for (const file of files) {
-    const { data: fileData } = await supabase.storage
-      .from("context-uploads")
-      .download(file.storage_path);
+    try {
+      const { data: fileData } = await supabase.storage
+        .from("context-uploads")
+        .download(file.storage_path);
 
-    if (!fileData) continue;
+      if (!fileData) continue;
 
-    const buffer = Buffer.from(await fileData.arrayBuffer());
+      const buffer = Buffer.from(await fileData.arrayBuffer());
 
-    if (file.file_type.startsWith("image/")) {
-      // Compress image to fit Claude's 5MB base64 limit
-      const { data: imgBase64, mediaType } = await compressImageForClaude(buffer, file.file_type);
+      if (file.file_type.startsWith("image/")) {
+        const { data: imgBase64, mediaType } = await compressImageForClaude(buffer, file.file_type);
+        processedFiles.push({
+          name: file.file_name,
+          text: "",
+          mimeType: mediaType,
+          base64: imgBase64,
+        });
+      } else if (file.file_type === "application/pdf") {
+        processedFiles.push({
+          name: file.file_name,
+          text: "",
+          mimeType: file.file_type,
+          base64: buffer.toString("base64"),
+        });
+      } else {
+        const text = await extractText(buffer, file.file_type, file.file_name);
+        processedFiles.push({
+          name: file.file_name,
+          text,
+          mimeType: file.file_type,
+        });
+      }
+    } catch (fileErr: any) {
+      console.error(`Error processing file ${file.file_name}:`, fileErr?.message || fileErr);
       processedFiles.push({
         name: file.file_name,
-        text: "",
-        mimeType: mediaType,
-        base64: imgBase64,
-      });
-    } else if (file.file_type === "application/pdf") {
-      // Send PDF as base64 — Claude reads them natively
-      processedFiles.push({
-        name: file.file_name,
-        text: "",
-        mimeType: file.file_type,
-        base64: buffer.toString("base64"),
-      });
-    } else {
-      const text = await extractText(buffer, file.file_type, file.file_name);
-      processedFiles.push({
-        name: file.file_name,
-        text,
+        text: `[Error extracting text from ${file.file_name}]`,
         mimeType: file.file_type,
       });
     }
   }
 
+  if (processedFiles.length === 0) {
+    await (supabase.from("context_profiles") as any)
+      .update({ status: "draft", updated_at: new Date().toISOString() })
+      .eq("id", contextProfileId);
+    return NextResponse.json({ error: "Could not process any files" }, { status: 400 });
+  }
+
   // Generate context with Claude
   const contextMarkdown = await generateContext(
-    skillDescription || skillSlug,
+    contextProfile.name,
     processedFiles
   );
 
-  // Upsert user_contexts
-  const { data: existing } = (await supabase
-    .from("user_contexts")
-    .select("id")
-    .eq("user_id", profile.id)
-    .eq("skill_slug", skillSlug)
-    .single()) as { data: any };
-
-  if (existing) {
-    await (supabase
-      .from("user_contexts") as any)
-      .update({ context_markdown: contextMarkdown, updated_at: new Date().toISOString() })
-      .eq("id", existing.id);
-  } else {
-    await (supabase.from("user_contexts") as any).insert({
-      user_id: profile.id,
-      skill_slug: skillSlug,
+  // Update context_profiles with generated markdown
+  const newVersion = (contextProfile.version || 1) + (contextProfile.context_markdown ? 1 : 0);
+  await (supabase.from("context_profiles") as any)
+    .update({
       context_markdown: contextMarkdown,
-    });
-  }
+      status: "ready",
+      version: newVersion,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", contextProfileId);
 
   // Mark files as processed
   const fileIds = files.map((f: any) => f.id);
@@ -114,5 +138,5 @@ export async function POST(request: NextRequest) {
     .update({ processed: true })
     .in("id", fileIds);
 
-  return NextResponse.json({ context: contextMarkdown });
+  return NextResponse.json({ context: contextMarkdown, version: newVersion });
 }

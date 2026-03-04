@@ -68,10 +68,10 @@ export async function POST(request: NextRequest) {
 
     // ── Step 1: Generate signed upload URL ──────────────────────────────
     if (action === "sign") {
-      const { skillSlug, fileName, fileType, fileSize } = body;
+      const { contextProfileId, fileName, fileType, fileSize } = body;
 
-      if (!skillSlug || !fileName) {
-        return NextResponse.json({ error: "Missing skillSlug or fileName" }, { status: 400 });
+      if (!contextProfileId || !fileName) {
+        return NextResponse.json({ error: "Missing contextProfileId or fileName" }, { status: 400 });
       }
 
       if (fileSize && fileSize > MAX_FILE_SIZE) {
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest) {
       }
 
       const safeName = sanitizeFileName(fileName);
-      const storagePath = `${profile.id}/${skillSlug}/${Date.now()}-${safeName}`;
+      const storagePath = `${profile.id}/contexts/${contextProfileId}/${Date.now()}-${safeName}`;
 
       const { data, error } = await supabase.storage
         .from("context-uploads")
@@ -114,11 +114,11 @@ export async function POST(request: NextRequest) {
 
     // ── Step 2: Confirm upload → record in DB ───────────────────────────
     if (action === "confirm") {
-      const { skillSlug, fileName, fileType, fileSize, storagePath } = body;
+      const { contextProfileId, fileName, fileType, fileSize, storagePath } = body;
 
-      if (!skillSlug || !fileName || !storagePath) {
+      if (!contextProfileId || !fileName || !storagePath) {
         return NextResponse.json(
-          { error: "Missing skillSlug, fileName, or storagePath" },
+          { error: "Missing contextProfileId, fileName, or storagePath" },
           { status: 400 }
         );
       }
@@ -129,7 +129,8 @@ export async function POST(request: NextRequest) {
         .from("context_files") as any)
         .insert({
           user_id: profile.id,
-          skill_slug: skillSlug,
+          context_profile_id: contextProfileId,
+          skill_slug: "context", // placeholder for backwards compat until column is dropped
           file_name: fileName,
           file_type: contentType,
           storage_path: storagePath,
