@@ -1,11 +1,10 @@
 ---
-name: faculty-research-profile
-description: >
-  Write faculty research profiles, bio sketches, and expertise summaries for websites and grant applications.
-  TRIGGER when user needs to create or update a faculty member's research bio or professional profile.
-version: 1.0.0
-category: research-data
-tags: [faculty-profile, biosketch, research-expertise, academic-bio]
+name: "faculty-research-profile"
+description: "Write faculty research profiles, bio sketches, and expertise summaries for websites and grant applications. TRIGGER when user needs to create or update a faculty member's research bio or professional profile."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [faculty-profile, biosketch, research-expertise, academic-bio]
 ---
 
 # Faculty Research Profile Writer

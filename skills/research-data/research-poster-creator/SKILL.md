@@ -1,11 +1,10 @@
 ---
-name: research-poster-creator
-description: >
-  Design academic research poster content with structured sections and visual hierarchy for conference presentations.
-  TRIGGER when user needs to create or revise content for an academic research poster.
-version: 1.0.0
-category: research-data
-tags: [research-poster, conference, academic-writing, presentation]
+name: "research-poster-creator"
+description: "Design academic research poster content with structured sections and visual hierarchy for conference presentations. TRIGGER when user needs to create or revise content for an academic research poster."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [research-poster, conference, academic-writing, presentation]
 ---
 
 # Research Poster Creator

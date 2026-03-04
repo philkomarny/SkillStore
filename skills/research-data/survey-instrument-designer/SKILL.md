@@ -1,11 +1,10 @@
 ---
-name: survey-instrument-designer
-description: >
-  Design survey instruments for institutional research with question design, response scales, and validity frameworks.
-  TRIGGER when user needs to create, revise, or evaluate a survey for data collection in higher education.
-version: 1.0.0
-category: research-data
-tags: [survey-design, assessment, institutional-research, measurement]
+name: "survey-instrument-designer"
+description: "Design survey instruments for institutional research with question design, response scales, and validity frameworks. TRIGGER when user needs to create, revise, or evaluate a survey for data collection in higher education."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [survey-design, assessment, institutional-research, measurement]
 ---
 
 # Survey Instrument Designer

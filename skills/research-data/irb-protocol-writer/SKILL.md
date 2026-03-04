@@ -1,11 +1,10 @@
 ---
-name: irb-protocol-writer
-description: >
-  Draft IRB protocols for human subjects research including study descriptions, consent forms, and risk assessments.
-  TRIGGER when user needs to prepare or revise an IRB submission for human subjects research.
-version: 1.0.0
-category: research-data
-tags: [irb, human-subjects, ethics, compliance]
+name: "irb-protocol-writer"
+description: "Draft IRB protocols for human subjects research including study descriptions, consent forms, and risk assessments. TRIGGER when user needs to prepare or revise an IRB submission for human subjects research."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [irb, human-subjects, ethics, compliance]
 ---
 
 # IRB Protocol Writer

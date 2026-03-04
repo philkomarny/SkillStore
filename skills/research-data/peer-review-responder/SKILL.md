@@ -1,11 +1,10 @@
 ---
-name: peer-review-responder
-description: >
-  Help researchers draft point-by-point responses to peer reviewer comments for journal manuscript revisions.
-  TRIGGER when user needs to respond to reviewer feedback on a journal article submission.
-version: 1.0.0
-category: research-data
-tags: [peer-review, manuscript-revision, academic-publishing, journal-response]
+name: "peer-review-responder"
+description: "Help researchers draft point-by-point responses to peer reviewer comments for journal manuscript revisions. TRIGGER when user needs to respond to reviewer feedback on a journal article submission."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [peer-review, manuscript-revision, academic-publishing, journal-response]
 ---
 
 # Peer Review Responder

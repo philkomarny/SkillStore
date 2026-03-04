@@ -1,11 +1,10 @@
 ---
-name: statistical-analysis-guide
-description: >
-  Guide researchers through statistical test selection, assumption checking, and APA-format reporting.
-  TRIGGER when user needs help choosing, running, interpreting, or reporting statistical analyses.
-version: 1.0.0
-category: research-data
-tags: [statistics, data-analysis, quantitative-methods, apa-reporting]
+name: "statistical-analysis-guide"
+description: "Guide researchers through statistical test selection, assumption checking, and APA-format reporting. TRIGGER when user needs help choosing, running, interpreting, or reporting statistical analyses."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [statistics, data-analysis, quantitative-methods, apa-reporting]
 ---
 
 # Statistical Analysis Guide

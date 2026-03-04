@@ -1,11 +1,10 @@
 ---
-name: institutional-research-report
-description: >
-  Write institutional research reports including enrollment trends, retention analysis, and peer comparison studies.
-  TRIGGER when user needs to produce a formal IR report for institutional stakeholders or accreditation.
-version: 1.0.0
-category: research-data
-tags: [institutional-research, enrollment, retention, peer-comparison]
+name: "institutional-research-report"
+description: "Write institutional research reports including enrollment trends, retention analysis, and peer comparison studies. TRIGGER when user needs to produce a formal IR report for institutional stakeholders or accreditation."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [institutional-research, enrollment, retention, peer-comparison]
 ---
 
 # Institutional Research Report Writer

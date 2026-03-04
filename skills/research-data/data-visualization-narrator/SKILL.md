@@ -1,11 +1,10 @@
 ---
-name: data-visualization-narrator
-description: >
-  Create narrative descriptions and interpretations of data visualizations for institutional reports and presentations.
-  TRIGGER when user needs to write about charts, dashboards, or data displays for non-technical audiences.
-version: 1.0.0
-category: research-data
-tags: [data-visualization, reporting, data-storytelling, dashboards]
+name: "data-visualization-narrator"
+description: "Create narrative descriptions and interpretations of data visualizations for institutional reports and presentations. TRIGGER when user needs to write about charts, dashboards, or data displays for non-technical audiences."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [data-visualization, reporting, data-storytelling, dashboards]
 ---
 
 # Data Visualization Narrator

@@ -1,11 +1,10 @@
 ---
-name: data-governance-policy
-description: >
-  Draft data governance policies, data dictionaries, and classification frameworks for institutional data management.
-  TRIGGER when user needs to create or update data governance documentation for their institution.
-version: 1.0.0
-category: research-data
-tags: [data-governance, data-management, data-classification, policy]
+name: "data-governance-policy"
+description: "Draft data governance policies, data dictionaries, and classification frameworks for institutional data management. TRIGGER when user needs to create or update data governance documentation for their institution."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [data-governance, data-management, data-classification, policy]
 ---
 
 # Data Governance Policy Writer

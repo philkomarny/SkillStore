@@ -1,11 +1,10 @@
 ---
-name: literature-review-assistant
-description: >
-  Help researchers structure and write literature reviews with systematic search strategies and synthesis frameworks.
-  TRIGGER when user needs to organize, synthesize, or write a literature review for a research project or publication.
-version: 1.0.0
-category: research-data
-tags: [literature-review, research-synthesis, academic-writing, systematic-review]
+name: "literature-review-assistant"
+description: "Help researchers structure and write literature reviews with systematic search strategies and synthesis frameworks. TRIGGER when user needs to organize, synthesize, or write a literature review for a research project or publication."
+metadata:
+  version: 1.0.0
+  category: research-data
+  tags: [literature-review, research-synthesis, academic-writing, systematic-review]
 ---
 
 # Literature Review Assistant
