@@ -1,11 +1,10 @@
 ---
-name: it-security-policy
-description: >
-  Draft IT security policies, acceptable use policies, incident response plans, and data classification guidelines for higher education.
-  TRIGGER when user needs to write or update IT security documentation or policies.
-version: 1.0.0
-category: it-operations
-tags: [security-policy, acceptable-use, incident-response, data-classification]
+name: "it-security-policy"
+description: "Draft IT security policies, acceptable use policies, incident response plans, and data classification guidelines for higher education. TRIGGER when user needs to write or update IT security documentation or policies."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [security-policy, acceptable-use, incident-response, data-classification]
 ---
 
 # IT Security Policy

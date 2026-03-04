@@ -1,11 +1,10 @@
 ---
-name: user-training-guide
-description: >
-  Create end-user training guides, quick reference cards, and onboarding documentation for campus technology systems.
-  TRIGGER when user needs to create training materials or onboarding docs for campus technology.
-version: 1.0.0
-category: it-operations
-tags: [training, documentation, onboarding, user-guides]
+name: "user-training-guide"
+description: "Create end-user training guides, quick reference cards, and onboarding documentation for campus technology systems. TRIGGER when user needs to create training materials or onboarding docs for campus technology."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [training, documentation, onboarding, user-guides]
 ---
 
 # User Training Guide

@@ -1,11 +1,10 @@
 ---
-name: sis-integration-guide
-description: >
-  Document SIS integration specifications, data mapping guides, and API documentation for Banner, Colleague, or PeopleSoft.
-  TRIGGER when user needs to document or plan a Student Information System integration.
-version: 1.0.0
-category: it-operations
-tags: [sis, integration, data-mapping, api-documentation]
+name: "sis-integration-guide"
+description: "Document SIS integration specifications, data mapping guides, and API documentation for Banner, Colleague, or PeopleSoft. TRIGGER when user needs to document or plan a Student Information System integration."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [sis, integration, data-mapping, api-documentation]
 ---
 
 # SIS Integration Guide

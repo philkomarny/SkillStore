@@ -1,11 +1,10 @@
 ---
-name: business-continuity-plan
-description: >
-  Draft IT business continuity and disaster recovery plans including BIA, recovery procedures, and testing schedules.
-  TRIGGER when user needs to create or update BC/DR documentation for campus IT systems.
-version: 1.0.0
-category: it-operations
-tags: [business-continuity, disaster-recovery, bia, risk-management]
+name: "business-continuity-plan"
+description: "Draft IT business continuity and disaster recovery plans including BIA, recovery procedures, and testing schedules. TRIGGER when user needs to create or update BC/DR documentation for campus IT systems."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [business-continuity, disaster-recovery, bia, risk-management]
 ---
 
 # Business Continuity Plan

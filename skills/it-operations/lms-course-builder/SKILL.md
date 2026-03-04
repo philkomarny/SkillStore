@@ -1,11 +1,10 @@
 ---
-name: lms-course-builder
-description: >
-  Create LMS course templates, module structures, and setup guides for Canvas, Blackboard, or Moodle course development.
-  TRIGGER when user needs to build or document LMS course structures.
-version: 1.0.0
-category: it-operations
-tags: [lms, course-design, canvas, instructional-technology]
+name: "lms-course-builder"
+description: "Create LMS course templates, module structures, and setup guides for Canvas, Blackboard, or Moodle course development. TRIGGER when user needs to build or document LMS course structures."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [lms, course-design, canvas, instructional-technology]
 ---
 
 # LMS Course Builder

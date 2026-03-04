@@ -1,11 +1,10 @@
 ---
-name: data-migration-planner
-description: >
-  Plan and document data migration projects including mapping specifications, validation checklists, rollback procedures, and stakeholder communications.
-  TRIGGER when user needs to plan, document, or execute a data migration between campus systems.
-version: 1.0.0
-category: it-operations
-tags: [data-migration, project-planning, data-mapping, system-conversion]
+name: "data-migration-planner"
+description: "Plan and document data migration projects including mapping specifications, validation checklists, rollback procedures, and stakeholder communications. TRIGGER when user needs to plan, document, or execute a data migration between campus systems."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [data-migration, project-planning, data-mapping, system-conversion]
 ---
 
 # Data Migration Planner

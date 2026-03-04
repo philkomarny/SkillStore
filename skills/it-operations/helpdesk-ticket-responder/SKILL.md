@@ -1,11 +1,10 @@
 ---
-name: helpdesk-ticket-responder
-description: >
-  Draft professional helpdesk ticket responses, knowledge base articles, and escalation communications for campus IT support.
-  TRIGGER when user needs to respond to IT support tickets or create KB articles.
-version: 1.0.0
-category: it-operations
-tags: [helpdesk, ticket-response, knowledge-base, it-support]
+name: "helpdesk-ticket-responder"
+description: "Draft professional helpdesk ticket responses, knowledge base articles, and escalation communications for campus IT support. TRIGGER when user needs to respond to IT support tickets or create KB articles."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [helpdesk, ticket-response, knowledge-base, it-support]
 ---
 
 # Helpdesk Ticket Responder

@@ -1,11 +1,10 @@
 ---
-name: campus-network-troubleshooter
-description: >
-  Create network troubleshooting guides, outage communication templates, and network documentation for campus IT infrastructure.
-  TRIGGER when user needs to troubleshoot, document, or communicate about campus network issues.
-version: 1.0.0
-category: it-operations
-tags: [network, troubleshooting, infrastructure, outage-communication]
+name: "campus-network-troubleshooter"
+description: "Create network troubleshooting guides, outage communication templates, and network documentation for campus IT infrastructure. TRIGGER when user needs to troubleshoot, document, or communicate about campus network issues."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [network, troubleshooting, infrastructure, outage-communication]
 ---
 
 # Campus Network Troubleshooter

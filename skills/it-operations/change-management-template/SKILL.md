@@ -1,11 +1,10 @@
 ---
-name: change-management-template
-description: >
-  Create change management documentation including change requests, impact assessments, communication plans, and rollback procedures.
-  TRIGGER when user needs to document a system change, maintenance window, or IT change advisory board submission.
-version: 1.0.0
-category: it-operations
-tags: [change-management, itil, change-request, impact-assessment]
+name: "change-management-template"
+description: "Create change management documentation including change requests, impact assessments, communication plans, and rollback procedures. TRIGGER when user needs to document a system change, maintenance window, or IT change advisory board submission."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [change-management, itil, change-request, impact-assessment]
 ---
 
 # Change Management Template

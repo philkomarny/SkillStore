@@ -1,11 +1,10 @@
 ---
-name: vendor-rfp-writer
-description: >
-  Write RFP documents for technology procurement including requirements specifications, evaluation criteria, and vendor comparison matrices.
-  TRIGGER when user needs to create an RFP or evaluate technology vendors.
-version: 1.0.0
-category: it-operations
-tags: [rfp, procurement, vendor-evaluation, technology-acquisition]
+name: "vendor-rfp-writer"
+description: "Write RFP documents for technology procurement including requirements specifications, evaluation criteria, and vendor comparison matrices. TRIGGER when user needs to create an RFP or evaluate technology vendors."
+metadata:
+  version: 1.0.0
+  category: it-operations
+  tags: [rfp, procurement, vendor-evaluation, technology-acquisition]
 ---
 
 # Vendor RFP Writer
