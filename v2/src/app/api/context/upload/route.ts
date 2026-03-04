@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
   if (uploadError) {
     console.error("Upload error:", uploadError);
-    return NextResponse.json({ error: "Upload failed" }, { status: 500 });
+    return NextResponse.json({ error: `Upload failed: ${uploadError.message}` }, { status: 500 });
   }
 
   // Record in context_files table
