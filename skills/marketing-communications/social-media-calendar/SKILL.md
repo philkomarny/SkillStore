@@ -1,11 +1,10 @@
 ---
-name: social-media-calendar
-description: >
-  Plan and create social media content calendars for higher education institutions.
-  TRIGGER when user needs to organize social content by platform, theme, or academic calendar.
-version: 1.0.0
-category: marketing-communications
-tags: [social-media, content-calendar, higher-ed, platform-strategy]
+name: "social-media-calendar"
+description: "Plan and create social media content calendars for higher education institutions. TRIGGER when user needs to organize social content by platform, theme, or academic calendar."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [social-media, content-calendar, higher-ed, platform-strategy]
 ---
 
 # Social Media Calendar

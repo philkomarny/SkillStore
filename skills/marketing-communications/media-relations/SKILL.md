@@ -1,11 +1,10 @@
 ---
-name: media-relations
-description: >
-  Draft press releases, media pitches, talking points, and interview prep for institutional news.
-  TRIGGER when user needs to engage media, prepare spokespersons, or publicize institutional stories.
-version: 1.0.0
-category: marketing-communications
-tags: [media-relations, press-releases, public-relations, spokesperson]
+name: "media-relations"
+description: "Draft press releases, media pitches, talking points, and interview prep for institutional news. TRIGGER when user needs to engage media, prepare spokespersons, or publicize institutional stories."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [media-relations, press-releases, public-relations, spokesperson]
 ---
 
 # Media Relations

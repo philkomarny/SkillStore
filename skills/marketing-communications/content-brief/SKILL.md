@@ -1,11 +1,10 @@
 ---
-name: content-brief
-description: >
-  Create content briefs for program pages, recruitment materials, and institutional content.
-  TRIGGER when user needs content planning for higher education marketing.
-version: 1.0.0
-category: marketing-communications
-tags: [content, briefs, SEO, program-pages]
+name: "content-brief"
+description: "Create content briefs for program pages, recruitment materials, and institutional content. TRIGGER when user needs content planning for higher education marketing."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [content, briefs, SEO, program-pages]
 ---
 
 # Content Brief

@@ -1,11 +1,10 @@
 ---
-name: brand-voice-guide
-description: >
-  Define and document institutional brand voice, tone guidelines, and messaging frameworks.
-  TRIGGER when user needs to establish or refine brand voice for consistent campus communications.
-version: 1.0.0
-category: marketing-communications
-tags: [brand-voice, tone, messaging, style-guide]
+name: "brand-voice-guide"
+description: "Define and document institutional brand voice, tone guidelines, and messaging frameworks. TRIGGER when user needs to establish or refine brand voice for consistent campus communications."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [brand-voice, tone, messaging, style-guide]
 ---
 
 # Brand Voice Guide

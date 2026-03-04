@@ -1,11 +1,10 @@
 ---
-name: email-newsletter-creator
-description: >
-  Design and write email newsletters for university audiences including prospects, students, alumni, and donors.
-  TRIGGER when user needs to create email content, plan drip campaigns, or improve email engagement.
-version: 1.0.0
-category: marketing-communications
-tags: [email, newsletters, drip-campaigns, audience-segmentation]
+name: "email-newsletter-creator"
+description: "Design and write email newsletters for university audiences including prospects, students, alumni, and donors. TRIGGER when user needs to create email content, plan drip campaigns, or improve email engagement."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [email, newsletters, drip-campaigns, audience-segmentation]
 ---
 
 # Email Newsletter Creator

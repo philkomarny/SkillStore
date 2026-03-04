@@ -1,11 +1,10 @@
 ---
-name: enrollment-campaign
-description: >
-  Analyze enrollment marketing campaign performance and optimize recruitment spend.
-  TRIGGER when user shares campaign data or asks about enrollment marketing metrics.
-version: 1.0.0
-category: marketing-communications
-tags: [enrollment-marketing, campaigns, ROI, recruitment]
+name: "enrollment-campaign"
+description: "Analyze enrollment marketing campaign performance and optimize recruitment spend. TRIGGER when user shares campaign data or asks about enrollment marketing metrics."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [enrollment-marketing, campaigns, ROI, recruitment]
 ---
 
 # Enrollment Campaign Analyzer

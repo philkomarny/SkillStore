@@ -1,11 +1,10 @@
 ---
-name: event-promotion
-description: >
-  Create promotional plans and content for campus events including open houses, commencement, and galas.
-  TRIGGER when user needs to promote a university event across channels.
-version: 1.0.0
-category: marketing-communications
-tags: [events, promotion, campus-events, multichannel-marketing]
+name: "event-promotion"
+description: "Create promotional plans and content for campus events including open houses, commencement, and galas. TRIGGER when user needs to promote a university event across channels."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [events, promotion, campus-events, multichannel-marketing]
 ---
 
 # Event Promotion

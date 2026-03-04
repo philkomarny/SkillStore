@@ -1,11 +1,10 @@
 ---
-name: alumni-storyteller
-description: >
-  Craft compelling alumni success stories, donor spotlights, and impact narratives for advancement marketing.
-  TRIGGER when user needs to write alumni features, donor stories, or institutional impact content.
-version: 1.0.0
-category: marketing-communications
-tags: [alumni, storytelling, advancement, donor-relations]
+name: "alumni-storyteller"
+description: "Craft compelling alumni success stories, donor spotlights, and impact narratives for advancement marketing. TRIGGER when user needs to write alumni features, donor stories, or institutional impact content."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [alumni, storytelling, advancement, donor-relations]
 ---
 
 # Alumni Storyteller

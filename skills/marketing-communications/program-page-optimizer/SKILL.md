@@ -1,11 +1,10 @@
 ---
-name: program-page-optimizer
-description: >
-  Optimize academic program web pages for SEO and conversion with better headlines, CTAs, and structure.
-  TRIGGER when user needs to improve program page performance, search rankings, or inquiry generation.
-version: 1.0.0
-category: marketing-communications
-tags: [SEO, program-pages, conversion, web-optimization]
+name: "program-page-optimizer"
+description: "Optimize academic program web pages for SEO and conversion with better headlines, CTAs, and structure. TRIGGER when user needs to improve program page performance, search rankings, or inquiry generation."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [SEO, program-pages, conversion, web-optimization]
 ---
 
 # Program Page Optimizer

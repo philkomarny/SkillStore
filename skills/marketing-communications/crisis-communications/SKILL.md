@@ -1,11 +1,10 @@
 ---
-name: crisis-communications
-description: >
-  Draft crisis communication plans, holding statements, and stakeholder messaging for campus emergencies.
-  TRIGGER when user needs to prepare for or respond to an institutional crisis.
-version: 1.0.0
-category: marketing-communications
-tags: [crisis-communications, emergency, media-response, stakeholder-messaging]
+name: "crisis-communications"
+description: "Draft crisis communication plans, holding statements, and stakeholder messaging for campus emergencies. TRIGGER when user needs to prepare for or respond to an institutional crisis."
+metadata:
+  version: 1.0.0
+  category: marketing-communications
+  tags: [crisis-communications, emergency, media-response, stakeholder-messaging]
 ---
 
 # Crisis Communications
