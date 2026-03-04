@@ -3,17 +3,14 @@ import "next-auth/jwt";
 
 declare module "next-auth" {
   interface Session {
-    accessToken: string;
-    githubId: string;
-    githubUsername: string;
+    googleId: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
     accessToken?: string;
-    githubId?: string;
-    githubUsername?: string;
+    googleId?: string;
   }
 }
 
@@ -168,8 +165,7 @@ export const VERIFICATION_BADGES: Record<number, VerificationBadge> = {
 
 export interface UserProfile {
   id: string;
-  githubId: string;
-  githubUsername: string;
+  googleId: string;
   email?: string;
   displayName?: string;
   avatarUrl?: string;

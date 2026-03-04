@@ -56,7 +56,7 @@ export default function HowItWorksPage() {
             Your Custom Skill
           </div>
           <p className="text-gray-500 text-[13px]">
-            Saved to GitHub, distributed from your storefront. Not a skill with
+            Saved to your account, distributed from your storefront. Not a skill with
             an appendix &mdash;{" "}
             <em className="text-gray-700">a skill rewritten to be yours.</em>
           </p>
@@ -68,7 +68,7 @@ export default function HowItWorksPage() {
         <Step
           number="1"
           title="Create Your Account"
-          description="Sign up with GitHub to get your own Refinery and personal storefront on eduSkillsMP. It takes seconds."
+          description="Sign up with Google to get your own Refinery and personal storefront on eduSkillsMP. It takes seconds."
           icon="👤"
         />
 
@@ -139,7 +139,7 @@ export default function HowItWorksPage() {
         <Step
           number="4"
           title="Save & Distribute"
-          description="Save your refined skill to GitHub — version-controlled and always yours. Your personal storefront on eduSkillsMP makes it easy to share."
+          description="Save your refined skill — versioned and always yours. Your personal storefront on eduSkillsMP makes it easy to share."
           icon="🏪"
         >
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">

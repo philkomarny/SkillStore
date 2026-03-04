@@ -1,11 +1,11 @@
 import NextAuth from "next-auth";
-import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 import { upsertUser } from "./lib/users";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    GitHub({
-      authorization: { params: { scope: "repo" } },
+    Google({
+      authorization: { params: { scope: "openid email profile" } },
     }),
   ],
   session: { strategy: "jwt" },
@@ -15,17 +15,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.accessToken = account.access_token;
       }
       if (profile) {
-        token.githubId = String(profile.id);
-        token.githubUsername = profile.login as string;
+        token.googleId = profile.sub as string;
 
         // Upsert user in database on sign-in
         try {
           await upsertUser({
-            githubId: String(profile.id),
-            githubUsername: profile.login as string,
+            googleId: profile.sub as string,
             email: (profile.email as string) || undefined,
             displayName: (profile.name as string) || undefined,
-            avatarUrl: (profile.avatar_url as string) || undefined,
+            avatarUrl: (profile.picture as string) || undefined,
           });
         } catch {
           // Don't block sign-in if DB is unavailable
@@ -35,12 +33,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token;
     },
     session({ session, token }) {
-      session.accessToken = token.accessToken as string;
-      session.githubId = token.githubId as string;
-      session.githubUsername = token.githubUsername as string;
+      session.googleId = token.googleId as string;
       // Ensure user.id is set so dashboard auth checks work
       if (token.sub) session.user.id = token.sub;
-      if (token.githubId) session.user.id = token.githubId as string;
+      if (token.googleId) session.user.id = token.googleId as string;
       return session;
     },
     async redirect({ url, baseUrl }) {

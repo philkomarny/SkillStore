@@ -32,7 +32,7 @@ export default function ContextUploader({
   const handleUpload = useCallback(
     async (fileList: FileList) => {
       if (!session) {
-        signIn("github");
+        signIn("google");
         return;
       }
 
@@ -118,7 +118,7 @@ export default function ContextUploader({
           Upload your documents to generate a personalized context file.
         </p>
         <button
-          onClick={() => signIn("github")}
+          onClick={() => signIn("google")}
           className="w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 transition-colors"
         >
           Sign in to add context

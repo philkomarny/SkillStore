@@ -21,7 +21,7 @@ export default function VouchButton({
 
   const handleVouch = async () => {
     if (!session) {
-      signIn("github");
+      signIn("google");
       return;
     }
 

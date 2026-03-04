@@ -14,5 +14,4 @@ web/out/
 
 # Environment
 .env*.local
-.claude
-config.sh
+.vercel

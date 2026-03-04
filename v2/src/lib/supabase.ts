@@ -30,13 +30,12 @@ export const supabase = new Proxy({} as ReturnType<typeof createClient>, {
 });
 
 /*
--- SkillStore v2 Database Schema
+-- eduSkillsMP Database Schema
 -- Run this SQL in Supabase SQL Editor to create all tables
 
 create table users (
   id uuid primary key default gen_random_uuid(),
-  github_id text unique not null,
-  github_username text not null,
+  google_id text unique not null,
   email text,
   display_name text,
   avatar_url text,
@@ -47,7 +46,7 @@ create table users (
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
-create index idx_users_github_id on users (github_id);
+create index idx_users_google_id on users (google_id);
 create index idx_users_stripe_customer_id on users (stripe_customer_id);
 
 create table skills (

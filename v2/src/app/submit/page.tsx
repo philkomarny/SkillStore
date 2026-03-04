@@ -19,7 +19,7 @@ export default function SubmitPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) {
-      signIn("github");
+      signIn("google");
       return;
     }
 

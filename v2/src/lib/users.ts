@@ -2,8 +2,7 @@ import { getClient } from "./supabase";
 import type { UserProfile } from "./types";
 
 export async function upsertUser(data: {
-  githubId: string;
-  githubUsername: string;
+  googleId: string;
   email?: string;
   displayName?: string;
   avatarUrl?: string;
@@ -11,33 +10,31 @@ export async function upsertUser(data: {
   const supabase = getClient();
   await (supabase.from("users") as any).upsert(
     {
-      github_id: data.githubId,
-      github_username: data.githubUsername,
+      google_id: data.googleId,
       email: data.email || null,
       display_name: data.displayName || null,
       avatar_url: data.avatarUrl || null,
       updated_at: new Date().toISOString(),
     },
-    { onConflict: "github_id" }
+    { onConflict: "google_id" }
   );
 }
 
 export async function getUserProfile(
-  githubId: string
+  googleId: string
 ): Promise<UserProfile | null> {
   const supabase = getClient();
   const { data, error } = (await supabase
     .from("users")
     .select("*")
-    .eq("github_id", githubId)
+    .eq("google_id", googleId)
     .single()) as { data: any; error: any };
 
   if (error || !data) return null;
 
   return {
     id: data.id,
-    githubId: data.github_id,
-    githubUsername: data.github_username,
+    googleId: data.google_id,
     email: data.email,
     displayName: data.display_name,
     avatarUrl: data.avatar_url,
