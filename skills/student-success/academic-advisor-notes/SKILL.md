@@ -1,11 +1,10 @@
 ---
-name: academic-advisor-notes
-description: >
-  Write professional advising session notes, action plans, and follow-up communications.
-  TRIGGER when user needs to document advising appointments or draft student follow-ups.
-version: 1.0.0
-category: student-success
-tags: [advising, notes, action-plans, student-communication]
+name: "academic-advisor-notes"
+description: "Write professional advising session notes, action plans, and follow-up communications. TRIGGER when user needs to document advising appointments or draft student follow-ups."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [advising, notes, action-plans, student-communication]
 ---
 
 # Academic Advisor Notes

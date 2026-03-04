@@ -1,11 +1,10 @@
 ---
-name: disability-accommodation
-description: >
-  Draft accommodation letters, accessible syllabus language, and accommodation plan documentation.
-  TRIGGER when user needs to create disability services documents or accessibility materials.
-version: 1.0.0
-category: student-success
-tags: [disability-services, accommodations, accessibility, ADA]
+name: "disability-accommodation"
+description: "Draft accommodation letters, accessible syllabus language, and accommodation plan documentation. TRIGGER when user needs to create disability services documents or accessibility materials."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [disability-services, accommodations, accessibility, ADA]
 ---
 
 # Disability Accommodation Writer

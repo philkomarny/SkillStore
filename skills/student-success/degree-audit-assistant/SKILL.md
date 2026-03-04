@@ -1,11 +1,10 @@
 ---
-name: degree-audit-assistant
-description: >
-  Review degree audits, identify remaining requirements, plan course sequences, and draft academic plans.
-  TRIGGER when user needs help with degree progress, course planning, or graduation readiness.
-version: 1.0.0
-category: student-success
-tags: [degree-audit, course-planning, graduation, academic-plan]
+name: "degree-audit-assistant"
+description: "Review degree audits, identify remaining requirements, plan course sequences, and draft academic plans. TRIGGER when user needs help with degree progress, course planning, or graduation readiness."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [degree-audit, course-planning, graduation, academic-plan]
 ---
 
 # Degree Audit Assistant

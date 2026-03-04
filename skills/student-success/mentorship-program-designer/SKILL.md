@@ -1,11 +1,10 @@
 ---
-name: mentorship-program-designer
-description: >
-  Design peer and faculty mentoring programs with matching criteria, training, and assessment frameworks.
-  TRIGGER when user needs to build, improve, or assess a mentoring program in higher education.
-version: 1.0.0
-category: student-success
-tags: [mentoring, peer-mentoring, faculty-mentoring, program-design]
+name: "mentorship-program-designer"
+description: "Design peer and faculty mentoring programs with matching criteria, training, and assessment frameworks. TRIGGER when user needs to build, improve, or assess a mentoring program in higher education."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [mentoring, peer-mentoring, faculty-mentoring, program-design]
 ---
 
 # Mentorship Program Designer

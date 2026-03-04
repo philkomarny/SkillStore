@@ -1,11 +1,10 @@
 ---
-name: first-year-experience
-description: >
-  Design first-year experience programming including orientation, FYE courses, and peer mentor training.
-  TRIGGER when user needs to create first-year student programs or transition support content.
-version: 1.0.0
-category: student-success
-tags: [first-year-experience, orientation, peer-mentoring, student-transition]
+name: "first-year-experience"
+description: "Design first-year experience programming including orientation, FYE courses, and peer mentor training. TRIGGER when user needs to create first-year student programs or transition support content."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [first-year-experience, orientation, peer-mentoring, student-transition]
 ---
 
 # First-Year Experience Designer

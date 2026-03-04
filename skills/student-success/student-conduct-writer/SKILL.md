@@ -1,11 +1,10 @@
 ---
-name: student-conduct-writer
-description: >
-  Draft student conduct letters, hearing summaries, and sanction communications.
-  TRIGGER when user needs to write conduct process documents or hearing outcome letters.
-version: 1.0.0
-category: student-success
-tags: [student-conduct, due-process, sanctions, Title-IX]
+name: "student-conduct-writer"
+description: "Draft student conduct letters, hearing summaries, and sanction communications. TRIGGER when user needs to write conduct process documents or hearing outcome letters."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [student-conduct, due-process, sanctions, Title-IX]
 ---
 
 # Student Conduct Writer

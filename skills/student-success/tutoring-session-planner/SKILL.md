@@ -1,11 +1,10 @@
 ---
-name: tutoring-session-planner
-description: >
-  Design tutoring and supplemental instruction sessions, create study guides, and draft learning support materials.
-  TRIGGER when user needs to plan tutoring sessions or create academic support resources.
-version: 1.0.0
-category: student-success
-tags: [tutoring, supplemental-instruction, study-guides, learning-support]
+name: "tutoring-session-planner"
+description: "Design tutoring and supplemental instruction sessions, create study guides, and draft learning support materials. TRIGGER when user needs to plan tutoring sessions or create academic support resources."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [tutoring, supplemental-instruction, study-guides, learning-support]
 ---
 
 # Tutoring Session Planner

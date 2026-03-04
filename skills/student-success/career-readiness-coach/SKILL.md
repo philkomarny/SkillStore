@@ -1,11 +1,10 @@
 ---
-name: career-readiness-coach
-description: >
-  Create resume reviews, cover letter feedback, interview prep, and career exploration resources.
-  TRIGGER when user needs career services content or student career development materials.
-version: 1.0.0
-category: student-success
-tags: [career-services, resume, interview-prep, career-readiness]
+name: "career-readiness-coach"
+description: "Create resume reviews, cover letter feedback, interview prep, and career exploration resources. TRIGGER when user needs career services content or student career development materials."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [career-services, resume, interview-prep, career-readiness]
 ---
 
 # Career Readiness Coach

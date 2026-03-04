@@ -1,11 +1,10 @@
 ---
-name: retention-risk-analyzer
-description: >
-  Analyze student risk indicators, generate retention reports, and draft intervention recommendations.
-  TRIGGER when user needs to assess at-risk student populations or create retention strategy documents.
-version: 1.0.0
-category: student-success
-tags: [retention, risk-analysis, intervention, student-success]
+name: "retention-risk-analyzer"
+description: "Analyze student risk indicators, generate retention reports, and draft intervention recommendations. TRIGGER when user needs to assess at-risk student populations or create retention strategy documents."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [retention, risk-analysis, intervention, student-success]
 ---
 
 # Retention Risk Analyzer

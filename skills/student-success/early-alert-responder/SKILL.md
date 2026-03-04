@@ -1,11 +1,10 @@
 ---
-name: early-alert-responder
-description: >
-  Triage student early alerts, draft intervention plans, and generate retention reports.
-  TRIGGER when user needs help with student early alerts, retention interventions, or success reporting.
-version: 1.0.0
-category: student-success
-tags: [retention, early-alert, advising, intervention]
+name: "early-alert-responder"
+description: "Triage student early alerts, draft intervention plans, and generate retention reports. TRIGGER when user needs help with student early alerts, retention interventions, or success reporting."
+metadata:
+  version: 1.0.0
+  category: student-success
+  tags: [retention, early-alert, advising, intervention]
 ---
 
 # Early Alert Responder
