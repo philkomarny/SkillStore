@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { supabase } from "@/lib/supabase";
+import { getUserProfile } from "@/lib/users";
+import { getClient } from "@/lib/supabase";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ALLOWED_TYPES = [
@@ -19,6 +20,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // Get internal UUID from profile (session.user.id is Google ID, not the DB UUID)
+  const profile = await getUserProfile(session.user.id);
+  if (!profile) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
   const formData = await request.formData();
   const skillSlug = formData.get("skillSlug") as string;
   const file = formData.get("file") as File;
@@ -35,8 +42,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unsupported file type" }, { status: 400 });
   }
 
+  const supabase = getClient();
   const buffer = Buffer.from(await file.arrayBuffer());
-  const storagePath = `${session.user.id}/${skillSlug}/${Date.now()}-${file.name}`;
+  const storagePath = `${profile.id}/${skillSlug}/${Date.now()}-${file.name}`;
 
   // Upload to Supabase Storage
   const { error: uploadError } = await supabase.storage
@@ -47,6 +55,7 @@ export async function POST(request: NextRequest) {
     });
 
   if (uploadError) {
+    console.error("Upload error:", uploadError);
     return NextResponse.json({ error: "Upload failed" }, { status: 500 });
   }
 
@@ -54,7 +63,7 @@ export async function POST(request: NextRequest) {
   const { data: record, error: dbError } = (await (supabase
     .from("context_files") as any)
     .insert({
-      user_id: session.user.id,
+      user_id: profile.id,
       skill_slug: skillSlug,
       file_name: file.name,
       file_type: file.type,
@@ -66,6 +75,7 @@ export async function POST(request: NextRequest) {
     .single()) as { data: any; error: any };
 
   if (dbError) {
+    console.error("DB error:", dbError);
     return NextResponse.json({ error: "Database error" }, { status: 500 });
   }
 

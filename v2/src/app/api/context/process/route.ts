@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { supabase } from "@/lib/supabase";
+import { getUserProfile } from "@/lib/users";
+import { getClient } from "@/lib/supabase";
 import { extractText, generateContext } from "@/lib/context-processor";
 
 export async function POST(request: NextRequest) {
@@ -9,6 +10,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const profile = await getUserProfile(session.user.id);
+  if (!profile) {
+    return NextResponse.json({ error: "User not found" }, { status: 404 });
+  }
+
+  const supabase = getClient();
   const { skillSlug, skillDescription } = await request.json();
   if (!skillSlug) {
     return NextResponse.json({ error: "Missing skillSlug" }, { status: 400 });
@@ -18,7 +25,7 @@ export async function POST(request: NextRequest) {
   const { data: files } = (await supabase
     .from("context_files")
     .select("*")
-    .eq("user_id", session.user.id)
+    .eq("user_id", profile.id)
     .eq("skill_slug", skillSlug)
     .eq("processed", false)) as { data: any[] | null };
 
@@ -70,7 +77,7 @@ export async function POST(request: NextRequest) {
   const { data: existing } = (await supabase
     .from("user_contexts")
     .select("id")
-    .eq("user_id", session.user.id)
+    .eq("user_id", profile.id)
     .eq("skill_slug", skillSlug)
     .single()) as { data: any };
 
@@ -81,7 +88,7 @@ export async function POST(request: NextRequest) {
       .eq("id", existing.id);
   } else {
     await (supabase.from("user_contexts") as any).insert({
-      user_id: session.user.id,
+      user_id: profile.id,
       skill_slug: skillSlug,
       context_markdown: contextMarkdown,
     });
