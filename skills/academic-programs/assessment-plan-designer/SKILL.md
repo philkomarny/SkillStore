@@ -1,11 +1,10 @@
 ---
-name: assessment-plan-designer
-description: >
-  Create assessment plans for courses and programs with direct and indirect measures, rubrics, and closing-the-loop documentation.
-  TRIGGER when user needs to design, revise, or document an assessment plan or report assessment results.
-version: 1.0.0
-category: academic-programs
-tags: [assessment, outcomes-assessment, rubrics, closing-the-loop]
+name: "assessment-plan-designer"
+description: "Create assessment plans for courses and programs with direct and indirect measures, rubrics, and closing-the-loop documentation. TRIGGER when user needs to design, revise, or document an assessment plan or report assessment results."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [assessment, outcomes-assessment, rubrics, closing-the-loop]
 ---
 
 # Assessment Plan Designer

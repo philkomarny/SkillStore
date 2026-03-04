@@ -1,11 +1,10 @@
 ---
-name: articulation-agreement
-description: >
-  Draft articulation agreements between institutions including course equivalency tables, transfer pathways, and dual enrollment frameworks.
-  TRIGGER when user needs to create or revise transfer agreements, course equivalencies, or partnership documents.
-version: 1.0.0
-category: academic-programs
-tags: [articulation, transfer, dual-enrollment, course-equivalency]
+name: "articulation-agreement"
+description: "Draft articulation agreements between institutions including course equivalency tables, transfer pathways, and dual enrollment frameworks. TRIGGER when user needs to create or revise transfer agreements, course equivalencies, or partnership documents."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [articulation, transfer, dual-enrollment, course-equivalency]
 ---
 
 # Articulation Agreement Drafter

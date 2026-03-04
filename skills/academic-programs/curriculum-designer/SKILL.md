@@ -1,11 +1,10 @@
 ---
-name: curriculum-designer
-description: >
-  Design and map course curricula with learning outcomes, assessments, and competency alignment.
-  TRIGGER when user needs to create, revise, or map academic curricula.
-version: 1.0.0
-category: academic-programs
-tags: [curriculum, learning-outcomes, course-design, competencies]
+name: "curriculum-designer"
+description: "Design and map course curricula with learning outcomes, assessments, and competency alignment. TRIGGER when user needs to create, revise, or map academic curricula."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [curriculum, learning-outcomes, course-design, competencies]
 ---
 
 # Curriculum Designer

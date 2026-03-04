@@ -1,11 +1,10 @@
 ---
-name: new-program-proposal
-description: >
-  Draft new academic program proposals including needs assessment, market analysis, curriculum outline, resource requirements, and financial projections.
-  TRIGGER when user needs to propose a new degree, certificate, minor, or concentration.
-version: 1.0.0
-category: academic-programs
-tags: [program-proposal, new-program, market-analysis, curriculum-planning]
+name: "new-program-proposal"
+description: "Draft new academic program proposals including needs assessment, market analysis, curriculum outline, resource requirements, and financial projections. TRIGGER when user needs to propose a new degree, certificate, minor, or concentration."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [program-proposal, new-program, market-analysis, curriculum-planning]
 ---
 
 # New Program Proposal Writer

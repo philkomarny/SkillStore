@@ -1,11 +1,10 @@
 ---
-name: accreditation-writer
-description: >
-  Write self-study reports, compliance narratives, and accreditation documentation.
-  TRIGGER when user needs help with accreditation, self-study, or institutional effectiveness reports.
-version: 1.0.0
-category: academic-programs
-tags: [accreditation, self-study, compliance, institutional-effectiveness]
+name: "accreditation-writer"
+description: "Write self-study reports, compliance narratives, and accreditation documentation. TRIGGER when user needs help with accreditation, self-study, or institutional effectiveness reports."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [accreditation, self-study, compliance, institutional-effectiveness]
 ---
 
 # Accreditation Writer

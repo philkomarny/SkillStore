@@ -1,11 +1,10 @@
 ---
-name: syllabus-builder
-description: >
-  Create complete course syllabi with learning outcomes, schedules, policies, assessments, and accessibility statements.
-  TRIGGER when user needs to build, revise, or review a course syllabus.
-version: 1.0.0
-category: academic-programs
-tags: [syllabus, course-design, policies, accessibility]
+name: "syllabus-builder"
+description: "Create complete course syllabi with learning outcomes, schedules, policies, assessments, and accessibility statements. TRIGGER when user needs to build, revise, or review a course syllabus."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [syllabus, course-design, policies, accessibility]
 ---
 
 # Syllabus Builder

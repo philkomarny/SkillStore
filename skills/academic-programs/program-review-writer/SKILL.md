@@ -1,11 +1,10 @@
 ---
-name: program-review-writer
-description: >
-  Write academic program review self-study reports including data analysis, SWOT assessments, and improvement plans.
-  TRIGGER when user needs to draft or revise a program review, self-study, or academic audit document.
-version: 1.0.0
-category: academic-programs
-tags: [program-review, self-study, academic-audit, continuous-improvement]
+name: "program-review-writer"
+description: "Write academic program review self-study reports including data analysis, SWOT assessments, and improvement plans. TRIGGER when user needs to draft or revise a program review, self-study, or academic audit document."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [program-review, self-study, academic-audit, continuous-improvement]
 ---
 
 # Program Review Writer

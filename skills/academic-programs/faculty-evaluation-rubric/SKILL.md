@@ -1,11 +1,10 @@
 ---
-name: faculty-evaluation-rubric
-description: >
-  Design evaluation rubrics for faculty teaching, scholarship, and service for tenure review, annual evaluations, and peer observation.
-  TRIGGER when user needs to create or improve faculty evaluation criteria or rubrics.
-version: 1.0.0
-category: academic-programs
-tags: [faculty-evaluation, tenure, peer-review, teaching-assessment]
+name: "faculty-evaluation-rubric"
+description: "Design evaluation rubrics for faculty teaching, scholarship, and service for tenure review, annual evaluations, and peer observation. TRIGGER when user needs to create or improve faculty evaluation criteria or rubrics."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [faculty-evaluation, tenure, peer-review, teaching-assessment]
 ---
 
 # Faculty Evaluation Rubric Designer

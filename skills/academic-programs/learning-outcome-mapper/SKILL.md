@@ -1,11 +1,10 @@
 ---
-name: learning-outcome-mapper
-description: >
-  Map course and program learning outcomes to institutional goals, accreditation standards, and competency frameworks.
-  TRIGGER when user needs to align outcomes, create alignment matrices, or map competencies across programs.
-version: 1.0.0
-category: academic-programs
-tags: [learning-outcomes, alignment, competency-mapping, accreditation]
+name: "learning-outcome-mapper"
+description: "Map course and program learning outcomes to institutional goals, accreditation standards, and competency frameworks. TRIGGER when user needs to align outcomes, create alignment matrices, or map competencies across programs."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [learning-outcomes, alignment, competency-mapping, accreditation]
 ---
 
 # Learning Outcome Mapper

@@ -1,11 +1,10 @@
 ---
-name: academic-catalog-editor
-description: >
-  Write and edit academic catalog entries including program descriptions, admission requirements, degree plans, course descriptions, and policy statements.
-  TRIGGER when user needs to draft or revise catalog copy for programs, courses, or academic policies.
-version: 1.0.0
-category: academic-programs
-tags: [academic-catalog, course-descriptions, degree-plans, academic-policy]
+name: "academic-catalog-editor"
+description: "Write and edit academic catalog entries including program descriptions, admission requirements, degree plans, course descriptions, and policy statements. TRIGGER when user needs to draft or revise catalog copy for programs, courses, or academic policies."
+metadata:
+  version: 1.0.0
+  category: academic-programs
+  tags: [academic-catalog, course-descriptions, degree-plans, academic-policy]
 ---
 
 # Academic Catalog Editor
