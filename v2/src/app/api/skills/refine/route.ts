@@ -4,8 +4,8 @@ import { getUserProfile } from "@/lib/users";
 import { getClient } from "@/lib/supabase";
 import { extractText, refineSkill } from "@/lib/context-processor";
 
-// Allow up to 60s for PDF extraction + Claude API call
-export const maxDuration = 60;
+// Allow up to 300s for PDF extraction + Claude API call (Vercel Pro)
+export const maxDuration = 300;
 
 export async function POST(req: Request) {
   const session = await auth();
