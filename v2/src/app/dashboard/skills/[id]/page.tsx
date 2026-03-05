@@ -127,29 +127,29 @@ export default async function SkillViewPage({
           </Link>
 
           {/* Meta info */}
-          <div className="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Author</span>
-              <span className="text-sm text-gray-700">
+          <div className="rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
+            <div className="flex items-center justify-between px-5 py-4">
+              <span className="text-sm text-gray-500">Author</span>
+              <span className="text-sm font-medium text-gray-900">
                 {session.user.name || session.user.email}
               </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Version</span>
-              <span className="text-sm font-mono text-gray-700">
+            <div className="flex items-center justify-between px-5 py-4">
+              <span className="text-sm text-gray-500">Version</span>
+              <span className="text-sm font-mono font-medium text-gray-900">
                 {userSkill.version}
               </span>
             </div>
-            <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Status</span>
-              <span className="text-sm text-gray-700 capitalize">
+            <div className="flex items-center justify-between px-5 py-4">
+              <span className="text-sm text-gray-500">Status</span>
+              <span className="text-sm font-medium text-gray-900 capitalize">
                 {userSkill.status || "draft"}
               </span>
             </div>
             {userSkill.updated_at && (
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500">Updated</span>
-                <span className="text-sm text-gray-700">
+              <div className="flex items-center justify-between px-5 py-4">
+                <span className="text-sm text-gray-500">Updated</span>
+                <span className="text-sm font-medium text-gray-900">
                   {new Date(userSkill.updated_at).toLocaleDateString()}
                 </span>
               </div>

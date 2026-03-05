@@ -49,7 +49,7 @@ export default function RootLayout({
                   href="/dashboard"
                   className="hidden sm:inline-flex text-sm text-gray-600 hover:text-gray-900 transition-colors"
                 >
-                  The Refinery
+                  Your Skills Refinery
                 </Link>
                 <AuthButton />
               </div>
