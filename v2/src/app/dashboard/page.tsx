@@ -52,7 +52,7 @@ export default async function DashboardPage({
         </div>
         <Link
           href="/skills"
-          className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-[#E07A2F] via-[#D4652E] to-[#C4512D] px-4 py-2.5 text-sm font-medium text-white hover:from-[#C96A28] hover:via-[#BD5927] hover:to-[#AD4626] transition-all shadow-sm"
         >
           Browse Marketplace
         </Link>
