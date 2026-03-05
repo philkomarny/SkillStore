@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 import { getAllSkills } from "@/lib/skills";
+import { auth } from "@/auth";
 
 export async function GET(
   request: NextRequest,
@@ -15,11 +16,16 @@ export async function GET(
   return NextResponse.json({ clapCount: skill?.vouch_count || 0 });
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
+export const POST = auth(async function POST(
+  req: any,
+  context: any
 ) {
-  const body = await request.json().catch(() => ({}));
+  if (!req.auth) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const params = context.params as { slug: string };
+  const body = await req.json().catch(() => ({}));
   const amount = Math.min(Math.max(parseInt(body.amount) || 1, 1), 50);
 
   // Get or auto-create the skill row
@@ -31,7 +37,7 @@ export async function POST(
 
   if (!skill) {
     const allSkills = await getAllSkills();
-    const entry = allSkills.find((s) => s.slug === params.slug);
+    const entry = allSkills.find((s: any) => s.slug === params.slug);
     const { data: created } = (await (supabase.from("skills") as any)
       .insert({
         slug: params.slug,
@@ -53,4 +59,4 @@ export async function POST(
     .eq("id", skill.id);
 
   return NextResponse.json({ ok: true });
-}
+}) as any;
