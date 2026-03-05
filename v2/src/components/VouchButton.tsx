@@ -6,62 +6,42 @@ import { useSession, signIn } from "next-auth/react";
 interface VouchButtonProps {
   skillSlug: string;
   initialCount: number;
-  initialVouched?: boolean;
 }
 
 export default function VouchButton({
   skillSlug,
   initialCount,
-  initialVouched = false,
 }: VouchButtonProps) {
   const { data: session } = useSession();
   const [count, setCount] = useState(initialCount);
-  const [vouched, setVouched] = useState(initialVouched);
-  const [loading, setLoading] = useState(false);
+  const [animating, setAnimating] = useState(false);
 
-  const handleVouch = async () => {
+  const handleClap = async () => {
     if (!session) {
       signIn("google");
       return;
     }
 
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/skills/${skillSlug}/vouch`, {
-        method: "POST",
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setCount(data.vouchCount);
-        setVouched(data.vouched);
-      }
-    } finally {
-      setLoading(false);
-    }
+    // Optimistic update
+    setCount((n) => n + 1);
+    setAnimating(true);
+    setTimeout(() => setAnimating(false), 300);
+
+    await fetch(`/api/skills/${skillSlug}/vouch`, { method: "POST" });
   };
 
   return (
     <button
-      onClick={handleVouch}
-      disabled={loading}
-      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-        vouched
-          ? "bg-accent/10 text-accent border border-accent/30"
-          : "bg-terminal-surface text-muted hover:bg-terminal-border border border-transparent"
-      }`}
-      title={session ? (vouched ? "Remove vouch" : "Vouch for this skill") : "Sign in to vouch"}
+      onClick={handleClap}
+      className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-terminal-surface text-muted hover:bg-terminal-border border border-transparent`}
+      title={session ? "Clap for this skill" : "Sign in to clap"}
     >
-      <svg
-        className={`h-3.5 w-3.5 ${vouched ? "fill-accent" : "fill-none stroke-current"}`}
-        viewBox="0 0 24 24"
-        strokeWidth={vouched ? 0 : 2}
+      <span
+        className={`text-base leading-none transition-transform ${animating ? "scale-125" : "scale-100"}`}
+        style={{ display: "inline-block" }}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z"
-        />
-      </svg>
+        👏
+      </span>
       <span>{count}</span>
     </button>
   );

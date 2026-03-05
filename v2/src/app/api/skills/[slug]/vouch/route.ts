@@ -7,34 +7,13 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  const session = await auth();
-
-  // Get skill
   const { data: skill } = (await supabase
     .from("skills")
-    .select("id, vouch_count")
+    .select("vouch_count")
     .eq("slug", params.slug)
     .single()) as { data: any };
 
-  if (!skill) {
-    return NextResponse.json({ vouchCount: 0, vouched: false });
-  }
-
-  let vouched = false;
-  if (session?.user?.id) {
-    const { data: vouch } = (await supabase
-      .from("vouches")
-      .select("id")
-      .eq("user_id", session.user.id)
-      .eq("skill_id", skill.id)
-      .single()) as { data: any };
-    vouched = !!vouch;
-  }
-
-  return NextResponse.json({
-    vouchCount: skill.vouch_count || 0,
-    vouched,
-  });
+  return NextResponse.json({ clapCount: skill?.vouch_count || 0 });
 }
 
 export async function POST(
@@ -71,28 +50,10 @@ export async function POST(
     skill = created;
   }
 
-  // Check existing vouch
-  const { data: existingVouch } = (await supabase
-    .from("vouches")
-    .select("id")
-    .eq("user_id", session.user.id)
-    .eq("skill_id", skill.id)
-    .single()) as { data: any };
+  const newCount = (skill.vouch_count || 0) + 1;
+  await (supabase.from("skills") as any)
+    .update({ vouch_count: newCount })
+    .eq("id", skill.id);
 
-  if (existingVouch) {
-    // Remove vouch
-    await (supabase.from("vouches") as any).delete().eq("id", existingVouch.id);
-    const newCount = Math.max(0, (skill.vouch_count || 0) - 1);
-    await (supabase.from("skills") as any).update({ vouch_count: newCount }).eq("id", skill.id);
-    return NextResponse.json({ vouchCount: newCount, vouched: false });
-  } else {
-    // Add vouch
-    await (supabase.from("vouches") as any).insert({
-      user_id: session.user.id,
-      skill_id: skill.id,
-    });
-    const newCount = (skill.vouch_count || 0) + 1;
-    await (supabase.from("skills") as any).update({ vouch_count: newCount }).eq("id", skill.id);
-    return NextResponse.json({ vouchCount: newCount, vouched: true });
-  }
+  return NextResponse.json({ clapCount: newCount });
 }
