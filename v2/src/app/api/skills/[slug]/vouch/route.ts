@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/auth";
 import { supabase } from "@/lib/supabase";
 import { getAllSkills } from "@/lib/skills";
 
@@ -20,11 +19,6 @@ export async function POST(
   request: NextRequest,
   { params }: { params: { slug: string } }
 ) {
-  const session = await auth();
-  if (!session?.user?.id) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
   const body = await request.json().catch(() => ({}));
   const amount = Math.min(Math.max(parseInt(body.amount) || 1, 1), 50);
 
