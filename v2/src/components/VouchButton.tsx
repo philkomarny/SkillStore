@@ -19,19 +19,23 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
   useEffect(() => {
     fetch("https://api.ipify.org?format=json")
       .then((r) => r.json())
-      .then((d) => { ipRef.current = d.ip; })
-      .catch(() => {});
+      .then((d) => { ipRef.current = d.ip; console.log("[clap] ip resolved"); })
+      .catch(() => console.warn("[clap] ip fetch failed"));
 
     fetch(`https://iw0ojycun6.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_item_count_get?slug=${skillSlug}&count_type=clap`)
       .then((r) => r.json())
-      .then((d) => { if (typeof d.total === "number") setCount(d.total); })
-      .catch(() => {});
+      .then((d) => {
+        console.log("[clap] count fetched:", d.total);
+        if (typeof d.total === "number") setCount(d.total);
+      })
+      .catch((err) => console.warn("[clap] count fetch failed:", err));
   }, [skillSlug]);
 
   const flush = () => {
     const amount = pendingRef.current;
     if (amount === 0) return;
     pendingRef.current = 0;
+    console.log("[clap] flushing amount:", amount, "slug:", skillSlug);
     fetch("https://sivvn9tsil.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_item_count_post", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -42,7 +46,9 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
         user_id: session?.user?.id ?? null,
         ip_address: ipRef.current,
       }),
-    }).catch((err) => alert("clap error: " + err));
+    })
+      .then((r) => console.log("[clap] post status:", r.status))
+      .catch((err) => console.error("[clap] post failed:", err));
   };
 
   const handleClap = () => {
