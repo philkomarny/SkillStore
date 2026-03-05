@@ -44,7 +44,7 @@ export async function getSkillDetail(
   const [raw, contextContent, dbSkill] = await Promise.all([
     getSkillContent(entry.source),
     userId ? getUserContext(userId, slug) : Promise.resolve(null),
-    supabase.from("skills").select("download_count, vouch_count, verification_level, submitted_by").eq("slug", slug).single().then((r: any) => r.data).catch(() => null),
+    Promise.resolve(supabase.from("skills").select("download_count, vouch_count, verification_level, submitted_by").eq("slug", slug).single()).then((r: any) => r.data).catch(() => null),
   ]);
 
   const { data, content } = matter(raw);
