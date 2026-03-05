@@ -24,6 +24,13 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ amount }),
     });
+    alert(JSON.stringify({
+      slug: skillSlug,
+      count: amount,
+      count_type: "clap",
+      user_id: session?.user?.id ?? null,
+      ip_address: "client-side",
+    }, null, 2));
   };
 
   const handleClap = () => {
