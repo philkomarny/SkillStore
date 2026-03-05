@@ -64,6 +64,9 @@ export async function POST(request: NextRequest) {
     base64?: string;
   }> = [];
 
+  // Claude API PDF limit is ~25MB raw / ~32MB base64
+  const MAX_PDF_BASE64_BYTES = 30_000_000;
+
   for (const file of files) {
     try {
       const { data: fileData } = await supabase.storage
@@ -83,12 +86,22 @@ export async function POST(request: NextRequest) {
           base64: imgBase64,
         });
       } else if (file.file_type === "application/pdf") {
-        processedFiles.push({
-          name: file.file_name,
-          text: "",
-          mimeType: file.file_type,
-          base64: buffer.toString("base64"),
-        });
+        const pdfBase64 = buffer.toString("base64");
+        if (pdfBase64.length > MAX_PDF_BASE64_BYTES) {
+          console.warn(`PDF ${file.file_name} too large for Claude API (${(pdfBase64.length / 1_000_000).toFixed(1)}MB base64). Skipping.`);
+          processedFiles.push({
+            name: file.file_name,
+            text: `[PDF "${file.file_name}" is too large to process directly (${(buffer.length / 1_000_000).toFixed(1)}MB). Please split it into smaller files and try again.]`,
+            mimeType: "text/plain",
+          });
+        } else {
+          processedFiles.push({
+            name: file.file_name,
+            text: "",
+            mimeType: file.file_type,
+            base64: pdfBase64,
+          });
+        }
       } else {
         const text = await extractText(buffer, file.file_type, file.file_name);
         processedFiles.push({
@@ -114,29 +127,51 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Could not process any files" }, { status: 400 });
   }
 
-  // Generate context with Claude
-  const contextMarkdown = await generateContext(
-    contextProfile.name,
-    processedFiles
-  );
+  try {
+    // Generate context with Claude
+    const contextMarkdown = await generateContext(
+      contextProfile.name,
+      processedFiles
+    );
 
-  // Update context_profiles with generated markdown
-  const newVersion = (contextProfile.version || 1) + (contextProfile.context_markdown ? 1 : 0);
-  await (supabase.from("context_profiles") as any)
-    .update({
-      context_markdown: contextMarkdown,
-      status: "ready",
-      version: newVersion,
-      updated_at: new Date().toISOString(),
-    })
-    .eq("id", contextProfileId);
+    // Update context_profiles with generated markdown
+    const newVersion = (contextProfile.version || 1) + (contextProfile.context_markdown ? 1 : 0);
+    await (supabase.from("context_profiles") as any)
+      .update({
+        context_markdown: contextMarkdown,
+        status: "ready",
+        version: newVersion,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", contextProfileId);
 
-  // Mark files as processed
-  const fileIds = files.map((f: any) => f.id);
-  await (supabase
-    .from("context_files") as any)
-    .update({ processed: true })
-    .in("id", fileIds);
+    // Mark files as processed
+    const fileIds = files.map((f: any) => f.id);
+    await (supabase
+      .from("context_files") as any)
+      .update({ processed: true })
+      .in("id", fileIds);
 
-  return NextResponse.json({ context: contextMarkdown, version: newVersion });
+    return NextResponse.json({ context: contextMarkdown, version: newVersion });
+  } catch (err: any) {
+    console.error("Context generation failed:", err?.message || err);
+
+    // Reset status so the user can retry
+    await (supabase.from("context_profiles") as any)
+      .update({ status: "error", updated_at: new Date().toISOString() })
+      .eq("id", contextProfileId);
+
+    const message = err?.message || "Unknown error";
+    if (message.includes("too large") || message.includes("token") || message.includes("max_tokens")) {
+      return NextResponse.json(
+        { error: "The uploaded documents are too large for AI processing. Try splitting large PDFs into smaller files." },
+        { status: 413 }
+      );
+    }
+
+    return NextResponse.json(
+      { error: "Failed to generate context. Please try again or use smaller files." },
+      { status: 500 }
+    );
+  }
 }
