@@ -6,6 +6,7 @@ const CTX_STATUS_STYLES: Record<string, { bg: string; text: string; label: strin
   draft: { bg: "bg-gray-100", text: "text-gray-600", label: "Draft" },
   building: { bg: "bg-yellow-100", text: "text-yellow-700", label: "Building..." },
   ready: { bg: "bg-green-100", text: "text-green-700", label: "Ready" },
+  error: { bg: "bg-red-100", text: "text-red-700", label: "Error" },
 };
 
 interface MyContextsListProps {

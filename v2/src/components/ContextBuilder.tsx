@@ -56,14 +56,21 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         body: JSON.stringify({ contextProfileId: profileId }),
       });
 
+      // Safely parse response — guard against empty body
+      let data: any;
+      try {
+        const text = await res.text();
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        data = {};
+      }
+
       if (!res.ok) {
-        const d = await res.json();
-        setError(d.error || "Failed to build context");
+        setError(data.error || "Failed to build context. The file may be too large.");
         setBuilding(false);
         return;
       }
 
-      const data = await res.json();
       // Return the completed profile to the parent
       onCreated({
         id: profileId,
@@ -73,7 +80,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         context_markdown: data.context,
       });
     } catch (err: any) {
-      setError(err?.message || "Something went wrong. The request may have timed out.");
+      setError(err?.message || "Something went wrong. The request may have timed out — try with a smaller file.");
     } finally {
       setBuilding(false);
     }
