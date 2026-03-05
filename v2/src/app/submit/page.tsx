@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { CATEGORIES } from "@/lib/types";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
+import TerminalWindow from "@/components/TerminalWindow";
 
 export default function SubmitPage() {
   const { data: session } = useSession();
@@ -47,19 +48,24 @@ export default function SubmitPage() {
   if (submitted) {
     return (
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-20 text-center">
-        <div className="text-4xl mb-4">🎉</div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <TerminalWindow title="submission-complete" size="sm">
+          <div className="p-6 text-center">
+            <p className="text-success font-mono text-sm mb-2">$ submit --status</p>
+            <p className="text-white/90 text-sm font-mono">Skill submitted successfully.</p>
+          </div>
+        </TerminalWindow>
+        <h1 className="text-2xl font-bold font-mono text-[#1a1a1a] mt-6 mb-2">
           Skill Submitted!
         </h1>
-        <p className="text-gray-500 mb-6">
+        <p className="text-muted mb-6">
           Your skill has been submitted for review. Community skills are published
           immediately. Bot verification will run automatically.
         </p>
         <a
           href="/skills"
-          className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700"
+          className="btn-claude inline-flex"
         >
-          Browse Skills
+          <span className="font-mono text-xs opacity-70">$</span> browse --skills
         </a>
       </div>
     );
@@ -67,15 +73,17 @@ export default function SubmitPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Submit a Skill</h1>
-      <p className="text-sm text-gray-500 mb-8">
+      <h1 className="text-2xl font-bold font-mono text-[#1a1a1a] mb-2">
+        <span className="text-accent">#</span> Submit a Skill
+      </h1>
+      <p className="text-sm text-muted mb-8">
         Share your Claude skill with the community. All submissions start as
-        Community (🌐) and can be promoted through verification.
+        Community and can be promoted through verification.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
             Skill Name
           </label>
           <input
@@ -84,12 +92,12 @@ export default function SubmitPage() {
             onChange={(e) => setName(e.target.value)}
             required
             placeholder="e.g., Grant Writing Assistant"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-terminal-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
             Description
           </label>
           <input
@@ -98,19 +106,19 @@ export default function SubmitPage() {
             onChange={(e) => setDescription(e.target.value)}
             required
             placeholder="A short description of what this skill does"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-terminal-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
             Category
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             required
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-terminal-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
           >
             <option value="">Select a category</option>
             {Object.values(CATEGORIES).map((cat) => (
@@ -122,7 +130,7 @@ export default function SubmitPage() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label className="block text-sm font-medium text-[#1a1a1a] mb-1">
             Tags
           </label>
           <input
@@ -130,25 +138,25 @@ export default function SubmitPage() {
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             placeholder="Comma-separated tags (e.g., writing, grants, research)"
-            className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-lg border border-terminal-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
           />
         </div>
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-medium text-[#1a1a1a]">
               Skill Content (Markdown)
             </label>
             <button
               type="button"
               onClick={() => setPreview(!preview)}
-              className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+              className="text-xs text-accent hover:text-accent-hover font-medium"
             >
               {preview ? "Edit" : "Preview"}
             </button>
           </div>
           {preview ? (
-            <div className="prose-skill rounded-lg border border-gray-200 p-4 min-h-[200px] bg-gray-50">
+            <div className="prose-skill rounded-lg border border-terminal-border p-4 min-h-[200px] bg-terminal-surface">
               <MarkdownRenderer content={content} />
             </div>
           ) : (
@@ -158,7 +166,7 @@ export default function SubmitPage() {
               required
               rows={12}
               placeholder="Write your skill instructions in Markdown..."
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full rounded-lg border border-terminal-border px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
             />
           )}
         </div>
@@ -166,7 +174,7 @@ export default function SubmitPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+          className="w-full btn-claude justify-center disabled:opacity-50"
         >
           {!session
             ? "Sign in to Submit"

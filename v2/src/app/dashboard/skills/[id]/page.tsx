@@ -74,12 +74,12 @@ export default async function SkillViewPage({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/dashboard" className="hover:text-blue-600">
+      <div className="flex items-center gap-2 text-sm text-muted mb-6 font-mono">
+        <Link href="/dashboard" className="hover:text-accent">
           Your Skills Refinery
         </Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">{userSkill.name}</span>
+        <span className="text-tertiary">/</span>
+        <span className="text-[#1a1a1a] font-medium">{userSkill.name}</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -87,19 +87,19 @@ export default async function SkillViewPage({
         <div className="lg:col-span-2">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              <h1 className="text-2xl font-bold font-mono text-[#1a1a1a] mb-2">
                 {userSkill.name}
               </h1>
               {userSkill.description && (
-                <p className="text-gray-500">{userSkill.description}</p>
+                <p className="text-muted">{userSkill.description}</p>
               )}
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
-              <span className="text-xs font-mono text-gray-400">
+              <span className="text-xs font-mono text-tertiary">
                 v{userSkill.version}
               </span>
               {userSkill.status === "refined" && (
-                <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
+                <span className="inline-flex items-center rounded-full bg-success/20 px-2.5 py-0.5 text-xs font-medium text-green-700">
                   Refined
                 </span>
               )}
@@ -107,11 +107,11 @@ export default async function SkillViewPage({
           </div>
 
           {/* Skill content — rendered markdown */}
-          <div className="prose-skill border-t border-gray-100 pt-6">
+          <div className="prose-skill border-t border-terminal-border pt-6">
             {content ? (
               <MarkdownRenderer content={content} />
             ) : (
-              <p className="text-sm text-gray-400">No content available.</p>
+              <p className="text-sm text-tertiary">No content available.</p>
             )}
           </div>
         </div>
@@ -127,29 +127,29 @@ export default async function SkillViewPage({
           </Link>
 
           {/* Meta info */}
-          <div className="rounded-xl border border-gray-200 bg-white overflow-hidden divide-y divide-gray-100">
+          <div className="rounded-xl border border-terminal-border bg-white overflow-hidden divide-y divide-terminal-border">
             <div className="flex items-center justify-between px-5 py-4">
-              <span className="text-sm text-gray-500">Author</span>
-              <span className="text-sm font-medium text-gray-900">
+              <span className="text-sm text-muted">Author</span>
+              <span className="text-sm font-medium text-[#1a1a1a]">
                 {session.user.name || session.user.email}
               </span>
             </div>
             <div className="flex items-center justify-between px-5 py-4">
-              <span className="text-sm text-gray-500">Version</span>
-              <span className="text-sm font-mono font-medium text-gray-900">
+              <span className="text-sm text-muted">Version</span>
+              <span className="text-sm font-mono font-medium text-[#1a1a1a]">
                 {userSkill.version}
               </span>
             </div>
             <div className="flex items-center justify-between px-5 py-4">
-              <span className="text-sm text-gray-500">Status</span>
-              <span className="text-sm font-medium text-gray-900 capitalize">
+              <span className="text-sm text-muted">Status</span>
+              <span className="text-sm font-medium text-[#1a1a1a] capitalize">
                 {userSkill.status || "draft"}
               </span>
             </div>
             {userSkill.updated_at && (
               <div className="flex items-center justify-between px-5 py-4">
-                <span className="text-sm text-gray-500">Updated</span>
-                <span className="text-sm font-medium text-gray-900">
+                <span className="text-sm text-muted">Updated</span>
+                <span className="text-sm font-medium font-mono text-[#1a1a1a]">
                   {new Date(userSkill.updated_at).toLocaleDateString()}
                 </span>
               </div>

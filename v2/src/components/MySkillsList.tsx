@@ -4,10 +4,10 @@ import { useState } from "react";
 import Link from "next/link";
 
 const STATUS_STYLES: Record<string, { bg: string; text: string; label: string }> = {
-  draft: { bg: "bg-gray-100", text: "text-gray-600", label: "Draft" },
-  refining: { bg: "bg-yellow-100", text: "text-yellow-700", label: "Refining..." },
-  refined: { bg: "bg-green-100", text: "text-green-700", label: "Refined" },
-  shared: { bg: "bg-blue-100", text: "text-blue-700", label: "Shared" },
+  draft: { bg: "bg-terminal-surface", text: "text-muted", label: "Draft" },
+  refining: { bg: "bg-warning/20", text: "text-yellow-700", label: "Refining..." },
+  refined: { bg: "bg-success/20", text: "text-green-700", label: "Refined" },
+  shared: { bg: "bg-accent/10", text: "text-accent", label: "Shared" },
 };
 
 interface MySkillsListProps {
@@ -38,17 +38,17 @@ export default function MySkillsList({
 
   if (skills.length === 0) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100">
-          <h2 className="text-sm font-semibold text-gray-900">My Skills</h2>
+      <div className="rounded-xl border border-terminal-border bg-white overflow-hidden">
+        <div className="px-5 py-4 border-b border-terminal-border">
+          <h2 className="text-sm font-semibold text-[#1a1a1a]">My Skills</h2>
         </div>
         <div className="px-5 py-10 text-center">
-          <p className="text-sm text-gray-400 mb-3">
+          <p className="text-sm text-tertiary mb-3">
             No skills yet. Import one from the marketplace to get started.
           </p>
           <Link
             href="/skills"
-            className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+            className="btn-claude inline-flex items-center gap-2"
           >
             Browse Marketplace
           </Link>
@@ -58,14 +58,14 @@ export default function MySkillsList({
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-      <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-900">My Skills</h2>
-        <span className="text-xs text-gray-400">
+    <div className="rounded-xl border border-terminal-border bg-white overflow-hidden">
+      <div className="px-5 py-4 border-b border-terminal-border flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-[#1a1a1a]">My Skills</h2>
+        <span className="text-xs text-tertiary font-mono">
           {skills.length} skill{skills.length !== 1 ? "s" : ""}
         </span>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-terminal-border">
         {skills.map((skill) => {
           const isSelected = skill.id === selectedSkillId;
           const isConfirming = confirmingId === skill.id;
@@ -92,7 +92,7 @@ export default function MySkillsList({
                   <button
                     onClick={() => setConfirmingId(null)}
                     disabled={isDeleting}
-                    className="rounded-lg border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    className="rounded-lg border border-terminal-border bg-white px-3 py-1 text-xs font-medium text-muted hover:bg-terminal-surface disabled:opacity-50 transition-colors"
                   >
                     Cancel
                   </button>
@@ -105,17 +105,16 @@ export default function MySkillsList({
             <div
               key={skill.id}
               className={`flex items-center transition-colors ${
-                isSelected ? "bg-blue-50 border-l-2 border-blue-600" : ""
+                isSelected ? "bg-accent/5 border-l-2 border-accent" : ""
               }`}
             >
-              {/* Clickable skill row — toggles selection for refinement */}
               <button
                 onClick={() => onSelectSkill(skill.id)}
-                className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 transition-colors text-left min-w-0 cursor-pointer"
+                className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-terminal-surface transition-colors text-left min-w-0 cursor-pointer"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-900 truncate">
+                    <span className="text-sm font-medium text-[#1a1a1a] truncate">
                       {skill.name}
                     </span>
                     <span
@@ -123,25 +122,24 @@ export default function MySkillsList({
                     >
                       {style.label}
                     </span>
-                    <span className="text-[10px] text-gray-400 font-mono">
+                    <span className="text-[10px] text-tertiary font-mono">
                       v{skill.version}
                     </span>
                   </div>
                   {skill.description && (
-                    <p className="text-xs text-gray-400 truncate mt-0.5">
+                    <p className="text-xs text-tertiary truncate mt-0.5">
                       {skill.description}
                     </p>
                   )}
                 </div>
-                <span className="text-[11px] text-gray-400 ml-3 whitespace-nowrap">
+                <span className="text-[11px] text-tertiary ml-3 whitespace-nowrap font-mono">
                   {new Date(skill.updated_at).toLocaleDateString()}
                 </span>
               </button>
 
-              {/* View icon — navigates to full skill page */}
               <Link
                 href={`/dashboard/skills/${skill.id}`}
-                className="px-2 py-3.5 text-gray-400 hover:text-blue-600 transition-colors"
+                className="px-2 py-3.5 text-tertiary hover:text-accent transition-colors"
                 title="View skill"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -150,13 +148,12 @@ export default function MySkillsList({
                 </svg>
               </Link>
 
-              {/* Delete icon */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setConfirmingId(skill.id);
                 }}
-                className="px-2 pr-4 py-3.5 text-gray-300 hover:text-red-500 transition-colors"
+                className="px-2 pr-4 py-3.5 text-terminal-border hover:text-red-500 transition-colors"
                 title="Delete skill"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

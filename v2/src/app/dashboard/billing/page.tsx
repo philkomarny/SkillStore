@@ -47,8 +47,8 @@ export default function BillingPage() {
     return (
       <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-48" />
-          <div className="h-32 bg-gray-100 rounded-xl" />
+          <div className="h-8 bg-terminal-surface rounded w-48" />
+          <div className="h-32 bg-terminal-surface rounded-xl" />
         </div>
       </div>
     );
@@ -60,26 +60,28 @@ export default function BillingPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Billing</h1>
+      <h1 className="text-2xl font-bold font-mono text-[#1a1a1a] mb-6">
+        <span className="text-accent">#</span> Billing
+      </h1>
 
-      <div className="rounded-xl border border-gray-200 bg-white p-6 mb-6">
-        <h2 className="text-sm font-semibold text-gray-900 mb-4">
+      <div className="rounded-xl border border-terminal-border bg-white p-6 mb-6">
+        <h2 className="text-sm font-semibold font-mono text-[#1a1a1a] mb-4">
           Current Plan
         </h2>
 
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-lg font-bold text-gray-900">
+            <p className="text-lg font-bold text-[#1a1a1a]">
               {isSubscribed ? "Level 2 — Unlimited" : "Free"}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted">
               {isSubscribed
                 ? "$50/month — Unlimited expert-verified skills"
                 : "Community skills only"}
             </p>
           </div>
           {isSubscribed && (
-            <span className="rounded-full bg-green-100 text-green-700 px-3 py-1 text-xs font-medium">
+            <span className="rounded-full bg-success/20 text-green-700 px-3 py-1 text-xs font-medium font-mono">
               Active
             </span>
           )}
@@ -88,14 +90,14 @@ export default function BillingPage() {
         {isSubscribed ? (
           <button
             onClick={openPortal}
-            className="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="rounded-lg border border-terminal-border bg-white px-4 py-2 text-sm font-medium text-[#1a1a1a] hover:bg-terminal-surface transition-colors"
           >
             Manage Subscription
           </button>
         ) : (
           <button
             onClick={startSubscription}
-            className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
+            className="btn-claude"
           >
             Upgrade to Level 2 — $50/month
           </button>
@@ -103,11 +105,11 @@ export default function BillingPage() {
       </div>
 
       {profile?.trial_started_at && (
-        <div className="rounded-xl border border-blue-200 bg-blue-50 p-5">
-          <h3 className="text-sm font-semibold text-blue-900 mb-1">
+        <div className="rounded-xl border border-accent/20 bg-accent/5 p-5">
+          <h3 className="text-sm font-semibold font-mono text-[#1a1a1a] mb-1">
             Trial Status
           </h3>
-          <p className="text-xs text-blue-700">
+          <p className="text-xs text-muted">
             Trial started{" "}
             {new Date(profile.trial_started_at).toLocaleDateString()}. You have
             access to all verified skills for 30 days.

@@ -45,8 +45,10 @@ export default async function DashboardPage({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Your Skills Refinery</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-2xl font-bold font-mono text-[#1a1a1a]">
+            <span className="text-accent">#</span> Your Skills Refinery
+          </h1>
+          <p className="text-sm text-muted">
             Welcome back, {session.user.name || session.user.email}
           </p>
         </div>
@@ -67,13 +69,13 @@ export default async function DashboardPage({
       />
 
       {/* Account Info */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5 mt-6">
+      <div className="rounded-xl border border-terminal-border bg-white p-5 mt-6">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-1">
+            <h3 className="text-xs font-medium text-muted uppercase tracking-wide mb-1 font-mono">
               Account
             </h3>
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-[#1a1a1a]">
               {profile?.subscriptionTier === "level2"
                 ? "Level 2 (Unlimited)"
                 : profile?.subscriptionTier === "level1"
@@ -83,7 +85,7 @@ export default async function DashboardPage({
           </div>
           <Link
             href="/dashboard/billing"
-            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+            className="text-xs text-accent hover:text-accent-hover font-medium font-mono"
           >
             Manage billing &rarr;
           </Link>

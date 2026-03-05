@@ -19,10 +19,10 @@ export default function VerificationBadge({
 
   const colorClasses =
     level === 2
-      ? "bg-green-50 text-green-700 border-green-200"
+      ? "bg-success/10 text-green-700 border-success/30"
       : level === 1
-      ? "bg-blue-50 text-blue-700 border-blue-200"
-      : "bg-gray-50 text-gray-600 border-gray-200";
+      ? "bg-accent/10 text-accent border-accent/30"
+      : "bg-terminal-surface text-muted border-terminal-border";
 
   return (
     <span

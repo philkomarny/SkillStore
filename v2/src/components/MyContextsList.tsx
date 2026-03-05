@@ -3,9 +3,9 @@
 import { useState } from "react";
 
 const CTX_STATUS_STYLES: Record<string, { bg: string; text: string; label: string }> = {
-  draft: { bg: "bg-gray-100", text: "text-gray-600", label: "Draft" },
-  building: { bg: "bg-yellow-100", text: "text-yellow-700", label: "Building..." },
-  ready: { bg: "bg-green-100", text: "text-green-700", label: "Ready" },
+  draft: { bg: "bg-terminal-surface", text: "text-muted", label: "Draft" },
+  building: { bg: "bg-warning/20", text: "text-yellow-700", label: "Building..." },
+  ready: { bg: "bg-success/20", text: "text-green-700", label: "Ready" },
   error: { bg: "bg-red-100", text: "text-red-700", label: "Error" },
 };
 
@@ -39,23 +39,23 @@ export default function MyContextsList({
 
   if (contextProfiles.length === 0) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-        <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-900">My Contexts</h2>
+      <div className="rounded-xl border border-terminal-border bg-white overflow-hidden">
+        <div className="px-5 py-4 border-b border-terminal-border flex items-center justify-between">
+          <h2 className="text-sm font-semibold text-[#1a1a1a]">My Contexts</h2>
           <button
             onClick={onNewContext}
-            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+            className="text-xs text-accent hover:text-accent-hover font-medium"
           >
             + New
           </button>
         </div>
         <div className="px-5 py-10 text-center">
-          <p className="text-sm text-gray-400 mb-3">
+          <p className="text-sm text-tertiary mb-3">
             No context files yet. Create one by uploading your institutional documents.
           </p>
           <button
             onClick={onNewContext}
-            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+            className="text-xs text-accent hover:text-accent-hover font-medium"
           >
             + Create Your First Context
           </button>
@@ -65,22 +65,22 @@ export default function MyContextsList({
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-      <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
-        <h2 className="text-sm font-semibold text-gray-900">My Contexts</h2>
+    <div className="rounded-xl border border-terminal-border bg-white overflow-hidden">
+      <div className="px-5 py-4 border-b border-terminal-border flex items-center justify-between">
+        <h2 className="text-sm font-semibold text-[#1a1a1a]">My Contexts</h2>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-gray-400">
+          <span className="text-xs text-tertiary font-mono">
             {contextProfiles.length} context{contextProfiles.length !== 1 ? "s" : ""}
           </span>
           <button
             onClick={onNewContext}
-            className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+            className="text-xs text-accent hover:text-accent-hover font-medium"
           >
             + New
           </button>
         </div>
       </div>
-      <div className="divide-y divide-gray-100">
+      <div className="divide-y divide-terminal-border">
         {contextProfiles.map((ctx) => {
           const isSelected = ctx.id === selectedContextId;
           const isConfirming = confirmingId === ctx.id;
@@ -108,7 +108,7 @@ export default function MyContextsList({
                   <button
                     onClick={() => setConfirmingId(null)}
                     disabled={isDeleting}
-                    className="rounded-lg border border-gray-300 bg-white px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                    className="rounded-lg border border-terminal-border bg-white px-3 py-1 text-xs font-medium text-muted hover:bg-terminal-surface disabled:opacity-50 transition-colors"
                   >
                     Cancel
                   </button>
@@ -121,17 +121,16 @@ export default function MyContextsList({
             <div
               key={ctx.id}
               className={`flex items-center transition-colors ${
-                isSelected ? "bg-blue-50 border-l-2 border-blue-600" : ""
+                isSelected ? "bg-accent/5 border-l-2 border-accent" : ""
               }`}
             >
-              {/* Clickable context row — toggles selection for refinement */}
               <button
                 onClick={() => onSelectContext(ctx.id)}
-                className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 transition-colors text-left min-w-0 cursor-pointer"
+                className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-terminal-surface transition-colors text-left min-w-0 cursor-pointer"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm font-medium text-gray-900 truncate">
+                    <span className="text-sm font-medium text-[#1a1a1a] truncate">
                       {ctx.name}
                     </span>
                     <span
@@ -139,23 +138,22 @@ export default function MyContextsList({
                     >
                       {style.label}
                     </span>
-                    <span className="text-[10px] text-gray-400 font-mono">
+                    <span className="text-[10px] text-tertiary font-mono">
                       v{ctx.version}
                     </span>
                   </div>
                 </div>
-                <span className="text-[11px] text-gray-400 ml-3 whitespace-nowrap">
+                <span className="text-[11px] text-tertiary ml-3 whitespace-nowrap font-mono">
                   {new Date(ctx.updated_at).toLocaleDateString()}
                 </span>
               </button>
 
-              {/* Delete icon */}
               <button
                 onClick={(e) => {
                   e.stopPropagation();
                   setConfirmingId(ctx.id);
                 }}
-                className="px-2 pr-4 py-3.5 text-gray-300 hover:text-red-500 transition-colors"
+                className="px-2 pr-4 py-3.5 text-terminal-border hover:text-red-500 transition-colors"
                 title="Delete context"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

@@ -36,16 +36,16 @@ export default async function SkillDetailPage({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/skills" className="hover:text-blue-600">
+      <div className="flex items-center gap-2 text-sm text-muted mb-6 font-mono">
+        <Link href="/skills" className="hover:text-accent">
           Skills
         </Link>
-        <span>/</span>
-        <Link href={`/skills/${params.category}`} className="hover:text-blue-600">
+        <span className="text-tertiary">/</span>
+        <Link href={`/skills/${params.category}`} className="hover:text-accent">
           {cat.label}
         </Link>
-        <span>/</span>
-        <span className="text-gray-900 font-medium">{skill.name}</span>
+        <span className="text-tertiary">/</span>
+        <span className="text-[#1a1a1a] font-medium">{skill.name}</span>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -53,8 +53,8 @@ export default async function SkillDetailPage({
         <div className="lg:col-span-2">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 mb-2">{skill.name}</h1>
-              <p className="text-gray-500">{skill.description}</p>
+              <h1 className="text-2xl font-bold font-mono text-[#1a1a1a] mb-2">{skill.name}</h1>
+              <p className="text-muted">{skill.description}</p>
             </div>
             <VouchButton
               skillSlug={skill.slug}
@@ -68,7 +68,7 @@ export default async function SkillDetailPage({
               {skill.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-block rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600"
+                  className="inline-block rounded-full bg-terminal-surface px-2.5 py-0.5 text-xs text-muted"
                 >
                   {tag}
                 </span>
@@ -77,7 +77,7 @@ export default async function SkillDetailPage({
           )}
 
           {/* Skill content */}
-          <div className="prose-skill border-t border-gray-100 pt-6">
+          <div className="prose-skill border-t border-terminal-border pt-6">
             <MarkdownRenderer content={skill.content} />
           </div>
         </div>
@@ -88,31 +88,31 @@ export default async function SkillDetailPage({
           <AddToRefinery skillSlug={skill.slug} />
 
           {/* Meta info */}
-          <div className="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
+          <div className="rounded-xl border border-terminal-border bg-white p-5 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Verification</span>
+              <span className="text-xs text-muted">Verification</span>
               <VerificationBadge level={skill.verificationLevel || 0} size="md" />
             </div>
             {skill.version && (
               <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500">Version</span>
-                <span className="text-sm font-mono text-gray-700">{skill.version}</span>
+                <span className="text-xs text-muted">Version</span>
+                <span className="text-sm font-mono text-[#1a1a1a]">{skill.version}</span>
               </div>
             )}
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Category</span>
-              <span className="text-sm text-gray-700">
+              <span className="text-xs text-muted">Category</span>
+              <span className="text-sm text-[#1a1a1a]">
                 {cat.icon} {cat.label}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-xs text-gray-500">Downloads</span>
+              <span className="text-xs text-muted">Downloads</span>
               <DownloadBadge count={skill.downloadCount || 0} />
             </div>
             {skill.submittedBy && (
               <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500">Submitted by</span>
-                <span className="text-sm text-gray-700">{skill.submittedBy}</span>
+                <span className="text-xs text-muted">Submitted by</span>
+                <span className="text-sm text-[#1a1a1a]">{skill.submittedBy}</span>
               </div>
             )}
           </div>

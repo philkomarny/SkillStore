@@ -1,22 +1,25 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
-import Image from "next/image";
+import { IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 import Providers from "@/components/Providers";
 import AuthButton from "@/components/AuthButton";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const poppins = Poppins({
+const ibmPlex = IBM_Plex_Sans({
   subsets: ["latin"],
-  weight: ["600", "700", "800"],
-  variable: "--font-poppins",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-ibm-plex",
+});
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-jetbrains",
 });
 
 export const metadata: Metadata = {
-  title: "eduSkillsMP — The Edu Skills Marketplace for Claude",
+  title: "eduSkillsMP — Verified Claude Skills for Education",
   description:
-    "Browse, install, and personalize verified skills for Claude. The open marketplace for AI prompt engineering.",
+    "The community-driven catalog of verified Claude skills built for higher education and K-12. Browse by role. Install with confidence. Refine for your campus.",
 };
 
 export default function RootLayout({
@@ -26,36 +29,36 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${poppins.variable} font-sans antialiased bg-white text-gray-900`}>
+      <body className={`${ibmPlex.variable} ${jetbrains.variable} font-sans antialiased bg-terminal-bg text-[#1a1a1a]`}>
         <Providers>
           {/* Header */}
-          <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
+          <header className="sticky top-0 z-50 bg-[#FAFAF8]/90 backdrop-blur-md border-b border-terminal-border">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
-                <Link href="/" className="flex-shrink-0">
-                  <Image src="/logo-nav.svg" alt="eduSkillsMP" width={160} height={28} priority />
+                <Link href="/" className="flex-shrink-0 font-mono font-bold text-lg">
+                  <span className="text-accent">edu</span>SkillsMP
                 </Link>
-                <nav className="hidden sm:flex items-center gap-5 text-sm text-gray-600">
-                  <Link href="/skills" className="hover:text-gray-900 transition-colors">
-                    Browse
+                <nav className="hidden sm:flex items-center gap-4 font-mono text-[13px] text-muted">
+                  <Link href="/skills" className="hover:text-[#1a1a1a] transition-colors">
+                    $ browse --skills
                   </Link>
-                  <Link href="/how-it-works" className="hover:text-gray-900 transition-colors">
-                    How It Works
+                  <Link href="/how-it-works" className="hover:text-[#1a1a1a] transition-colors">
+                    $ --how-it-works
                   </Link>
-                  <Link href="/pricing" className="hover:text-gray-900 transition-colors">
-                    Pricing
+                  <Link href="/pricing" className="hover:text-[#1a1a1a] transition-colors">
+                    $ --pricing
                   </Link>
-                  <Link href="/submit" className="hover:text-gray-900 transition-colors">
-                    Submit
+                  <Link href="/submit" className="hover:text-[#1a1a1a] transition-colors">
+                    $ submit
                   </Link>
                 </nav>
               </div>
               <div className="flex items-center gap-4">
                 <Link
                   href="/dashboard"
-                  className="hidden sm:inline-flex text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                  className="hidden sm:inline-flex font-mono text-[13px] text-muted hover:text-[#1a1a1a] transition-colors"
                 >
-                  Your Skills Refinery
+                  Your Refinery
                 </Link>
                 <AuthButton />
               </div>
@@ -66,18 +69,18 @@ export default function RootLayout({
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
 
           {/* Footer */}
-          <footer className="border-t border-gray-100 py-8">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-              <span>eduSkillsMP — The Edu Skills Marketplace for Claude</span>
+          <footer className="border-t border-terminal-border py-8">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-tertiary font-mono">
+              <span>eduSkillsMP — Verified Claude skills for education, by education.</span>
               <div className="flex items-center gap-4">
-                <Link href="/pricing" className="hover:text-gray-600 transition-colors">
-                  Pricing
+                <Link href="/pricing" className="hover:text-muted transition-colors">
+                  $ --pricing
                 </Link>
-                <Link href="/how-it-works" className="hover:text-gray-600 transition-colors">
-                  How It Works
+                <Link href="/how-it-works" className="hover:text-muted transition-colors">
+                  $ --how-it-works
                 </Link>
-                <Link href="/submit" className="hover:text-gray-600 transition-colors">
-                  Submit a Skill
+                <Link href="/submit" className="hover:text-muted transition-colors">
+                  $ submit
                 </Link>
               </div>
             </div>

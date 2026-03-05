@@ -40,19 +40,19 @@ export default async function CategoryPage({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
       <div className="mb-2">
-        <Link href="/skills" className="text-sm text-blue-600 hover:text-blue-800">
-          ← All categories
+        <Link href="/skills" className="text-sm text-accent hover:text-accent-hover font-mono">
+          &larr; All categories
         </Link>
       </div>
 
       <div className="flex items-center gap-3 mb-2">
         <span className="text-3xl">{cat.icon}</span>
-        <h1 className="text-2xl font-bold text-gray-900">{cat.label}</h1>
+        <h1 className="text-2xl font-bold font-mono text-[#1a1a1a]">{cat.label}</h1>
       </div>
-      <p className="text-sm text-gray-500 mb-8">{cat.description}</p>
+      <p className="text-sm text-muted mb-8">{cat.description}</p>
 
       <div className="max-w-lg mb-8">
-        <Suspense fallback={<div className="h-10 bg-gray-100 rounded-lg animate-pulse" />}>
+        <Suspense fallback={<div className="h-10 bg-terminal-surface rounded-lg animate-pulse" />}>
           <SearchBar placeholder={`Search ${cat.label.toLowerCase()} skills...`} />
         </Suspense>
       </div>
@@ -64,10 +64,10 @@ export default async function CategoryPage({
       </div>
 
       {skills.length === 0 && (
-        <div className="text-center py-16 text-gray-400">
-          <p className="text-lg mb-2">No skills in this category yet</p>
+        <div className="text-center py-16 text-tertiary">
+          <p className="text-lg mb-2 font-mono">No skills in this category yet</p>
           <p className="text-sm">
-            <Link href="/submit" className="text-blue-600 hover:underline">
+            <Link href="/submit" className="text-accent hover:underline">
               Submit the first one
             </Link>
           </p>

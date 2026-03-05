@@ -32,7 +32,6 @@ export default function AddToRefinery({ skillSlug }: AddToRefineryProps) {
 
       if (res.ok) {
         const data = await res.json();
-        // Navigate to the dashboard with skill selected
         router.push(`/dashboard?skill=${data.userSkill.id}`);
       } else {
         const data = await res.json();
@@ -46,11 +45,11 @@ export default function AddToRefinery({ skillSlug }: AddToRefineryProps) {
   };
 
   return (
-    <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-5">
-      <h3 className="text-sm font-semibold text-gray-900 mb-2">
+    <div className="rounded-xl border border-accent/20 bg-accent/5 p-5">
+      <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">
         Personalize This Skill
       </h3>
-      <p className="text-xs text-gray-500 mb-3">
+      <p className="text-xs text-muted mb-3">
         Import this skill into Your Refinery to customize it with your
         documents, language, and processes.
       </p>

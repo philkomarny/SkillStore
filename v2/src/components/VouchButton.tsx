@@ -46,13 +46,13 @@ export default function VouchButton({
       disabled={loading}
       className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
         vouched
-          ? "bg-blue-100 text-blue-700 border border-blue-200"
-          : "bg-gray-100 text-gray-600 hover:bg-gray-200 border border-transparent"
+          ? "bg-accent/10 text-accent border border-accent/30"
+          : "bg-terminal-surface text-muted hover:bg-terminal-border border border-transparent"
       }`}
       title={session ? (vouched ? "Remove vouch" : "Vouch for this skill") : "Sign in to vouch"}
     >
       <svg
-        className={`h-3.5 w-3.5 ${vouched ? "fill-blue-600" : "fill-none stroke-current"}`}
+        className={`h-3.5 w-3.5 ${vouched ? "fill-accent" : "fill-none stroke-current"}`}
         viewBox="0 0 24 24"
         strokeWidth={vouched ? 0 : 2}
       >

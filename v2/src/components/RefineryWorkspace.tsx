@@ -104,14 +104,14 @@ export default function RefineryWorkspace({
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-      <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-2">
-        <div className="w-6 h-6 rounded-md bg-blue-600 text-white flex items-center justify-center text-xs font-bold">
+    <div className="rounded-xl border border-terminal-border bg-white overflow-hidden">
+      <div className="px-5 py-4 border-b border-terminal-border flex items-center gap-2">
+        <div className="w-6 h-6 rounded-md bg-accent text-white flex items-center justify-center text-xs font-bold font-mono">
           R
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-gray-900">Your Skills Refinery</h2>
-          <p className="text-xs text-gray-400 mt-0.5">
+          <h2 className="text-sm font-semibold text-[#1a1a1a]">Your Skills Refinery</h2>
+          <p className="text-xs text-tertiary mt-0.5">
             Select a skill + a context file above, then refine
           </p>
         </div>
@@ -120,7 +120,7 @@ export default function RefineryWorkspace({
       <div className="px-5 py-4 space-y-3">
         {/* Selected skill */}
         <div>
-          <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">
+          <label className="block text-[10px] font-semibold text-muted uppercase tracking-wide mb-1 font-mono">
             Skill
           </label>
           {selectedSkill && isRenaming ? (
@@ -135,19 +135,19 @@ export default function RefineryWorkspace({
                 }}
                 autoFocus
                 disabled={renaming}
-                className="flex-1 rounded-lg border border-blue-300 bg-white px-3 py-2 text-sm text-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 rounded-lg border border-accent/30 bg-white px-3 py-2 text-sm text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-accent"
               />
               <button
                 onClick={handleRename}
                 disabled={renaming}
-                className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="btn-claude px-3 py-2 text-xs"
               >
                 {renaming ? "..." : "Save"}
               </button>
               <button
                 onClick={() => setIsRenaming(false)}
                 disabled={renaming}
-                className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50 transition-colors"
+                className="rounded-lg border border-terminal-border bg-white px-3 py-2 text-xs font-medium text-muted hover:bg-terminal-surface disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>
@@ -156,8 +156,8 @@ export default function RefineryWorkspace({
             <div
               className={`rounded-lg border px-3 py-2 text-sm flex items-center justify-between ${
                 selectedSkill
-                  ? "border-blue-200 bg-blue-50 text-blue-900"
-                  : "border-gray-200 bg-gray-50 text-gray-400"
+                  ? "border-accent/20 bg-accent/5 text-[#1a1a1a]"
+                  : "border-terminal-border bg-terminal-surface text-tertiary"
               }`}
             >
               <div>
@@ -165,7 +165,7 @@ export default function RefineryWorkspace({
                   ? `${selectedSkill.name} (v${selectedSkill.version})`
                   : "Select a skill from My Skills above"}
                 {selectedSkill && (
-                  <span className="block text-[10px] text-blue-600 mt-0.5">
+                  <span className="block text-[10px] text-accent mt-0.5">
                     by {userName}
                   </span>
                 )}
@@ -173,7 +173,7 @@ export default function RefineryWorkspace({
               {selectedSkill && (
                 <button
                   onClick={startRename}
-                  className="text-blue-400 hover:text-blue-700 transition-colors ml-2 flex-shrink-0"
+                  className="text-tertiary hover:text-accent transition-colors ml-2 flex-shrink-0"
                   title="Rename skill"
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -187,16 +187,16 @@ export default function RefineryWorkspace({
 
         {/* Selected context */}
         <div>
-          <label className="block text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1">
+          <label className="block text-[10px] font-semibold text-muted uppercase tracking-wide mb-1 font-mono">
             Context
           </label>
           <div
             className={`rounded-lg border px-3 py-2 text-sm ${
               selectedContext
                 ? selectedContext.status === "ready"
-                  ? "border-green-200 bg-green-50 text-green-900"
-                  : "border-yellow-200 bg-yellow-50 text-yellow-900"
-                : "border-gray-200 bg-gray-50 text-gray-400"
+                  ? "border-success/30 bg-success/10 text-[#1a1a1a]"
+                  : "border-warning/30 bg-warning/10 text-[#1a1a1a]"
+                : "border-terminal-border bg-terminal-surface text-tertiary"
             }`}
           >
             {selectedContext
@@ -213,7 +213,7 @@ export default function RefineryWorkspace({
         <button
           onClick={handleRefine}
           disabled={!canRefine}
-          className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="w-full btn-claude disabled:opacity-40 disabled:cursor-not-allowed"
         >
           {refining ? (
             <span className="flex items-center justify-center gap-2">
@@ -244,7 +244,7 @@ export default function RefineryWorkspace({
 
         {/* Success result */}
         {refineResult && (
-          <div className="rounded-lg bg-green-50 border border-green-200 p-3">
+          <div className="rounded-lg bg-success/10 border border-success/30 p-3">
             <div className="text-xs font-semibold text-green-700 mb-1">
               Refinement Complete (v{refineResult.version})
             </div>
