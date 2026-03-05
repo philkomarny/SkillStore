@@ -15,3 +15,6 @@ web/out/
 # Environment
 .env*.local
 .vercel
+.claude
+config.sh
+ghauth
