@@ -1,6 +1,7 @@
 import matter from "gray-matter";
 import { getMarketplaceJson, getSkillContent } from "./github";
 import { getUserContext } from "./users";
+import { supabase } from "./supabase";
 import type { Marketplace, SkillEntry, SkillDetail } from "./types";
 
 function deriveSlug(entry: Omit<SkillEntry, "slug">): string {
@@ -40,15 +41,20 @@ export async function getSkillDetail(
 
   if (!entry) return null;
 
-  const [raw, contextContent] = await Promise.all([
+  const [raw, contextContent, dbSkill] = await Promise.all([
     getSkillContent(entry.source),
     userId ? getUserContext(userId, slug) : Promise.resolve(null),
+    supabase.from("skills").select("download_count, vouch_count, verification_level, submitted_by").eq("slug", slug).single().then((r: any) => r.data).catch(() => null),
   ]);
 
   const { data, content } = matter(raw);
 
   return {
     ...entry,
+    downloadCount: dbSkill?.download_count ?? 0,
+    vouchCount: dbSkill?.vouch_count ?? entry.vouchCount ?? 0,
+    verificationLevel: dbSkill?.verification_level ?? entry.verificationLevel ?? 0,
+    submittedBy: dbSkill?.submitted_by ?? entry.submittedBy,
     content,
     rawContent: raw,
     contextContent,
