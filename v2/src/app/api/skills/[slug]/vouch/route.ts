@@ -25,6 +25,9 @@ export async function POST(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const body = await request.json().catch(() => ({}));
+  const amount = Math.min(Math.max(parseInt(body.amount) || 1, 1), 50);
+
   // Get or auto-create the skill row
   let { data: skill } = (await supabase
     .from("skills")
@@ -50,10 +53,10 @@ export async function POST(
     skill = created;
   }
 
-  const newCount = (skill.vouch_count || 0) + 1;
+  const newCount = (skill.vouch_count || 0) + amount;
   await (supabase.from("skills") as any)
     .update({ vouch_count: newCount })
     .eq("id", skill.id);
 
-  return NextResponse.json({ clapCount: newCount });
+  return NextResponse.json({ ok: true });
 }
