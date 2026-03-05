@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Pricing — eduSkillsMP",
-  description: "Choose your plan for verified Claude skills.",
+  description: "Choose your plan for the Edu Skills Marketplace and The Refinery.",
 };
 
 const TIERS = [
@@ -10,9 +10,9 @@ const TIERS = [
     name: "Free",
     price: "$0",
     period: "forever",
-    description: "Browse and install community skills",
+    description: "Browse, install, and use community skills",
     features: [
-      "Browse all skills",
+      "Browse all skills in the marketplace",
       "Install community (🌐) skills",
       "3 install methods (Desktop, Code, Project)",
       "No account required",
@@ -22,35 +22,35 @@ const TIERS = [
     highlighted: false,
   },
   {
-    name: "Level 1",
-    price: "$0.99",
-    period: "per skill",
-    description: "Bot-verified skills with context uploads",
+    name: "Refinery — Personal",
+    price: "$2.50",
+    period: "per refined skill / mo.",
+    description: "Personalize skills for your institution with AI",
     features: [
       "Everything in Free",
-      "30-day free trial of verified skills",
-      "Bot-verified (🤖) security scanning",
-      "Upload docs for AI context generation",
-      "Pay per skill after trial",
+      "AI-powered skill refinement",
+      "Upload docs for context generation",
+      "Personal skill storefront",
+      "Version history on refined skills",
     ],
-    cta: "Start Free Trial",
-    ctaHref: "/api/checkout?plan=level1",
+    cta: "Start Refining",
+    ctaHref: "/api/checkout?plan=personal",
     highlighted: true,
   },
   {
-    name: "Level 2",
-    price: "$50",
-    period: "/month",
-    description: "Unlimited expert-verified skills",
+    name: "Refinery — Institution",
+    price: "$2.50",
+    period: "per refined skill / mo.",
+    description: "Collaborative refinement for teams",
     features: [
-      "Everything in Level 1",
-      "Unlimited expert-verified (👤) skills",
-      "Human-reviewed for quality",
-      "Priority context processing",
-      "Early access to new skills",
+      "Everything in Personal",
+      "Multiple contributors per store",
+      "Shared context profiles",
+      "Unified institutional storefront",
+      "Team management dashboard",
     ],
-    cta: "Subscribe",
-    ctaHref: "/api/checkout?plan=level2",
+    cta: "Get Started",
+    ctaHref: "/api/checkout?plan=institution",
     highlighted: false,
   },
 ];
@@ -63,8 +63,8 @@ export default function PricingPage() {
           Simple, transparent pricing
         </h1>
         <p className="text-gray-500 max-w-lg mx-auto">
-          Community skills are always free. Verified skills offer security scanning
-          and expert review.
+          Community skills are always free. The Refinery lets you personalize
+          skills for your institution — pay only for what you refine.
         </p>
       </div>
 
@@ -121,12 +121,12 @@ export default function PricingPage() {
         ))}
       </div>
 
-      {/* Level 3 */}
+      {/* Custom Skills */}
       <div className="mt-12 rounded-xl border border-gray-200 bg-gray-50 p-8 text-center">
-        <h3 className="text-lg font-bold text-gray-900 mb-2">Level 3 — Custom</h3>
+        <h3 className="text-lg font-bold text-gray-900 mb-2">Custom Skills</h3>
         <p className="text-sm text-gray-500 mb-4 max-w-md mx-auto">
-          Need custom AI-powered skills built for your institution? Our team creates
-          bespoke skills with human + AI collaboration.
+          Need bespoke AI-powered skills built for your institution? Our team
+          creates custom skills through human + AI collaboration.
         </p>
         <Link
           href="/submit"
