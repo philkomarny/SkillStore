@@ -68,55 +68,58 @@ export default function PricingPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
         {TIERS.map((tier) => (
-          <div
-            key={tier.name}
-            className={`rounded-xl border p-6 flex flex-col ${
-              tier.highlighted
-                ? "border-accent bg-accent/5 ring-1 ring-accent/20"
-                : "border-terminal-border bg-white"
-            }`}
-          >
-            {tier.highlighted && (
-              <span className="inline-block self-start rounded-full bg-accent/10 text-accent text-[10px] font-bold px-2.5 py-0.5 mb-3 uppercase tracking-wide font-mono">
+          <div key={tier.name} className="flex flex-col items-center">
+            {tier.highlighted ? (
+              <span className="inline-block rounded-full bg-accent/10 text-accent text-[10px] font-bold px-2.5 py-0.5 mb-2 uppercase tracking-wide font-mono">
                 Most Popular
               </span>
+            ) : (
+              <div className="h-[22px] mb-2" />
             )}
-            <h2 className="text-lg font-bold font-mono text-[#1a1a1a]">{tier.name}</h2>
-            <div className="mt-2 mb-1">
-              <span className="text-3xl font-bold text-[#1a1a1a]">{tier.price}</span>
-              <span className="text-sm text-muted ml-1">{tier.period}</span>
-            </div>
-            <p className="text-sm text-muted mb-6">{tier.description}</p>
-
-            <ul className="space-y-2.5 mb-8 flex-1">
-              {tier.features.map((feature) => (
-                <li key={feature} className="flex items-start gap-2 text-sm text-[#1a1a1a]">
-                  <svg
-                    className="h-4 w-4 text-success mt-0.5 flex-shrink-0"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  {feature}
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              href={tier.ctaHref}
-              className={`block text-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+            <div
+              className={`rounded-xl border p-6 flex flex-col w-full ${
                 tier.highlighted
-                  ? "btn-claude justify-center"
-                  : "bg-terminal-surface text-[#1a1a1a] hover:bg-terminal-border"
+                  ? "border-accent bg-accent/5 ring-1 ring-accent/20"
+                  : "border-terminal-border bg-white"
               }`}
             >
-              {tier.cta}
-            </Link>
+              <h2 className="text-lg font-bold font-mono text-[#1a1a1a]">{tier.name}</h2>
+              <div className="mt-2 mb-1">
+                <span className="text-3xl font-bold text-[#1a1a1a]">{tier.price}</span>
+                <span className="text-sm text-muted ml-1">{tier.period}</span>
+              </div>
+              <p className="text-sm text-muted mb-6">{tier.description}</p>
+
+              <ul className="space-y-2.5 mb-8 flex-1">
+                {tier.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2 text-sm text-[#1a1a1a]">
+                    <svg
+                      className="h-4 w-4 text-success mt-0.5 flex-shrink-0"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <Link
+                href={tier.ctaHref}
+                className={`block text-center rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                  tier.highlighted
+                    ? "btn-claude justify-center"
+                    : "bg-terminal-surface text-[#1a1a1a] hover:bg-terminal-border"
+                }`}
+              >
+                {tier.cta}
+              </Link>
+            </div>
           </div>
         ))}
       </div>
