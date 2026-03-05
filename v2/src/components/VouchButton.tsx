@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 
 interface VouchButtonProps {
@@ -14,23 +14,30 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
   const [animating, setAnimating] = useState(false);
   const pendingRef = useRef(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const ipRef = useRef<string>("unknown");
+
+  useEffect(() => {
+    fetch("https://api.ipify.org?format=json")
+      .then((r) => r.json())
+      .then((d) => { ipRef.current = d.ip; })
+      .catch(() => {});
+  }, []);
 
   const flush = () => {
     const amount = pendingRef.current;
     if (amount === 0) return;
     pendingRef.current = 0;
-    fetch(`/api/skills/${skillSlug}/vouch`, {
+    fetch("https://sivvn9tsil.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_item_count_post", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount }),
+      body: JSON.stringify({
+        slug: skillSlug,
+        count: amount,
+        count_type: "clap",
+        user_id: session?.user?.id ?? null,
+        ip_address: ipRef.current,
+      }),
     });
-    alert(JSON.stringify({
-      slug: skillSlug,
-      count: amount,
-      count_type: "clap",
-      user_id: session?.user?.id ?? null,
-      ip_address: "client-side",
-    }, null, 2));
   };
 
   const handleClap = () => {
