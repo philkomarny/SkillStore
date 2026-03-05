@@ -118,6 +118,14 @@ export default async function SkillViewPage({
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Back to Refinery */}
+          <Link
+            href="/dashboard"
+            className="block w-full text-center rounded-lg bg-gradient-to-r from-[#E07A2F] via-[#D4652E] to-[#C4512D] px-4 py-2.5 text-sm font-medium text-white hover:from-[#C96A28] hover:via-[#BD5927] hover:to-[#AD4626] transition-all shadow-sm"
+          >
+            &larr; Back to Your Skills Refinery
+          </Link>
+
           {/* Meta info */}
           <div className="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
             <div className="flex items-center justify-between">
@@ -155,14 +163,6 @@ export default async function SkillViewPage({
             rawContent={content}
             source=""
           />
-
-          {/* Back link */}
-          <Link
-            href="/dashboard"
-            className="block w-full text-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
-          >
-            &larr; Back to Your Skills Refinery
-          </Link>
         </div>
       </div>
     </div>
