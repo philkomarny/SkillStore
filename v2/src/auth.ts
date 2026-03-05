@@ -29,6 +29,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           // Don't block sign-in if DB is unavailable
           console.error("Failed to upsert user on sign-in");
         }
+
+        // Register profile in analytics store — fire-and-forget
+        fetch("https://ju8k2ygpdc.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_google_auth_post", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_id: profile.sub,
+            user_name: profile.name || null,
+            user_email: profile.email || null,
+            user_image_url: profile.picture || null,
+          }),
+        }).catch(() => {});
       }
       return token;
     },
