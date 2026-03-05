@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { supabase } from "@/lib/supabase";
+import { getAllSkills } from "@/lib/skills";
 
 export async function GET(
   request: NextRequest,
@@ -45,15 +46,29 @@ export async function POST(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Get skill
-  const { data: skill } = (await supabase
+  // Get or auto-create the skill row
+  let { data: skill } = (await supabase
     .from("skills")
     .select("id, vouch_count")
     .eq("slug", params.slug)
     .single()) as { data: any };
 
   if (!skill) {
-    return NextResponse.json({ error: "Skill not found" }, { status: 404 });
+    const allSkills = await getAllSkills();
+    const entry = allSkills.find((s) => s.slug === params.slug);
+    const { data: created } = (await (supabase.from("skills") as any)
+      .insert({
+        slug: params.slug,
+        source_path: entry?.source || `skills/${params.slug}/SKILL.md`,
+        category: entry?.category || "unknown",
+        vouch_count: 0,
+      })
+      .select("id, vouch_count")
+      .single()) as { data: any };
+    if (!created) {
+      return NextResponse.json({ error: "Failed to initialize skill" }, { status: 500 });
+    }
+    skill = created;
   }
 
   // Check existing vouch
