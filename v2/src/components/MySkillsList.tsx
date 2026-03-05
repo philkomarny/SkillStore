@@ -111,7 +111,7 @@ export default function MySkillsList({
               {/* Clickable skill row — toggles selection for refinement */}
               <button
                 onClick={() => onSelectSkill(skill.id)}
-                className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 transition-colors text-left min-w-0"
+                className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-gray-50 transition-colors text-left min-w-0 cursor-pointer"
               >
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">

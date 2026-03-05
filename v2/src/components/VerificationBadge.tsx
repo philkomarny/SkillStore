@@ -1,6 +1,7 @@
 "use client";
 
 import { VERIFICATION_BADGES } from "@/lib/types";
+import CategoryIcon from "./CategoryIcon";
 
 interface VerificationBadgeProps {
   level: number;
@@ -14,6 +15,7 @@ export default function VerificationBadge({
   const badge = VERIFICATION_BADGES[level] || VERIFICATION_BADGES[0];
 
   const sizeClasses = size === "md" ? "text-sm px-2.5 py-1" : "text-xs px-2 py-0.5";
+  const iconSize = size === "md" ? "w-3.5 h-3.5" : "w-3 h-3";
 
   const colorClasses =
     level === 2
@@ -27,7 +29,7 @@ export default function VerificationBadge({
       className={`inline-flex items-center gap-1 rounded-full border font-medium ${sizeClasses} ${colorClasses}`}
       title={badge.description}
     >
-      <span>{badge.emoji}</span>
+      <CategoryIcon name={badge.icon} className={iconSize} />
       <span>{badge.label}</span>
     </span>
   );

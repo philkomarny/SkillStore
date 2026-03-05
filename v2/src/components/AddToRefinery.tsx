@@ -57,7 +57,7 @@ export default function AddToRefinery({ skillSlug }: AddToRefineryProps) {
       <button
         onClick={handleAdd}
         disabled={loading}
-        className="block w-full rounded-lg bg-gradient-to-r from-[#E07A2F] via-[#D4652E] to-[#C4512D] px-4 py-2.5 text-sm font-medium text-white text-center hover:from-[#C96A28] hover:via-[#BD5927] hover:to-[#AD4626] disabled:opacity-50 transition-all shadow-sm"
+        className="btn-claude block w-full"
       >
         {!session
           ? "Sign in to Add"

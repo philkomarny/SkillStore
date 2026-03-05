@@ -4,6 +4,7 @@ import { CATEGORIES } from "@/lib/types";
 import SearchBar from "@/components/SearchBar";
 import SkillCard from "@/components/SkillCard";
 import CategoryGrid from "@/components/CategoryGrid";
+import CategoryIcon from "@/components/CategoryIcon";
 
 export const metadata = {
   title: "Browse Skills — eduSkillsMP",
@@ -56,8 +57,14 @@ export default async function BrowsePage({
 
       {category && CATEGORIES[category] && (
         <div className="mb-6">
-          <span className="text-2xl mr-2">{CATEGORIES[category].icon}</span>
-          <span className="text-lg font-semibold text-gray-900">{CATEGORIES[category].label}</span>
+          <div className="flex items-center gap-2 mb-1">
+            <CategoryIcon
+              name={CATEGORIES[category].icon}
+              className="w-6 h-6"
+              color={CATEGORIES[category].color}
+            />
+            <span className="text-lg font-semibold text-gray-900">{CATEGORIES[category].label}</span>
+          </div>
           <p className="text-sm text-gray-500 mt-1">{CATEGORIES[category].description}</p>
         </div>
       )}
