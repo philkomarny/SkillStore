@@ -12,7 +12,6 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
   const { data: session } = useSession();
   const [count, setCount] = useState(initialCount);
   const [animating, setAnimating] = useState(false);
-  const [errored, setErrored] = useState(false);
   const pendingRef = useRef(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ipRef = useRef<string>("unknown");
@@ -43,7 +42,7 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
         user_id: session?.user?.id ?? null,
         ip_address: ipRef.current,
       }),
-    }).catch(() => setErrored(true));
+    }).catch((err) => alert("clap error: " + err));
   };
 
   const handleClap = () => {
@@ -71,7 +70,7 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
         className={`text-base leading-none transition-transform ${animating ? "scale-125" : "scale-100"}`}
         style={{ display: "inline-block" }}
       >
-        {errored ? "500" : "👏"}
+        👏
       </span>
       <span>{count}</span>
     </button>
