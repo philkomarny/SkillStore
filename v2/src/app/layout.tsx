@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 import Providers from "@/components/Providers";
@@ -26,8 +27,8 @@ export default function RootLayout({
           <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-14">
               <div className="flex items-center gap-8">
-                <Link href="/" className="text-lg font-bold text-gray-900 tracking-tight">
-                  eduSkillsMP
+                <Link href="/" className="flex-shrink-0">
+                  <Image src="/logo-nav.svg" alt="eduSkillsMP" width={160} height={28} priority />
                 </Link>
                 <nav className="hidden sm:flex items-center gap-5 text-sm text-gray-600">
                   <Link href="/skills" className="hover:text-gray-900 transition-colors">
