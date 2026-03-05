@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 interface DownloadBadgeProps {
   count: number;
+  skillSlug: string;
 }
 
 function formatCount(n: number): string {
@@ -11,7 +12,7 @@ function formatCount(n: number): string {
   return String(n);
 }
 
-export default function DownloadBadge({ count }: DownloadBadgeProps) {
+export default function DownloadBadge({ count, skillSlug }: DownloadBadgeProps) {
   const [displayCount, setDisplayCount] = useState(count);
 
   useEffect(() => {
@@ -19,6 +20,13 @@ export default function DownloadBadge({ count }: DownloadBadgeProps) {
     window.addEventListener("skill-downloaded", handler);
     return () => window.removeEventListener("skill-downloaded", handler);
   }, []);
+
+  useEffect(() => {
+    fetch(`https://iw0ojycun6.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_item_count_get?slug=${skillSlug}&count_type=download`)
+      .then((r) => r.json())
+      .then((d) => { if (typeof d.total === "number") setDisplayCount(d.total); })
+      .catch(() => {});
+  }, [skillSlug]);
 
   return (
     <span className="inline-flex items-stretch rounded overflow-hidden text-xs font-medium font-mono leading-none border border-terminal-border">

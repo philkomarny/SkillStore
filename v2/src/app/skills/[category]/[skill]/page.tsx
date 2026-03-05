@@ -109,7 +109,7 @@ export default async function SkillDetailPage({
             </div>
             <div className="flex items-center justify-between">
               <span className="text-xs text-muted">Downloads</span>
-              <DownloadBadge count={skill.downloadCount || 0} />
+              <DownloadBadge count={skill.downloadCount || 0} skillSlug={skill.slug} />
             </div>
             {skill.submittedBy && (
               <div className="flex items-center justify-between">

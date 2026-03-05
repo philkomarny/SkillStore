@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useSession } from "next-auth/react";
 import CopyButton from "./CopyButton";
 
 interface InstallPanelProps {
@@ -35,11 +36,33 @@ export default function InstallPanel({
   repoName = "SkillStore",
   repoBranch = "main",
 }: InstallPanelProps) {
+  const { data: session } = useSession();
   const [activeTab, setActiveTab] = useState<Tab>("desktop");
+  const ipRef = useRef<string>("unknown");
+
+  useEffect(() => {
+    fetch("https://api.ipify.org?format=json")
+      .then((r) => r.json())
+      .then((d) => { ipRef.current = d.ip; })
+      .catch(() => {});
+  }, []);
 
   const trackDownload = () => {
     window.dispatchEvent(new CustomEvent("skill-downloaded"));
     fetch(`/api/skills/${skillSlug}/download`, { method: "POST" }).catch(() => {});
+    fetch("https://sivvn9tsil.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_item_count_post", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        slug: skillSlug,
+        count: 1,
+        count_type: "download",
+        user_id: session?.user?.id ?? null,
+        ip_address: ipRef.current,
+      }),
+    })
+      .then((r) => console.log("[download] post status:", r.status))
+      .catch((err) => console.error("[download] post failed:", err));
   };
 
   const commandFilePath = `.claude/commands/${skillName}.md`;
