@@ -38,9 +38,8 @@ export default function InstallPanel({
   const [activeTab, setActiveTab] = useState<Tab>("desktop");
 
   const trackDownload = () => {
-    fetch(`/api/skills/${skillSlug}/download`, { method: "POST" })
-      .then(() => window.dispatchEvent(new CustomEvent("skill-downloaded")))
-      .catch(() => {});
+    window.dispatchEvent(new CustomEvent("skill-downloaded"));
+    fetch(`/api/skills/${skillSlug}/download`, { method: "POST" }).catch(() => {});
   };
 
   const commandFilePath = `.claude/commands/${skillName}.md`;
