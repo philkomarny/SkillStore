@@ -26,7 +26,7 @@ export async function generateMetadata({
     .single()) as { data: any };
 
   return {
-    title: skill ? `${skill.name} — The Refinery` : "Skill — The Refinery",
+    title: skill ? `${skill.name} — Your Skills Refinery` : "Skill — Your Skills Refinery",
   };
 }
 
@@ -76,7 +76,7 @@ export default async function SkillViewPage({
       {/* Breadcrumb */}
       <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
         <Link href="/dashboard" className="hover:text-blue-600">
-          The Refinery
+          Your Skills Refinery
         </Link>
         <span>/</span>
         <span className="text-gray-900 font-medium">{userSkill.name}</span>
@@ -121,6 +121,12 @@ export default async function SkillViewPage({
           {/* Meta info */}
           <div className="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
             <div className="flex items-center justify-between">
+              <span className="text-xs text-gray-500">Author</span>
+              <span className="text-sm text-gray-700">
+                {session.user.name || session.user.email}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
               <span className="text-xs text-gray-500">Version</span>
               <span className="text-sm font-mono text-gray-700">
                 {userSkill.version}
@@ -155,7 +161,7 @@ export default async function SkillViewPage({
             href="/dashboard"
             className="block w-full text-center rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
-            &larr; Back to The Refinery
+            &larr; Back to Your Skills Refinery
           </Link>
         </div>
       </div>

@@ -7,6 +7,7 @@ import InstallPanel from "@/components/InstallPanel";
 import VerificationBadge from "@/components/VerificationBadge";
 import VouchButton from "@/components/VouchButton";
 import DownloadBadge from "@/components/DownloadBadge";
+import AddToRefinery from "@/components/AddToRefinery";
 
 export async function generateMetadata({
   params,
@@ -83,6 +84,9 @@ export default async function SkillDetailPage({
 
         {/* Sidebar */}
         <div className="space-y-6">
+          {/* Add to Refinery */}
+          <AddToRefinery skillSlug={skill.slug} />
+
           {/* Meta info */}
           <div className="rounded-xl border border-gray-200 bg-white p-5 space-y-4">
             <div className="flex items-center justify-between">

@@ -51,19 +51,19 @@ export default function AddToRefinery({ skillSlug }: AddToRefineryProps) {
         Personalize This Skill
       </h3>
       <p className="text-xs text-gray-500 mb-3">
-        Import this skill into your Refinery to customize it with your
+        Import this skill into Your Refinery to customize it with your
         documents, language, and processes.
       </p>
       <button
         onClick={handleAdd}
         disabled={loading}
-        className="block w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white text-center hover:bg-blue-700 disabled:opacity-50 transition-colors"
+        className="block w-full rounded-lg bg-gradient-to-r from-[#E07A2F] via-[#D4652E] to-[#C4512D] px-4 py-2.5 text-sm font-medium text-white text-center hover:from-[#C96A28] hover:via-[#BD5927] hover:to-[#AD4626] disabled:opacity-50 transition-all shadow-sm"
       >
         {!session
           ? "Sign in to Add"
           : loading
           ? "Adding..."
-          : "Add to My Refinery"}
+          : "Add to Your Refinery"}
       </button>
       {error && (
         <p className="text-xs text-red-500 mt-2">{error}</p>
