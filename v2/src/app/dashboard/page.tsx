@@ -6,7 +6,7 @@ import { getClient } from "@/lib/supabase";
 import DashboardClient from "@/components/DashboardClient";
 
 export const metadata = {
-  title: "The Refinery — eduSkillsMP",
+  title: "Your Skills Refinery — eduSkillsMP",
 };
 
 export default async function DashboardPage({
@@ -45,7 +45,7 @@ export default async function DashboardPage({
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">The Refinery</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Your Skills Refinery</h1>
           <p className="text-sm text-gray-500">
             Welcome back, {session.user.name || session.user.email}
           </p>
@@ -63,6 +63,7 @@ export default async function DashboardPage({
         skills={skills}
         contextProfiles={contexts}
         initialSkillId={searchParams.skill || null}
+        userName={session.user.name || session.user.email || "You"}
       />
 
       {/* Account Info */}

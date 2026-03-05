@@ -11,12 +11,14 @@ interface DashboardClientProps {
   skills: any[];
   contextProfiles: any[];
   initialSkillId?: string | null;
+  userName: string;
 }
 
 export default function DashboardClient({
   skills,
   contextProfiles,
   initialSkillId,
+  userName,
 }: DashboardClientProps) {
   const router = useRouter();
 
@@ -112,6 +114,7 @@ export default function DashboardClient({
         selectedSkillId={selectedSkillId}
         selectedContextId={selectedContextId}
         onProfilesChanged={handleProfilesChanged}
+        userName={userName}
       />
     </div>
   );
