@@ -121,7 +121,7 @@ export default async function SkillViewPage({
           {/* Back to Refinery */}
           <Link
             href="/dashboard"
-            className="block w-full text-center rounded-lg bg-gradient-to-r from-[#E07A2F] via-[#D4652E] to-[#C4512D] px-4 py-2.5 text-sm font-medium text-white hover:from-[#C96A28] hover:via-[#BD5927] hover:to-[#AD4626] transition-all shadow-sm"
+            className="btn-claude block w-full text-center"
           >
             &larr; Back to Your Skills Refinery
           </Link>

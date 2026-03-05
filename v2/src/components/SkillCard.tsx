@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CATEGORIES, type SkillEntry } from "@/lib/types";
 import VerificationBadge from "./VerificationBadge";
+import CategoryIcon from "./CategoryIcon";
 
 interface SkillCardProps {
   skill: SkillEntry;
@@ -12,11 +13,17 @@ export default function SkillCard({ skill }: SkillCardProps) {
   return (
     <Link
       href={`/skills/${skill.category}/${skill.slug}`}
-      className="group rounded-xl border border-gray-200 bg-white p-5 hover:border-gray-300 hover:shadow-sm transition-all"
+      className="group cursor-pointer rounded-xl border border-gray-200 bg-white p-5 hover:border-gray-300 hover:shadow-sm transition-all"
     >
       <div className="flex items-start justify-between gap-2 mb-2">
         <div className="flex items-center gap-2 min-w-0">
-          {category && <span className="text-lg flex-shrink-0">{category.icon}</span>}
+          {category && (
+            <CategoryIcon
+              name={category.icon}
+              className="w-5 h-5 flex-shrink-0"
+              color={category.color}
+            />
+          )}
           <h3 className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors truncate">
             {skill.name}
           </h3>

@@ -32,7 +32,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Prospect outreach, application review, yield management",
     color: "#2563eb",
     lightColor: "#dbeafe",
-    icon: "\uD83C\uDF93",
+    icon: "GraduationCap",
   },
   "marketing-communications": {
     id: "marketing-communications",
@@ -40,7 +40,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Campaign strategy, content creation, brand voice",
     color: "#7c3aed",
     lightColor: "#ede9fe",
-    icon: "\uD83D\uDCE3",
+    icon: "Megaphone",
   },
   "academic-programs": {
     id: "academic-programs",
@@ -48,7 +48,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Curriculum design, accreditation, program review",
     color: "#059669",
     lightColor: "#d1fae5",
-    icon: "\uD83D\uDCDA",
+    icon: "BookOpen",
   },
   "student-success": {
     id: "student-success",
@@ -56,7 +56,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Advising, early alerts, retention, career services",
     color: "#d97706",
     lightColor: "#fef3c7",
-    icon: "\u2B50",
+    icon: "Star",
   },
   "grants-finance": {
     id: "grants-finance",
@@ -64,7 +64,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Grant writing, budget analysis, financial reporting",
     color: "#dc2626",
     lightColor: "#fee2e2",
-    icon: "\uD83D\uDCB0",
+    icon: "DollarSign",
   },
   "research-data": {
     id: "research-data",
@@ -72,7 +72,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Data analysis, IRB support, research methodology",
     color: "#0891b2",
     lightColor: "#cffafe",
-    icon: "\uD83D\uDCCA",
+    icon: "BarChart3",
   },
   "compliance-accreditation": {
     id: "compliance-accreditation",
@@ -80,7 +80,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Policy writing, regulatory compliance, audit prep",
     color: "#7c3aed",
     lightColor: "#f5f3ff",
-    icon: "\uD83D\uDCCB",
+    icon: "ClipboardCheck",
   },
   "it-operations": {
     id: "it-operations",
@@ -88,7 +88,7 @@ export const CATEGORIES: Record<string, Category> = {
     description: "Technical documentation, process automation, helpdesk",
     color: "#4b5563",
     lightColor: "#f3f4f6",
-    icon: "\uD83D\uDDA5\uFE0F",
+    icon: "Monitor",
   },
 };
 
@@ -136,7 +136,7 @@ export interface SkillDetail extends SkillEntry {
 export interface VerificationBadge {
   level: number;
   label: string;
-  emoji: string;
+  icon: string;
   description: string;
 }
 
@@ -144,19 +144,19 @@ export const VERIFICATION_BADGES: Record<number, VerificationBadge> = {
   0: {
     level: 0,
     label: "Community",
-    emoji: "\uD83C\uDF10",
+    icon: "Globe",
     description: "Community-submitted, not yet verified",
   },
   1: {
     level: 1,
     label: "Bot Verified",
-    emoji: "\uD83E\uDD16",
+    icon: "Bot",
     description: "Passed automated security assessment",
   },
   2: {
     level: 2,
     label: "Expert Verified",
-    emoji: "\uD83D\uDC64",
+    icon: "UserCheck",
     description: "Reviewed and approved by a human expert",
   },
 };

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Poppins } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
@@ -7,6 +7,11 @@ import Providers from "@/components/Providers";
 import AuthButton from "@/components/AuthButton";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["600", "700", "800"],
+  variable: "--font-poppins",
+});
 
 export const metadata: Metadata = {
   title: "eduSkillsMP — The Edu Skills Marketplace for Claude",
@@ -21,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} font-sans antialiased bg-white text-gray-900`}>
+      <body className={`${inter.variable} ${poppins.variable} font-sans antialiased bg-white text-gray-900`}>
         <Providers>
           {/* Header */}
           <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
