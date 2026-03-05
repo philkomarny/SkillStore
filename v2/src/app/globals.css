@@ -49,6 +49,22 @@ h1, h2, h3, h4 {
   color: #9B9485;
 }
 
+h1, h2, h3, h4 {
+  font-family: var(--font-poppins, system-ui, sans-serif);
+}
+
+/* Claude orange gradient CTA button */
+.btn-claude {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-all shadow-sm;
+  background: linear-gradient(to right, #E07A2F, #D4652E, #C4512D);
+}
+.btn-claude:hover {
+  background: linear-gradient(to right, #C96A28, #BD5927, #AD4626);
+}
+.btn-claude:disabled {
+  @apply opacity-50;
+}
+
 /* Markdown rendering styles for skill content */
 .prose-skill {
   @apply leading-relaxed;
