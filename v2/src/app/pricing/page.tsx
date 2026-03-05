@@ -68,7 +68,7 @@ export default function PricingPage() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-end">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {TIERS.map((tier) => (
           <div key={tier.name} className="flex flex-col items-center">
             {tier.highlighted ? (
@@ -79,7 +79,7 @@ export default function PricingPage() {
               <div className="h-[22px] mb-2" />
             )}
             <div
-              className={`rounded-xl border p-6 flex flex-col w-full ${
+              className={`rounded-xl border p-6 flex flex-col flex-1 w-full ${
                 tier.highlighted
                   ? "border-accent bg-accent/5 ring-1 ring-accent/20"
                   : "border-terminal-border bg-white"
