@@ -15,7 +15,6 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  // Upload hook — only active once profileId is set
   const { files, uploadFiles, hasUploadedFiles } = useFileUpload({
     contextProfileId: profileId || "",
   });
@@ -56,7 +55,6 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         body: JSON.stringify({ contextProfileId: profileId }),
       });
 
-      // Safely parse response — guard against empty body
       let data: any;
       try {
         const text = await res.text();
@@ -71,7 +69,6 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         return;
       }
 
-      // Return the completed profile to the parent
       onCreated({
         id: profileId,
         name: name.trim(),
@@ -98,14 +95,14 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
   );
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
-      <div className="px-4 pt-4 pb-3 border-b border-gray-100 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-gray-900">
+    <div className="rounded-lg border border-terminal-border bg-white overflow-hidden">
+      <div className="px-4 pt-4 pb-3 border-b border-terminal-border flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-[#1a1a1a]">
           New Context File
         </h3>
         <button
           onClick={onCancel}
-          className="text-xs text-gray-400 hover:text-gray-600"
+          className="text-xs text-tertiary hover:text-muted"
         >
           Cancel
         </button>
@@ -115,7 +112,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         {/* Step 1: Name the context */}
         {!profileId && (
           <div>
-            <label className="block text-xs font-medium text-gray-700 mb-1.5">
+            <label className="block text-xs font-medium text-muted mb-1.5">
               Name your context file
             </label>
             <div className="flex gap-2">
@@ -124,7 +121,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder='e.g. "Admissions 2024" or "Brand Guide"'
-                className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none"
+                className="flex-1 rounded-lg border border-terminal-border px-3 py-2 text-sm text-[#1a1a1a] placeholder-tertiary focus:border-accent focus:ring-1 focus:ring-accent outline-none"
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && name.trim()) handleCreateProfile();
                 }}
@@ -132,7 +129,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
               <button
                 onClick={handleCreateProfile}
                 disabled={!name.trim()}
-                className="rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-40 transition-colors"
+                className="rounded-lg bg-terminal-dark px-4 py-2 text-sm font-medium text-white hover:bg-terminal-titlebar disabled:opacity-40 transition-colors"
               >
                 Create
               </button>
@@ -144,19 +141,19 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         {profileId && (
           <>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500"></div>
-              <span className="text-xs font-medium text-gray-700">
+              <div className="w-2 h-2 rounded-full bg-success"></div>
+              <span className="text-xs font-medium text-muted">
                 {name}
               </span>
-              <span className="text-[10px] text-gray-400">created</span>
+              <span className="text-[10px] text-tertiary">created</span>
             </div>
 
             {/* Drop zone */}
             <div
               className={`border-2 border-dashed rounded-lg p-5 text-center transition-colors ${
                 dragActive
-                  ? "border-blue-400 bg-blue-50"
-                  : "border-gray-200 hover:border-gray-300"
+                  ? "border-accent bg-accent/5"
+                  : "border-terminal-border hover:border-muted"
               }`}
               onDragOver={(e) => {
                 e.preventDefault();
@@ -179,12 +176,12 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
               />
               <label
                 htmlFor="context-upload"
-                className="cursor-pointer text-xs text-gray-500"
+                className="cursor-pointer text-xs text-muted"
               >
-                <span className="text-blue-600 font-medium">Click to upload</span>{" "}
+                <span className="text-accent font-medium">Click to upload</span>{" "}
                 or drag and drop
                 <br />
-                <span className="text-[11px] text-gray-400">
+                <span className="text-[11px] text-tertiary">
                   PDF, DOCX, TXT, MD, Images (max 10MB each)
                 </span>
               </label>
@@ -198,14 +195,14 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
                     key={i}
                     className="flex items-center justify-between text-xs py-1"
                   >
-                    <span className="text-gray-700 truncate">{file.name}</span>
+                    <span className="text-muted truncate">{file.name}</span>
                     <span
                       className={`text-[11px] ${
                         file.status === "uploaded"
                           ? "text-green-600"
                           : file.status === "error"
                           ? "text-red-500"
-                          : "text-gray-400"
+                          : "text-tertiary"
                       }`}
                     >
                       {file.status === "uploading"
@@ -224,7 +221,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
               <button
                 onClick={handleBuildContext}
                 disabled={building}
-                className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                className="w-full btn-claude disabled:opacity-50"
               >
                 {building ? (
                   <span className="flex items-center justify-center gap-2">

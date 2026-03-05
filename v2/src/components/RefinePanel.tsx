@@ -160,11 +160,11 @@ export default function RefinePanel({
 
   if (!session) {
     return (
-      <div className="rounded-lg border border-gray-200 bg-white p-4">
-        <p className="text-xs text-gray-500 mb-2">Sign in to refine skills.</p>
+      <div className="rounded-lg border border-terminal-border bg-white p-4">
+        <p className="text-xs text-muted mb-2">Sign in to refine skills.</p>
         <button
           onClick={() => signIn("google")}
-          className="w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 transition-colors"
+          className="w-full rounded-lg bg-terminal-dark px-4 py-2 text-sm font-medium text-white hover:bg-terminal-titlebar transition-colors"
         >
           Sign in
         </button>
@@ -173,12 +173,12 @@ export default function RefinePanel({
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white overflow-hidden">
+    <div className="rounded-lg border border-terminal-border bg-white overflow-hidden">
       <div className="px-4 pt-4 pb-3">
-        <h3 className="text-sm font-semibold text-gray-900 mb-1">
+        <h3 className="text-sm font-semibold text-[#1a1a1a] mb-1">
           Refine This Skill
         </h3>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted">
           Upload your documents (PDFs, docs, text files). The AI will rewrite
           &ldquo;{skillName}&rdquo; with your specific context baked in.
         </p>
@@ -187,7 +187,7 @@ export default function RefinePanel({
       {/* Success result */}
       {result && (
         <div className="px-4 pb-4">
-          <div className="rounded-lg bg-green-50 border border-green-200 p-3 mb-3">
+          <div className="rounded-lg bg-success/10 border border-success/30 p-3 mb-3">
             <div className="text-xs font-semibold text-green-700 mb-1">
               Refinement Complete (v{result.version})
             </div>
@@ -195,8 +195,8 @@ export default function RefinePanel({
               {result.contextSummary}
             </p>
           </div>
-          <div className="rounded-lg bg-gray-50 border border-gray-200 p-3 max-h-48 overflow-y-auto">
-            <pre className="text-xs text-gray-600 font-mono whitespace-pre-wrap leading-relaxed">
+          <div className="rounded-lg bg-terminal-surface border border-terminal-border p-3 max-h-48 overflow-y-auto">
+            <pre className="text-xs text-muted font-mono whitespace-pre-wrap leading-relaxed">
               {result.refinedContent.slice(0, 1500)}
               {result.refinedContent.length > 1500 && "\n\n... (view full content above)"}
             </pre>
@@ -211,8 +211,8 @@ export default function RefinePanel({
           <div
             className={`border-2 border-dashed rounded-lg p-5 text-center transition-colors ${
               dragActive
-                ? "border-blue-400 bg-blue-50"
-                : "border-gray-200 hover:border-gray-300"
+                ? "border-accent bg-accent/5"
+                : "border-terminal-border hover:border-accent/30"
             }`}
             onDragOver={(e) => {
               e.preventDefault();
@@ -241,12 +241,12 @@ export default function RefinePanel({
             />
             <label
               htmlFor="refine-upload"
-              className="cursor-pointer text-xs text-gray-500"
+              className="cursor-pointer text-xs text-muted"
             >
-              <span className="text-blue-600 font-medium">Click to upload</span>{" "}
+              <span className="text-accent font-medium">Click to upload</span>{" "}
               or drag and drop
               <br />
-              <span className="text-[11px] text-gray-400">
+              <span className="text-[11px] text-tertiary">
                 PDF, DOCX, TXT, MD, Images (max 10MB each)
               </span>
             </label>
@@ -260,14 +260,14 @@ export default function RefinePanel({
                   key={i}
                   className="flex items-center justify-between text-xs py-1"
                 >
-                  <span className="text-gray-700 truncate">{file.name}</span>
+                  <span className="text-[#1a1a1a] truncate">{file.name}</span>
                   <span
                     className={`text-[11px] ${
                       file.status === "uploaded"
                         ? "text-green-600"
                         : file.status === "error"
                         ? "text-red-500"
-                        : "text-gray-400"
+                        : "text-tertiary"
                     }`}
                   >
                     {file.status === "uploading"
@@ -286,7 +286,7 @@ export default function RefinePanel({
             <button
               onClick={handleRefine}
               disabled={refining}
-              className="mt-3 w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="mt-3 w-full btn-claude justify-center disabled:opacity-50"
             >
               {refining ? (
                 <span className="flex items-center justify-center gap-2">
@@ -325,7 +325,7 @@ export default function RefinePanel({
         <div className="px-4 pb-4">
           <button
             onClick={() => setResult(null)}
-            className="w-full rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-xs font-medium text-gray-600 hover:bg-gray-100 transition-colors"
+            className="w-full rounded-lg border border-terminal-border bg-terminal-surface px-4 py-2 text-xs font-medium text-muted hover:bg-terminal-border transition-colors"
           >
             Upload more documents &amp; refine again
           </button>

@@ -5,6 +5,7 @@ import SearchBar from "@/components/SearchBar";
 import SkillCard from "@/components/SkillCard";
 import CategoryGrid from "@/components/CategoryGrid";
 import CategoryIcon from "@/components/CategoryIcon";
+import SectionHeading from "@/components/SectionHeading";
 
 export const metadata = {
   title: "Browse Skills — eduSkillsMP",
@@ -35,22 +36,22 @@ export default async function BrowsePage({
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Browse Skills</h1>
-      <p className="text-sm text-gray-500 mb-8">
+      <SectionHeading as="h1">Browse Skills</SectionHeading>
+      <p className="text-sm text-muted mb-8">
         {skills.length} skill{skills.length !== 1 ? "s" : ""} available
         {category && CATEGORIES[category] ? ` in ${CATEGORIES[category].label}` : ""}
         {query ? ` matching "${query}"` : ""}
       </p>
 
       <div className="max-w-lg mb-8">
-        <Suspense fallback={<div className="h-10 bg-gray-100 rounded-lg animate-pulse" />}>
+        <Suspense fallback={<div className="h-10 bg-terminal-surface rounded-lg animate-pulse" />}>
           <SearchBar placeholder="Search skills..." />
         </Suspense>
       </div>
 
       {!category && !query && (
         <div className="mb-12">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Categories</h2>
+          <SectionHeading>Categories</SectionHeading>
           <CategoryGrid />
         </div>
       )}
@@ -63,9 +64,9 @@ export default async function BrowsePage({
               className="w-6 h-6"
               color={CATEGORIES[category].color}
             />
-            <span className="text-lg font-semibold text-gray-900">{CATEGORIES[category].label}</span>
+            <span className="text-lg font-semibold font-mono text-[#1a1a1a]">{CATEGORIES[category].label}</span>
           </div>
-          <p className="text-sm text-gray-500 mt-1">{CATEGORIES[category].description}</p>
+          <p className="text-sm text-muted mt-1">{CATEGORIES[category].description}</p>
         </div>
       )}
 
@@ -76,9 +77,9 @@ export default async function BrowsePage({
       </div>
 
       {skills.length === 0 && (
-        <div className="text-center py-16 text-gray-400">
-          <p className="text-lg mb-2">No skills found</p>
-          <p className="text-sm">Try a different search term or category.</p>
+        <div className="text-center py-16 text-tertiary">
+          <p className="text-lg mb-2 font-mono">No skills found</p>
+          <p className="text-sm text-muted">Try a different search term or category.</p>
         </div>
       )}
     </div>

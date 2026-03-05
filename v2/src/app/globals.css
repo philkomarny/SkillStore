@@ -3,7 +3,50 @@
 @tailwind utilities;
 
 body {
-  font-family: var(--font-inter, system-ui, sans-serif);
+  font-family: var(--font-ibm-plex, system-ui, sans-serif);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-jetbrains, monospace);
+}
+
+/* Claude orange gradient CTA button */
+.btn-claude {
+  @apply inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-sm font-medium text-white transition-all shadow-sm;
+  background: linear-gradient(to right, #E07A2F, #D4652E, #C4512D);
+}
+.btn-claude:hover {
+  background: linear-gradient(to right, #C96A28, #BD5927, #AD4626);
+}
+.btn-claude:disabled {
+  @apply opacity-50;
+}
+
+/* Terminal window components */
+.terminal-window {
+  @apply rounded-xl overflow-hidden;
+  background: #2D2A24;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+.terminal-titlebar {
+  @apply px-4 py-2.5 flex items-center gap-2;
+  background: #3D3930;
+}
+.terminal-body {
+  @apply p-6 font-mono text-sm leading-loose;
+  color: #E8E5DF;
+}
+.terminal-prompt {
+  color: #D4652E;
+}
+.terminal-command {
+  color: #7EB77F;
+}
+.terminal-output {
+  color: #E8C547;
+}
+.terminal-comment {
+  color: #9B9485;
 }
 
 h1, h2, h3, h4 {
@@ -24,19 +67,23 @@ h1, h2, h3, h4 {
 
 /* Markdown rendering styles for skill content */
 .prose-skill {
-  @apply text-gray-700 leading-relaxed;
+  @apply leading-relaxed;
+  color: #6B6459;
 }
 
 .prose-skill h1 {
-  @apply text-2xl font-bold text-gray-900 mt-8 mb-4;
+  @apply text-2xl font-bold mt-8 mb-4;
+  color: #1a1a1a;
 }
 
 .prose-skill h2 {
-  @apply text-xl font-semibold text-gray-900 mt-6 mb-3;
+  @apply text-xl font-semibold mt-6 mb-3;
+  color: #1a1a1a;
 }
 
 .prose-skill h3 {
-  @apply text-lg font-semibold text-gray-800 mt-5 mb-2;
+  @apply text-lg font-semibold mt-5 mb-2;
+  color: #2D2A24;
 }
 
 .prose-skill p {
@@ -52,31 +99,43 @@ h1, h2, h3, h4 {
 }
 
 .prose-skill li {
-  @apply text-gray-700;
+  color: #6B6459;
 }
 
 .prose-skill code {
-  @apply bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  @apply px-1.5 py-0.5 rounded text-sm font-mono;
+  background: #F5F3EF;
+  color: #2D2A24;
 }
 
 .prose-skill pre {
-  @apply bg-gray-900 text-gray-100 rounded-lg p-4 mb-4 overflow-x-auto text-xs;
+  @apply rounded-lg p-4 mb-4 overflow-x-auto text-xs;
+  background: #2D2A24;
+  color: #E8E5DF;
 }
 
 .prose-skill pre code {
-  @apply bg-transparent text-gray-100 p-0 text-xs;
+  @apply bg-transparent p-0 text-xs;
+  color: #E8E5DF;
 }
 
 .prose-skill blockquote {
-  @apply border-l-4 border-blue-300 pl-4 italic text-gray-600 my-4;
+  @apply border-l-4 pl-4 italic my-4;
+  border-color: #D4652E;
+  color: #6B6459;
 }
 
 .prose-skill a {
-  @apply text-blue-600 hover:text-blue-800 underline;
+  @apply underline;
+  color: #D4652E;
+}
+.prose-skill a:hover {
+  color: #BD5927;
 }
 
 .prose-skill hr {
-  @apply border-gray-200 my-6;
+  @apply my-6;
+  border-color: #E8E5DF;
 }
 
 .prose-skill table {
@@ -84,13 +143,18 @@ h1, h2, h3, h4 {
 }
 
 .prose-skill th {
-  @apply bg-gray-50 border border-gray-200 px-3 py-2 text-left text-sm font-semibold text-gray-700;
+  @apply px-3 py-2 text-left text-sm font-semibold;
+  background: #F5F3EF;
+  border: 1px solid #E8E5DF;
+  color: #6B6459;
 }
 
 .prose-skill td {
-  @apply border border-gray-200 px-3 py-2 text-sm;
+  @apply px-3 py-2 text-sm;
+  border: 1px solid #E8E5DF;
 }
 
 .prose-skill strong {
-  @apply font-semibold text-gray-900;
+  @apply font-semibold;
+  color: #1a1a1a;
 }

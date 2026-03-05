@@ -49,21 +49,21 @@ export default function InstallPanel({
     : rawContent;
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-      <h2 className="text-sm font-semibold text-gray-900 px-5 pt-5 pb-3">
+    <div className="rounded-xl border border-terminal-border bg-white overflow-hidden">
+      <h2 className="text-sm font-semibold text-[#1a1a1a] px-5 pt-5 pb-3">
         Add to Claude
       </h2>
 
       {/* Tabs */}
-      <div className="flex border-b border-gray-200 px-5">
+      <div className="flex border-b border-terminal-border px-5">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-1.5 px-3 py-2 text-xs font-medium border-b-2 transition-colors ${
               activeTab === tab.id
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+                ? "border-accent text-accent"
+                : "border-transparent text-muted hover:text-[#1a1a1a]"
             }`}
           >
             <TabIcon type={tab.icon} />
@@ -76,26 +76,26 @@ export default function InstallPanel({
       <div className="p-5">
         {activeTab === "desktop" && (
           <div>
-            <p className="text-xs text-gray-500 mb-4">
+            <p className="text-xs text-muted mb-4">
               Works in the <strong>Claude Desktop app</strong> (macOS/Windows) and{" "}
               <strong>claude.ai</strong> in the browser.
             </p>
 
-            <ol className="text-xs text-gray-600 space-y-3 mb-4">
+            <ol className="text-xs text-muted space-y-3 mb-4">
               <li className="flex gap-2">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">1</span>
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent/10 text-accent flex items-center justify-center text-[10px] font-bold">1</span>
                 <span>Open <strong>Claude Desktop</strong> or <strong>claude.ai</strong></span>
               </li>
               <li className="flex gap-2">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">2</span>
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent/10 text-accent flex items-center justify-center text-[10px] font-bold">2</span>
                 <span>Create or open a <strong>Project</strong></span>
               </li>
               <li className="flex gap-2">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">3</span>
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent/10 text-accent flex items-center justify-center text-[10px] font-bold">3</span>
                 <span>Open <strong>Project settings</strong> and find <strong>Custom instructions</strong></span>
               </li>
               <li className="flex gap-2">
-                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-[10px] font-bold">4</span>
+                <span className="flex-shrink-0 w-5 h-5 rounded-full bg-accent/10 text-accent flex items-center justify-center text-[10px] font-bold">4</span>
                 <span>Paste the skill content (copied below)</span>
               </li>
             </ol>
@@ -113,11 +113,11 @@ export default function InstallPanel({
 
         {activeTab === "code" && (
           <div>
-            <p className="text-xs text-gray-500 mb-3">
+            <p className="text-xs text-muted mb-3">
               Add as a <strong>slash command</strong> in Claude Code:
             </p>
-            <div className="bg-gray-900 rounded-lg p-3 mb-3">
-              <code className="text-xs font-mono text-green-400 break-all">
+            <div className="bg-terminal-dark rounded-lg p-3 mb-3">
+              <code className="text-xs font-mono text-success break-all">
                 mkdir -p .claude/commands && {curlCommand}
               </code>
             </div>
@@ -127,10 +127,10 @@ export default function InstallPanel({
               onCopy={trackDownload}
             />
 
-            <div className="bg-blue-50 rounded-lg p-3 mt-4">
-              <p className="text-[11px] text-blue-700">
+            <div className="bg-terminal-surface rounded-lg p-3 mt-4">
+              <p className="text-[11px] text-muted">
                 Once added, invoke with{" "}
-                <code className="font-mono font-semibold">/{skillName}</code>{" "}
+                <code className="font-mono font-semibold text-accent">/{skillName}</code>{" "}
                 in Claude Code.
               </p>
             </div>
@@ -139,13 +139,13 @@ export default function InstallPanel({
 
         {activeTab === "project" && (
           <div>
-            <p className="text-xs text-gray-500 mb-3">
+            <p className="text-xs text-muted mb-3">
               Copy and save as a project file:
             </p>
 
-            <p className="text-xs text-gray-500 mb-2">
+            <p className="text-xs text-muted mb-2">
               Save as{" "}
-              <code className="bg-gray-100 px-1 rounded text-[11px]">
+              <code className="bg-terminal-surface px-1 rounded text-[11px] font-mono">
                 {commandFilePath}
               </code>
             </p>
@@ -159,10 +159,10 @@ export default function InstallPanel({
               <CopyButton text={rawContent} label="Copy skill content" onCopy={trackDownload} />
             )}
 
-            <div className="bg-blue-50 rounded-lg p-3 mt-4">
-              <p className="text-[11px] text-blue-700">
+            <div className="bg-terminal-surface rounded-lg p-3 mt-4">
+              <p className="text-[11px] text-muted">
                 Once saved, invoke with{" "}
-                <code className="font-mono font-semibold">/{skillName}</code>{" "}
+                <code className="font-mono font-semibold text-accent">/{skillName}</code>{" "}
                 in Claude Code. Scoped to this project only.
               </p>
             </div>
@@ -188,7 +188,6 @@ function TabIcon({ type }: { type: string }) {
       </svg>
     );
   }
-  // desktop
   return (
     <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

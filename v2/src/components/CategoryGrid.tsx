@@ -17,7 +17,7 @@ export default function CategoryGrid({ skillCounts = {} }: CategoryGridProps) {
           <Link
             key={cat.id}
             href={`/skills/${cat.id}`}
-            className="group cursor-pointer rounded-xl border border-gray-200 bg-white p-5 hover:border-gray-300 hover:shadow-sm transition-all"
+            className="group cursor-pointer rounded-xl border border-terminal-border bg-white p-5 hover:border-accent/30 hover:shadow-sm transition-all"
           >
             <div className="flex items-start gap-3">
               <div
@@ -31,14 +31,14 @@ export default function CategoryGrid({ skillCounts = {} }: CategoryGridProps) {
                 />
               </div>
               <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-gray-900 group-hover:text-blue-600 transition-colors">
+                <h3 className="text-sm font-semibold text-[#1a1a1a] group-hover:text-accent transition-colors">
                   {cat.label}
                 </h3>
-                <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+                <p className="text-xs text-muted mt-1 line-clamp-2">
                   {cat.description}
                 </p>
                 {count > 0 && (
-                  <span className="inline-block mt-2 text-[11px] font-medium text-gray-400">
+                  <span className="inline-block mt-2 text-[11px] font-medium text-tertiary font-mono">
                     {count} skill{count !== 1 ? "s" : ""}
                   </span>
                 )}

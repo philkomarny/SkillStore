@@ -7,7 +7,7 @@ export default function AuthButton() {
 
   if (status === "loading") {
     return (
-      <div className="h-8 w-20 bg-gray-100 rounded animate-pulse" />
+      <div className="h-8 w-20 bg-terminal-surface rounded animate-pulse" />
     );
   }
 
@@ -15,7 +15,7 @@ export default function AuthButton() {
     return (
       <button
         onClick={() => signIn("google")}
-        className="inline-flex items-center gap-1.5 text-sm bg-gray-900 text-white px-3 py-1.5 rounded-lg hover:bg-gray-700 transition-colors"
+        className="inline-flex items-center gap-1.5 text-sm bg-terminal-dark text-white px-3 py-1.5 rounded-lg hover:bg-terminal-titlebar transition-colors"
       >
         <svg className="h-4 w-4" viewBox="0 0 24 24">
           <path
@@ -49,12 +49,12 @@ export default function AuthButton() {
           className="h-7 w-7 rounded-full"
         />
       )}
-      <span className="text-sm text-gray-700 hidden sm:inline">
+      <span className="text-sm text-muted hidden sm:inline">
         {session.user?.name || session.user?.email}
       </span>
       <button
         onClick={() => signOut()}
-        className="text-xs text-gray-500 hover:text-gray-700"
+        className="text-xs text-tertiary hover:text-muted"
       >
         Sign out
       </button>

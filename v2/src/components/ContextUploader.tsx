@@ -110,16 +110,16 @@ export default function ContextUploader({
 
   if (!session) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white p-5">
-        <h3 className="text-sm font-semibold text-gray-900 mb-2">
+      <div className="rounded-xl border border-terminal-border bg-white p-5">
+        <h3 className="text-sm font-semibold text-[#1a1a1a] mb-2">
           Personalize This Skill
         </h3>
-        <p className="text-xs text-gray-500 mb-3">
+        <p className="text-xs text-muted mb-3">
           Upload your documents to generate a personalized context file.
         </p>
         <button
           onClick={() => signIn("google")}
-          className="w-full rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 transition-colors"
+          className="w-full rounded-lg bg-terminal-dark px-4 py-2 text-sm font-medium text-white hover:bg-terminal-titlebar transition-colors"
         >
           Sign in to add context
         </button>
@@ -128,14 +128,14 @@ export default function ContextUploader({
   }
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden">
-      <h3 className="text-sm font-semibold text-gray-900 px-5 pt-5 pb-3">
+    <div className="rounded-xl border border-terminal-border bg-white overflow-hidden">
+      <h3 className="text-sm font-semibold text-[#1a1a1a] px-5 pt-5 pb-3">
         {context ? "Your Context" : "Personalize This Skill"}
       </h3>
 
       {context && !editing ? (
         <div className="px-5 pb-5">
-          <div className="prose-skill text-xs bg-gray-50 rounded-lg p-4 max-h-64 overflow-y-auto mb-3">
+          <div className="prose-skill text-xs bg-terminal-surface rounded-lg p-4 max-h-64 overflow-y-auto mb-3">
             <MarkdownRenderer content={context} />
           </div>
           <div className="flex gap-2">
@@ -144,7 +144,7 @@ export default function ContextUploader({
                 setEditText(context);
                 setEditing(true);
               }}
-              className="text-xs text-blue-600 hover:text-blue-800 font-medium"
+              className="text-xs text-accent hover:text-accent-hover font-medium"
             >
               Edit
             </button>
@@ -164,18 +164,18 @@ export default function ContextUploader({
           <textarea
             value={editText}
             onChange={(e) => setEditText(e.target.value)}
-            className="w-full h-48 rounded-lg border border-gray-200 p-3 text-xs font-mono text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-48 rounded-lg border border-terminal-border p-3 text-xs font-mono text-[#1a1a1a] focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
           />
           <div className="flex gap-2 mt-2">
             <button
               onClick={handleSaveEdit}
-              className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-700"
+              className="btn-claude text-xs px-3 py-1.5"
             >
               Save
             </button>
             <button
               onClick={() => setEditing(false)}
-              className="rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-200"
+              className="rounded-lg bg-terminal-surface px-3 py-1.5 text-xs font-medium text-[#1a1a1a] hover:bg-terminal-border"
             >
               Cancel
             </button>
@@ -183,7 +183,7 @@ export default function ContextUploader({
         </div>
       ) : (
         <div className="px-5 pb-5">
-          <p className="text-xs text-gray-500 mb-3">
+          <p className="text-xs text-muted mb-3">
             Upload PDFs, docs, or text files. AI will generate a personalized
             context file.
           </p>
@@ -192,8 +192,8 @@ export default function ContextUploader({
           <div
             className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
               dragActive
-                ? "border-blue-400 bg-blue-50"
-                : "border-gray-200 hover:border-gray-300"
+                ? "border-accent bg-accent/5"
+                : "border-terminal-border hover:border-accent/30"
             }`}
             onDragOver={(e) => {
               e.preventDefault();
@@ -222,12 +222,12 @@ export default function ContextUploader({
             />
             <label
               htmlFor="context-upload"
-              className="cursor-pointer text-xs text-gray-500"
+              className="cursor-pointer text-xs text-muted"
             >
-              <span className="text-blue-600 font-medium">Click to upload</span>{" "}
+              <span className="text-accent font-medium">Click to upload</span>{" "}
               or drag and drop
               <br />
-              <span className="text-[11px] text-gray-400">
+              <span className="text-[11px] text-tertiary">
                 PDF, DOCX, TXT, MD, Images (max 10MB)
               </span>
             </label>
@@ -241,14 +241,14 @@ export default function ContextUploader({
                   key={i}
                   className="flex items-center justify-between text-xs py-1"
                 >
-                  <span className="text-gray-700 truncate">{file.name}</span>
+                  <span className="text-[#1a1a1a] truncate">{file.name}</span>
                   <span
                     className={`text-[11px] ${
                       file.status === "uploaded"
                         ? "text-green-600"
                         : file.status === "error"
                         ? "text-red-500"
-                        : "text-gray-400"
+                        : "text-tertiary"
                     }`}
                   >
                     {file.status === "uploading"
@@ -267,7 +267,7 @@ export default function ContextUploader({
             <button
               onClick={handleGenerate}
               disabled={processing}
-              className="mt-3 w-full rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 transition-colors"
+              className="mt-3 w-full btn-claude justify-center disabled:opacity-50"
             >
               {processing ? "Generating context..." : "Generate Context"}
             </button>
