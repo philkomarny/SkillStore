@@ -12,6 +12,7 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
   const { data: session } = useSession();
   const [count, setCount] = useState(initialCount);
   const [animating, setAnimating] = useState(false);
+  const [errored, setErrored] = useState(false);
   const pendingRef = useRef(0);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const ipRef = useRef<string>("unknown");
@@ -21,7 +22,12 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
       .then((r) => r.json())
       .then((d) => { ipRef.current = d.ip; })
       .catch(() => {});
-  }, []);
+
+    fetch(`https://iw0ojycun6.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_item_count_get?slug=${skillSlug}&count_type=clap`)
+      .then((r) => r.json())
+      .then((d) => { if (typeof d.total === "number") setCount(d.total); })
+      .catch(() => {});
+  }, [skillSlug]);
 
   const flush = () => {
     const amount = pendingRef.current;
@@ -37,7 +43,7 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
         user_id: session?.user?.id ?? null,
         ip_address: ipRef.current,
       }),
-    });
+    }).catch(() => setErrored(true));
   };
 
   const handleClap = () => {
@@ -65,7 +71,7 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
         className={`text-base leading-none transition-transform ${animating ? "scale-125" : "scale-100"}`}
         style={{ display: "inline-block" }}
       >
-        👏
+        {errored ? "500" : "👏"}
       </span>
       <span>{count}</span>
     </button>
