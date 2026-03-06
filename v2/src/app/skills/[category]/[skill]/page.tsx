@@ -68,12 +68,13 @@ export default async function SkillDetailPage({
           {skill.tags.length > 0 && (
             <div className="flex flex-wrap gap-1.5 mb-6">
               {skill.tags.map((tag) => (
-                <span
+                <Link
                   key={tag}
-                  className="inline-block rounded-full bg-terminal-surface px-2.5 py-0.5 text-xs text-muted"
+                  href={`/skills?tag=${tag}`}
+                  className="inline-block rounded-full bg-terminal-surface px-2.5 py-0.5 text-xs text-muted hover:bg-accent/10 hover:text-accent transition-colors"
                 >
                   {tag}
-                </span>
+                </Link>
               ))}
             </div>
           )}

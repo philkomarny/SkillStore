@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { CATEGORIES, type SkillEntry } from "@/lib/types";
 import VerificationBadge from "./VerificationBadge";
 import CategoryIcon from "./CategoryIcon";
@@ -9,11 +12,12 @@ interface SkillCardProps {
 }
 
 export default function SkillCard({ skill }: SkillCardProps) {
+  const router = useRouter();
   const category = CATEGORIES[skill.category];
 
   return (
-    <Link
-      href={`/skills/${skill.category}/${skill.slug}`}
+    <div
+      onClick={() => router.push(`/skills/${skill.category}/${skill.slug}`)}
       className="group cursor-pointer rounded-xl border border-terminal-border bg-white p-0 hover:border-accent/30 hover:shadow-sm transition-all overflow-hidden"
     >
       {/* Mini title bar */}
@@ -48,12 +52,14 @@ export default function SkillCard({ skill }: SkillCardProps) {
         <div className="flex items-center justify-between">
           <div className="flex flex-wrap gap-1">
             {skill.tags.slice(0, 3).map((tag) => (
-              <span
+              <Link
                 key={tag}
-                className="inline-block rounded-full bg-terminal-surface px-2 py-0.5 text-[10px] font-medium text-muted"
+                href={`/skills?tag=${tag}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-block rounded-full bg-terminal-surface px-2 py-0.5 text-[10px] font-medium text-muted hover:bg-accent/10 hover:text-accent transition-colors"
               >
                 {tag}
-              </span>
+              </Link>
             ))}
           </div>
 
@@ -70,6 +76,6 @@ export default function SkillCard({ skill }: SkillCardProps) {
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

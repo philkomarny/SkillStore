@@ -14,14 +14,19 @@ export const metadata = {
 export default async function BrowsePage({
   searchParams,
 }: {
-  searchParams: { q?: string; category?: string };
+  searchParams: { q?: string; category?: string; tag?: string };
 }) {
   let skills = await getAllSkills();
   const query = searchParams.q || "";
   const category = searchParams.category || "";
+  const tag = searchParams.tag || "";
 
   if (category && CATEGORIES[category]) {
     skills = skills.filter((s) => s.category === category);
+  }
+
+  if (tag) {
+    skills = skills.filter((s) => s.tags.includes(tag));
   }
 
   if (query) {
@@ -40,6 +45,7 @@ export default async function BrowsePage({
       <p className="text-sm text-muted mb-8">
         {skills.length} skill{skills.length !== 1 ? "s" : ""} available
         {category && CATEGORIES[category] ? ` in ${CATEGORIES[category].label}` : ""}
+        {tag ? ` tagged "${tag}"` : ""}
         {query ? ` matching "${query}"` : ""}
       </p>
 
