@@ -85,7 +85,7 @@ export default async function SkillDetailPage({
         </div>
 
         {/* Sidebar */}
-        <div className="space-y-6 self-start sticky top-6">
+        <div className="space-y-6 self-start sticky top-20">
           {/* Add to Refinery */}
           <AddToRefinery skillSlug={skill.slug} />
 
