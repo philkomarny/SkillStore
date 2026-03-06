@@ -164,36 +164,82 @@ export default function InstallPanel({
         {activeTab === "project" && (
           <div>
             <p className="text-xs text-muted mb-3">
-              Copy and save as a project file:
+              Download and save to your project:
             </p>
 
-            <p className="text-xs text-muted mb-2">
-              Save as{" "}
+            <p className="text-xs text-muted mb-3">
+              Save to{" "}
               <code className="bg-terminal-surface px-1 rounded text-[11px] font-mono">
                 {commandFilePath}
-              </code>
+              </code>{" "}
+              in your project root.
             </p>
 
-            {contextContent ? (
-              <div className="space-y-2">
-                <CopyButton text={combinedContent} label="Copy skill + context" onCopy={trackDownload} />
-                <CopyButton text={rawContent} label="Copy skill only" onCopy={trackDownload} />
-              </div>
-            ) : (
-              <CopyButton text={rawContent} label="Copy skill content" onCopy={trackDownload} />
-            )}
+            <div className="space-y-2 mb-2">
+              <DownloadButton
+                content={contextContent ? combinedContent : rawContent}
+                filename={`${skillName}.md`}
+                label={contextContent ? "Download skill + context" : "Download skill file"}
+                onDownload={trackDownload}
+              />
+              {contextContent && (
+                <DownloadButton
+                  content={rawContent}
+                  filename={`${skillName}.md`}
+                  label="Download skill only"
+                  onDownload={trackDownload}
+                />
+              )}
+            </div>
 
             <div className="bg-terminal-surface rounded-lg p-3 mt-4">
               <p className="text-[11px] text-muted">
-                Once saved, invoke with{" "}
+                Move the downloaded file to{" "}
+                <code className="font-mono font-semibold text-accent">.claude/commands/</code>{" "}
+                in your project root, then invoke with{" "}
                 <code className="font-mono font-semibold text-accent">/{skillName}</code>{" "}
-                in Claude Code. Scoped to this project only.
+                in Claude Code.
               </p>
             </div>
           </div>
         )}
       </div>
     </div>
+  );
+}
+
+function DownloadButton({
+  content,
+  filename,
+  label,
+  onDownload,
+}: {
+  content: string;
+  filename: string;
+  label: string;
+  onDownload: () => void;
+}) {
+  const handleDownload = () => {
+    const blob = new Blob([content], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+    onDownload();
+  };
+
+  return (
+    <button
+      onClick={handleDownload}
+      className="flex items-center gap-2 w-full px-3 py-2 text-xs font-medium rounded-lg border border-terminal-border bg-white hover:bg-terminal-surface transition-colors text-[#1a1a1a]"
+    >
+      <svg className="h-3.5 w-3.5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      {label}
+    </button>
   );
 }
 

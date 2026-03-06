@@ -6,110 +6,129 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 SkillStore is an enterprise skill catalog for Claude Code, targeting higher education institutions. It has two parts:
 1. **Skills content** — `SKILL.md` files organized under `skills/<department>/<skill-name>/`
-2. **Web catalog** — a Next.js app in `web/` for browsing and discovering skills
+2. **Web catalog** — a Next.js app in `v2/` for browsing, discovering, and submitting skills
 
-A second Next.js app exists in `v2/` (adds Stripe billing and a skill submission workflow) but `web/` is the primary production app.
+> **Note:** `web/` is legacy and inactive. All active development happens in `v2/`.
 
 ## Development Commands
 
-All commands run from `web/`:
+All commands run from `v2/`:
 
 ```bash
-cd web
+cd v2
 npm run dev      # Start dev server at localhost:3000
 npm run build    # Production build
 npm run lint     # ESLint
 ```
 
-For `v2/`:
-```bash
-cd v2
-npm run dev
-npm run build
-npm run lint
-```
-
 ## Environment Setup
 
-Copy `web/.env.example` to `web/.env.local`. Key variables:
+Create `v2/.env.local` with:
 
 | Variable | Purpose |
 |---|---|
-| `GITHUB_TOKEN` | Increases GitHub API rate limit (60 → 5,000 req/hr); required for private forks |
-| `AUTH_SECRET` | NextAuth secret — generate with `npx auth secret` |
-| `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` | GitHub OAuth app credentials |
-| `NEXT_PUBLIC_SUPABASE_URL` / `SUPABASE_SERVICE_ROLE_KEY` | Supabase (enterprise features) |
-| `SKILLSTORE_REPO_OWNER/NAME/BRANCH` | Override to point the web catalog at a fork |
+| `GITHUB_TOKEN` | Fetches skills from GitHub; required for private forks |
+| `NEXTAUTH_SECRET` | next-auth secret |
+| `SUPABASE_URL` / `SUPABASE_ANON_KEY` | Supabase database |
+| `STRIPE_SECRET_KEY` / `STRIPE_PUBLISHABLE_KEY` | Stripe billing |
+| `SKILLSTORE_REPO_OWNER/NAME/BRANCH` | Override to point catalog at a fork |
 
 ## Architecture
 
+### Tech Stack (v2)
+
+- **Framework**: Next.js 14 (App Router), TypeScript
+- **Styling**: Tailwind CSS
+- **Auth**: next-auth v5 beta
+- **Database**: Supabase
+- **Payments**: Stripe
+- **AI**: @anthropic-ai/sdk
+- **Markdown**: gray-matter (frontmatter), react-markdown + remark-gfm
+
 ### Data Flow
 
-The web catalog reads all skill data from GitHub at runtime (with 60-second revalidation). The data flow is:
-
-1. `.claude-plugin/marketplace.json` is the single source of truth — it lists every skill with its `source` path, name, description, version, category, and tags.
-2. `web/src/lib/github.ts` fetches `marketplace.json` and individual `SKILL.md` files from GitHub raw content, with local filesystem fallback for development.
-3. `web/src/lib/skills.ts` parses the markdown frontmatter (via `gray-matter`) and exposes typed helpers: `getAllSkills`, `getSkillsByDepartment`, `getSkillDetail`, `getDepartments`, `searchSkills`.
-4. Next.js App Router pages/API routes call these helpers directly (server-side).
-
-### Enterprise Context Pattern
-
-Enterprise forks can add `context.md` files alongside each `SKILL.md` to inject institution-specific data. The web catalog detects these automatically. A separate enterprise context repo is also supported — the `getEnterpriseContextContent` function in `github.ts` strips the `skills/` prefix from the source path and fetches `context.md` from the enterprise repo.
-
-### Skill Categories (marketplace.json)
-
-The catalog organizes skills under these categories (directory names under `skills/`):
-- `enrollment-admissions`
-- `marketing-communications`
-- `academic-programs`
-- `student-success`
-- `grants-finance`
-- `research-data`
-- `compliance-accreditation`
-- `it-operations`
-- `hr`
+1. `.claude-plugin/marketplace.json` is the single source of truth — lists every skill with `source` path, name, description, version, category, and tags.
+2. `v2/src/lib/github.ts` fetches `marketplace.json` and individual `SKILL.md` files from GitHub raw content.
+3. `v2/src/lib/skills.ts` parses frontmatter via `gray-matter` and exposes `getAllSkills`, `getSkillsByDepartment`, `getSkillDetail`, `getDepartments`, `searchSkills`.
+4. Next.js App Router pages/API routes call these helpers server-side.
 
 ### Key Files
 
-- `.claude-plugin/marketplace.json` — catalog index; must be updated when adding/updating any skill
-- `web/src/lib/github.ts` — all GitHub and filesystem I/O
-- `web/src/lib/skills.ts` — business logic for skill retrieval and search
-- `web/src/lib/types.ts` — `SkillEntry`, `SkillDetail`, `Marketplace`, `DEPARTMENTS` constants
+| File | Purpose |
+|------|---------|
+| `.claude-plugin/marketplace.json` | Catalog index — update when adding/modifying any skill |
+| `v2/src/lib/skills.ts` | Skill catalog loading and search |
+| `v2/src/lib/github.ts` | GitHub API for fetching SKILL.md content |
+| `v2/src/lib/types.ts` | `SkillEntry`, `SkillDetail`, `DEPARTMENTS` types |
+| `v2/src/lib/users.ts` | User context and vouch system |
+| `v2/src/lib/access.ts` | Access control logic |
+| `v2/src/lib/supabase.ts` | Supabase client |
+| `v2/src/lib/stripe.ts` | Stripe billing helpers |
+
+### Enterprise Context Pattern
+
+Enterprise forks can add `context.md` files alongside each `SKILL.md` to inject institution-specific data (school name, programs, voice). The web catalog detects these automatically. A separate enterprise context repo is also supported.
 
 ## Skill Authoring
 
 ### SKILL.md Format
 
-Every skill requires YAML frontmatter:
-
 ```yaml
 ---
-name: skill-name          # kebab-case, must match directory name
-description: >
-  One sentence. Must include TRIGGER keyword.
-version: 1.0.0            # SemVer
-category: department-name # must match directory
-tags: [tag1, tag2, tag3]  # 3-6 tags, kebab-case
+name: "skill-name"          # kebab-case, matches directory name
+description: "One sentence. TRIGGER when user needs to [specific use case]."
+metadata:
+  version: 1.0.0            # SemVer
+  category: department-name # must match directory
+  tags: [tag1, tag2, tag3]  # 3-6 tags, kebab-case
 ---
 ```
 
-Required body sections: title (H1), role statement, "When to Activate" bullets, core framework/process, templates/output formats, input requirements, anti-patterns.
+Required body sections (in order): H1 title, role statement ("You are a..."), "When to Activate" bullets, core framework/process, templates/output formats, "Input Requirements", "Anti-Patterns".
+
+### Skill Categories
+
+| Directory | Covers |
+|-----------|--------|
+| `enrollment-admissions/` | Admissions, recruitment, yield, waitlist |
+| `marketing-communications/` | Enrollment marketing, content, campaigns |
+| `academic-programs/` | Curriculum, accreditation, assessment |
+| `student-success/` | Advising, retention, early alert |
+| `grants-finance/` | Grants, budgets, financial aid |
+| `it-operations/` | Systems, security, ed-tech |
+| `compliance-accreditation/` | FERPA, Title IX, SACSCOC, Clery |
+| `research-data/` | IRB, surveys, institutional research |
+| `hr/` | Faculty hiring, staff recruitment |
 
 ### Adding a New Skill
 
 1. Create `skills/<department>/<skill-name>/SKILL.md`
-2. Add an entry to `.claude-plugin/marketplace.json` (name, source, description, version, category, tags)
-3. Branch name convention: `skill/<department>/<skill-name>`
+2. Add an entry to `.claude-plugin/marketplace.json`
+3. Branch name: `skill/<department>/<skill-name>`
 
 ### Updating a Skill
 
 1. Edit `SKILL.md`
-2. Bump version in both the frontmatter and `marketplace.json`
-3. Branch name convention: `update/<skill-name>`
+2. Bump version in both frontmatter and `marketplace.json`
+3. Branch name: `update/<skill-name>`
 
 ### Quality Rules
 
-- Skills must be under 500 lines
+- Under 500 lines — split reference material into `references/` if needed
 - Higher-education specific (not generic business skills)
 - Must include anti-patterns section
+- Every email template must stay under 150 words
 - `marketplace.json` entry must match frontmatter fields exactly
+
+## Git Conventions
+
+**Do NOT commit until explicitly asked.**
+
+Commit message format — one line, conventional prefix only:
+- `feat:` — New skill or feature
+- `fix:` — Bug fix
+- `docs:` — Documentation
+- `chore:` — Maintenance (frontmatter, metadata, tags)
+- `deploy:` — Vercel/infra changes
+
+**Never** add `Co-Authored-By` lines or Claude attribution to commits or PRs.
