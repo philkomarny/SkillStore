@@ -69,7 +69,8 @@ export default function VouchButton({ skillSlug, initialCount }: VouchButtonProp
   return (
     <button
       onClick={handleClap}
-      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-terminal-surface text-muted hover:bg-terminal-border border border-transparent"
+      disabled={!session}
+      className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors bg-terminal-surface text-muted border border-transparent disabled:opacity-40 disabled:cursor-not-allowed hover:enabled:bg-terminal-border"
       title={session ? "Clap for this skill" : "Sign in to clap"}
     >
       <span
