@@ -4,6 +4,36 @@ import { getUserContext } from "./users";
 import { supabase } from "./supabase";
 import type { Marketplace, SkillEntry, SkillDetail } from "./types";
 
+async function getCommunitySkills(): Promise<SkillEntry[]> {
+  try {
+    const { data } = await supabase
+      .from("skills")
+      .select("slug, source_path, category, verification_level, submitted_by, verification_report")
+      .eq("is_published", true)
+      .like("source_path", "submissions/%");
+    if (!data) return [];
+    return data.map((s: any) => ({
+      slug: s.slug,
+      name: s.verification_report?.submission?.name || s.slug.replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase()),
+      source: s.source_path,
+      description: s.verification_report?.submission?.description || "",
+      version: "1.0.0",
+      category: s.category,
+      tags: s.verification_report?.submission?.tags || [],
+      verificationLevel: s.verification_level,
+      submittedBy: s.submitted_by,
+    }));
+  } catch {
+    return [];
+  }
+}
+
+async function getSkillContentFromStorage(path: string): Promise<string> {
+  const { data } = await supabase.storage.from("refined-skills").download(path);
+  if (!data) throw new Error(`Storage content not found: ${path}`);
+  return data.text();
+}
+
 function deriveSlug(entry: Omit<SkillEntry, "slug">): string {
   // Derive slug from source path: "skills/marketing-communications/campaign-strategy/SKILL.md" → "campaign-strategy"
   const parts = entry.source.split("/");
@@ -18,11 +48,15 @@ function deriveSlug(entry: Omit<SkillEntry, "slug">): string {
 }
 
 export async function getAllSkills(): Promise<SkillEntry[]> {
-  const marketplace: Marketplace = await getMarketplaceJson();
-  return marketplace.skills.map((s) => ({
+  const [marketplace, community] = await Promise.all([
+    getMarketplaceJson(),
+    getCommunitySkills(),
+  ]);
+  const official: SkillEntry[] = (marketplace as Marketplace).skills.map((s) => ({
     ...s,
     slug: (s as any).slug || deriveSlug(s),
   }));
+  return [...official, ...community];
 }
 
 export async function getSkillsByCategory(
@@ -41,8 +75,9 @@ export async function getSkillDetail(
 
   if (!entry) return null;
 
+  const isCommunity = entry.source.startsWith("submissions/");
   const [raw, contextContent, dbSkill] = await Promise.all([
-    getSkillContent(entry.source),
+    isCommunity ? getSkillContentFromStorage(entry.source) : getSkillContent(entry.source),
     userId ? getUserContext(userId, slug) : Promise.resolve(null),
     Promise.resolve(supabase.from("skills").select("download_count, vouch_count, verification_level, submitted_by").eq("slug", slug).single()).then((r: any) => r.data).catch(() => null),
   ]);
