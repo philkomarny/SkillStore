@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getClient } from "@/lib/supabase";
+import { addSkillContent } from "@/lib/skill-store";
 
 export async function POST(request: NextRequest) {
   const session = await auth();
@@ -34,6 +35,8 @@ export async function POST(request: NextRequest) {
   const storagePath = `submissions/${slug}.md`;
   const supabase = getClient();
 
+  // [SKILL-STORE] replaced — uncomment below to roll back
+  /*
   const { error: storageError } = await supabase.storage
     .from("refined-skills")
     .upload(storagePath, fileContent, { contentType: "text/markdown", upsert: true });
@@ -42,6 +45,15 @@ export async function POST(request: NextRequest) {
     console.error(`[submit] storage upload failed:`, storageError);
     return NextResponse.json({ error: "Storage upload failed" }, { status: 500 });
   }
+  */
+  try {
+    await addSkillContent(slug, fileContent, { name, description, category, tags: tagList }, session.user.id);
+    console.log(`[submit] slug=${slug} stored in skill-store`);
+  } catch (err) {
+    console.error(`[submit] skill-store upload failed:`, err);
+    return NextResponse.json({ error: "Storage upload failed" }, { status: 500 });
+  }
+  // [/SKILL-STORE]
 
   const { data: skill, error: skillError } = await supabase
     .from("skills")

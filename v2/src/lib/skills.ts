@@ -1,7 +1,12 @@
 import matter from "gray-matter";
-import { getMarketplaceJson, getSkillContent } from "./github";
+import { listSkills as storeListSkills, getSkillContent as storeGetSkillContent } from "./skill-store";
 import { getUserContext } from "./users";
 import { supabase } from "./supabase";
+import type { SkillEntry, SkillDetail } from "./types";
+
+// [SKILL-STORE] replaced — uncomment below to roll back
+/*
+import { getMarketplaceJson, getSkillContent } from "./github";
 import type { Marketplace, SkillEntry, SkillDetail } from "./types";
 
 async function getCommunitySkills(): Promise<SkillEntry[]> {
@@ -35,9 +40,7 @@ async function getSkillContentFromStorage(path: string): Promise<string> {
 }
 
 function deriveSlug(entry: Omit<SkillEntry, "slug">): string {
-  // Derive slug from source path: "skills/marketing-communications/campaign-strategy/SKILL.md" → "campaign-strategy"
   const parts = entry.source.split("/");
-  // Use the folder name before SKILL.md, or slugify the name
   if (parts.length >= 2) {
     return parts[parts.length - 2];
   }
@@ -46,7 +49,15 @@ function deriveSlug(entry: Omit<SkillEntry, "slug">): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 }
+*/
+// [/SKILL-STORE]
 
+export async function getAllSkills(): Promise<SkillEntry[]> {
+  return storeListSkills();
+}
+
+// [SKILL-STORE] replaced — uncomment below to roll back
+/*
 export async function getAllSkills(): Promise<SkillEntry[]> {
   const [marketplace, community] = await Promise.all([
     getMarketplaceJson(),
@@ -58,6 +69,8 @@ export async function getAllSkills(): Promise<SkillEntry[]> {
   }));
   return [...official, ...community];
 }
+*/
+// [/SKILL-STORE]
 
 export async function getSkillsByCategory(
   category: string
@@ -75,9 +88,14 @@ export async function getSkillDetail(
 
   if (!entry) return null;
 
+  // [SKILL-STORE] replaced — uncomment below to roll back
+  /*
   const isCommunity = entry.source.startsWith("submissions/");
+  const rawPromise = isCommunity ? getSkillContentFromStorage(entry.source) : getSkillContent(entry.source);
+  */
+  // [/SKILL-STORE]
   const [raw, contextContent, dbSkill] = await Promise.all([
-    isCommunity ? getSkillContentFromStorage(entry.source) : getSkillContent(entry.source),
+    storeGetSkillContent(slug),
     userId ? getUserContext(userId, slug) : Promise.resolve(null),
     Promise.resolve(supabase.from("skills").select("download_count, vouch_count, verification_level, submitted_by").eq("slug", slug).single()).then((r: any) => r.data).catch(() => null),
   ]);

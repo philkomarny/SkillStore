@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { getClient } from "@/lib/supabase";
+import { getSkillContent } from "@/lib/skill-store";
 
 let _anthropic: Anthropic | null = null;
 function getAnthropic(): Anthropic {
@@ -59,7 +60,8 @@ export async function POST(request: NextRequest) {
   for (const item of pending) {
     const skill = item.skills as any;
     const slug = skill?.slug;
-    const sourcePath = skill?.source_path;
+    // [SKILL-STORE] sourcePath replaced by slug-based fetch
+    // const sourcePath = skill?.source_path;
 
     // Mark as in_review to prevent double-processing
     await supabase
@@ -68,6 +70,8 @@ export async function POST(request: NextRequest) {
       .eq("id", item.id);
 
     try {
+      // [SKILL-STORE] replaced — uncomment below to roll back
+      /*
       const { data: fileData } = await supabase.storage
         .from("refined-skills")
         .download(sourcePath);
@@ -82,6 +86,19 @@ export async function POST(request: NextRequest) {
       }
 
       const content = await fileData.text();
+      */
+      let content: string;
+      try {
+        content = await getSkillContent(slug);
+      } catch {
+        console.error(`[review] slug=${slug} content not found in skill-store`);
+        await supabase
+          .from("verification_queue")
+          .update({ status: "rejected", bot_report: { error: "Content not found" }, updated_at: new Date().toISOString() })
+          .eq("id", item.id);
+        continue;
+      }
+      // [/SKILL-STORE]
 
       const response = await anthropic.messages.create({
         model: "claude-sonnet-4-6",
