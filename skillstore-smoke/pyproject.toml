@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "skillstore-smoke"
+version = "0.1.0"
+description = "Playwright smoke tests for eduskillsmp.com"
+authors = []
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.11"
+playwright = "^1.40"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

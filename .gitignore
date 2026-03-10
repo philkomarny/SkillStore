@@ -18,4 +18,7 @@ web/out/
 .claude
 config.sh
 ghauth
-ghauth
+
+# Test secrets and session state — never commit
+skillstore-smoke/.env.test
+skillstore-smoke/auth-state.json

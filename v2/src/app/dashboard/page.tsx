@@ -2,7 +2,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { getUserProfile } from "@/lib/users";
-import { getClient } from "@/lib/supabase";
+// [CONTEXT-STORE] replaced — remove comment block to roll back
+// import { getClient } from "@/lib/supabase";
+import { listContexts } from "@/lib/context-store";
 import DashboardClient from "@/components/DashboardClient";
 
 export const metadata = {
@@ -21,7 +23,7 @@ export default async function DashboardPage({
 
   const profile = await getUserProfile(session.user.id);
 
-  const supabase = getClient();
+  const supabase = (await import("@/lib/supabase")).getClient();
 
   // Fetch user's skills
   const { data: userSkills } = (await supabase
@@ -30,15 +32,20 @@ export default async function DashboardPage({
     .eq("user_id", profile?.id)
     .order("updated_at", { ascending: false })) as { data: any[] | null };
 
-  // Fetch user's context profiles
+  // [CONTEXT-STORE] replaced — remove comment block to roll back
+  /*
   const { data: contextProfiles } = (await supabase
     .from("context_profiles")
     .select("*")
     .eq("user_id", profile?.id)
     .order("updated_at", { ascending: false })) as { data: any[] | null };
+  const contexts = contextProfiles || [];
+  */
+  // user_id for Lambda = Google OAuth subject ID (session.user.id)
+  const contexts = await listContexts(session.user.id).catch(() => []);
+  // [/CONTEXT-STORE]
 
   const skills = userSkills || [];
-  const contexts = contextProfiles || [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

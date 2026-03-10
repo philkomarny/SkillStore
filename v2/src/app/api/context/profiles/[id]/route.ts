@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { getUserProfile } from "@/lib/users";
 import { getClient } from "@/lib/supabase";
+// [CONTEXT-STORE] replaced — remove comment block to roll back
+import { getContext, deleteContext } from "@/lib/context-store";
 
 /**
  * GET /api/context/profiles/[id] — Get a single context profile with its files
@@ -15,32 +17,37 @@ export async function GET(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // [CONTEXT-STORE] replaced — remove comment block to roll back
+  /*
   const profile = await getUserProfile(session.user.id);
   if (!profile) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-
   const supabase = getClient();
-
   const { data: contextProfile, error } = (await supabase
     .from("context_profiles")
     .select("*")
     .eq("id", params.id)
     .eq("user_id", profile.id)
     .single()) as { data: any; error: any };
-
   if (error || !contextProfile) {
     return NextResponse.json({ error: "Profile not found" }, { status: 404 });
   }
-
-  // Also fetch associated files
   const { data: files } = (await supabase
     .from("context_files")
     .select("id, file_name, file_type, file_size_bytes, processed, created_at")
     .eq("context_profile_id", params.id)
     .order("created_at", { ascending: false })) as { data: any[] | null };
-
   return NextResponse.json({ profile: contextProfile, files: files || [] });
+  */
+  try {
+    const ctx = await getContext(params.id, session.user.id);
+    if (!ctx) return NextResponse.json({ error: "Profile not found" }, { status: 404 });
+    return NextResponse.json({ profile: ctx, files: ctx.documents ?? [] });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+  // [/CONTEXT-STORE]
 }
 
 /**
@@ -104,44 +111,40 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // [CONTEXT-STORE] replaced — remove comment block to roll back
+  /*
   const profile = await getUserProfile(session.user.id);
   if (!profile) {
     return NextResponse.json({ error: "User not found" }, { status: 404 });
   }
-
   const supabase = getClient();
-
-  // Verify ownership
   const { data: existing } = (await supabase
     .from("context_profiles")
     .select("id")
     .eq("id", params.id)
     .eq("user_id", profile.id)
     .single()) as { data: any };
-
   if (!existing) {
     return NextResponse.json({ error: "Profile not found" }, { status: 404 });
   }
-
-  // Get files for storage cleanup
   const { data: files } = (await supabase
     .from("context_files")
     .select("storage_path")
     .eq("context_profile_id", params.id)) as { data: any[] | null };
-
-  // Delete files from storage
   if (files && files.length > 0) {
     const paths = files.map((f: any) => f.storage_path).filter(Boolean);
     if (paths.length > 0) {
       await supabase.storage.from("context-uploads").remove(paths);
     }
   }
-
-  // Delete profile (cascades to context_files via FK)
-  await supabase
-    .from("context_profiles")
-    .delete()
-    .eq("id", params.id);
-
+  await supabase.from("context_profiles").delete().eq("id", params.id);
   return NextResponse.json({ success: true });
+  */
+  try {
+    await deleteContext(params.id, session.user.id);
+    return NextResponse.json({ success: true });
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+  // [/CONTEXT-STORE]
 }

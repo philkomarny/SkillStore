@@ -1,13 +1,30 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
+
+// [CONTEXT-STORE] entire route replaced — remove comment block to roll back to Supabase/Claude flow
+// This route will be superseded by createContext() in context-store.ts once document APIs (#14)
+// are wired. createContext() calls POST /contexts Lambda with name + MD5 array.
+// Until then, context creation still goes through the ContextBuilder → /api/context/profiles
+// (POST to create staging record) → /api/context/upload (file upload) → this route (synthesis).
+/*
 import { auth } from "@/auth";
 import { getUserProfile } from "@/lib/users";
 import { getClient } from "@/lib/supabase";
 import { extractText, generateContext, compressImageForClaude } from "@/lib/context-processor";
+*/
 
 // Allow up to 300s for file processing + Claude API call (Vercel Pro)
 export const maxDuration = 300;
 
-export async function POST(request: NextRequest) {
+export async function POST() {
+  return NextResponse.json(
+    { error: "Context synthesis is now handled by the Lambda context API. See issue #18." },
+    { status: 503 }
+  );
+}
+
+/*
+// [CONTEXT-STORE] original implementation below — uncomment to roll back
+export async function POST_ORIGINAL(request: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -175,3 +192,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+*/ // [/CONTEXT-STORE]
