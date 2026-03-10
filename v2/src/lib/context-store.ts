@@ -52,6 +52,7 @@ export async function createContext(
   userId: string
 ): Promise<{ id: string; status: string }> {
   assertUserId(userId);
+  console.log("[context-store] createContext →", ENDPOINTS.add, "name:", name, "documents:", documents.length, "user:", userId);
   const res = await fetch(ENDPOINTS.add, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -59,6 +60,7 @@ export async function createContext(
   });
   if (!res.ok) throw new Error(`createContext failed: ${res.status}`);
   const data = await res.json();
+  console.log("[context-store] createContext ← id:", data.contextId, "status:", data.status);
   return { id: data.contextId, status: data.status };
 }
 
@@ -69,12 +71,15 @@ export async function createContext(
  */
 export async function getContext(contextId: string, userId: string): Promise<any | null> {
   assertUserId(userId);
+  console.log("[context-store] getContext → id:", contextId, "user:", userId);
   const res = await fetch(
     `${ENDPOINTS.get}?contextId=${encodeURIComponent(contextId)}&user_id=${encodeURIComponent(userId)}`
   );
-  if (res.status === 404) return null;
+  if (res.status === 404) { console.log("[context-store] getContext ← 404 (not found)"); return null; }
   if (!res.ok) throw new Error(`getContext failed: ${res.status}`);
-  return normalize(await res.json());
+  const data = normalize(await res.json());
+  console.log("[context-store] getContext ← status:", data.status);
+  return data;
 }
 
 /**
@@ -83,10 +88,13 @@ export async function getContext(contextId: string, userId: string): Promise<any
  */
 export async function listContexts(userId: string): Promise<any[]> {
   assertUserId(userId);
+  console.log("[context-store] listContexts → user:", userId);
   const res = await fetch(`${ENDPOINTS.list}?user_id=${encodeURIComponent(userId)}`);
   if (!res.ok) throw new Error(`listContexts failed: ${res.status}`);
   const data = await res.json();
-  return Array.isArray(data) ? data.map(normalize) : [];
+  const result = Array.isArray(data) ? data.map(normalize) : [];
+  console.log("[context-store] listContexts ←", result.length, "contexts");
+  return result;
 }
 
 /**
@@ -95,9 +103,11 @@ export async function listContexts(userId: string): Promise<any[]> {
  */
 export async function deleteContext(contextId: string, userId: string): Promise<void> {
   assertUserId(userId);
+  console.log("[context-store] deleteContext → id:", contextId, "user:", userId);
   const res = await fetch(
     `${ENDPOINTS.delete}?contextId=${encodeURIComponent(contextId)}&user_id=${encodeURIComponent(userId)}`,
     { method: "DELETE" }
   );
   if (!res.ok) throw new Error(`deleteContext failed: ${res.status}`);
+  console.log("[context-store] deleteContext ← OK");
 }

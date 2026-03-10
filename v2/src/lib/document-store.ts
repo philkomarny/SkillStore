@@ -2,22 +2,23 @@
  * document-store.ts — Thin wrapper around the Lambda-backed document APIs.
  *
  * Endpoints (all open, no auth header required):
- *   POST   esm_live_upload_document_post  — upload a file; returns { md5, status }
- *   GET    esm_live_get_document_get      — get document metadata + plain text by MD5
- *   POST   esm_live_list_documents_post   — list documents in a user's library
- *   POST   esm_live_delete_document_post  — remove from user's library (does not delete global record)
+ *   POST   esm_live_upload_document_post    — upload a file; returns { md5, status }
+ *   GET    esm_live_get_document_get        — get document metadata + plain text by MD5
+ *   GET    esm_live_list_documents_get      — list documents in a user's library
+ *   DELETE esm_live_delete_document_delete  — remove from user's library (does not delete global record)
  *
  * Text extraction (PDF, DOCX, images) is handled internally by Lambda-to-Lambda invocation.
  * No public endpoint for extraction — it is triggered automatically by upload.
  *
+ * Canonical endpoint inventory: https://github.com/febelabs/skillflow/issues/141
  * Related issues: #14 (document APIs), #15 (text extraction), #18 (context APIs that consume MD5s)
  */
 
 const ENDPOINTS = {
   upload: "https://plvh12o05c.execute-api.us-west-2.amazonaws.com/prod/esm_live_upload_document_post",
   get:    "https://ikt0pbkcx1.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_document_get",
-  list:   "https://durik7cyze.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_documents_post",
-  delete: "https://l9h3c7vji5.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_document_post",
+  list:   "https://durik7cyze.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_documents_get",
+  delete: "https://l9h3c7vji5.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_document_delete",
 };
 
 function assertUserId(userId: string): void {
@@ -38,12 +39,15 @@ export async function uploadDocument(
   userId: string
 ): Promise<{ md5: string; status: string }> {
   assertUserId(userId);
+  console.log("[document-store] uploadDocument →", ENDPOINTS.upload, "file:", fileName, "user:", userId);
   const form = new FormData();
-  form.append("file", new Blob([buffer], { type: fileType }), fileName);
+  form.append("file", new Blob([buffer as unknown as ArrayBuffer], { type: fileType }), fileName);
   form.append("user_id", userId);
   const res = await fetch(ENDPOINTS.upload, { method: "POST", body: form });
   if (!res.ok) throw new Error(`uploadDocument failed: ${res.status}`);
-  return res.json();
+  const data = await res.json();
+  console.log("[document-store] uploadDocument ← md5:", data.md5, "status:", data.status);
+  return data;
 }
 
 /**
@@ -52,10 +56,13 @@ export async function uploadDocument(
  * Plain text is only available when status: "ready".
  */
 export async function getDocument(md5: string): Promise<any | null> {
+  console.log("[document-store] getDocument → md5:", md5);
   const res = await fetch(`${ENDPOINTS.get}?md5=${encodeURIComponent(md5)}`);
-  if (res.status === 404) return null;
+  if (res.status === 404) { console.log("[document-store] getDocument ← 404 (not found)"); return null; }
   if (!res.ok) throw new Error(`getDocument failed: ${res.status}`);
-  return res.json();
+  const data = await res.json();
+  console.log("[document-store] getDocument ← status:", data.status);
+  return data;
 }
 
 /**
@@ -64,14 +71,13 @@ export async function getDocument(md5: string): Promise<any | null> {
  */
 export async function listDocuments(userId: string): Promise<any[]> {
   assertUserId(userId);
-  const res = await fetch(ENDPOINTS.list, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ user_id: userId }),
-  });
+  console.log("[document-store] listDocuments → user:", userId);
+  const res = await fetch(`${ENDPOINTS.list}?user_id=${encodeURIComponent(userId)}`);
   if (!res.ok) throw new Error(`listDocuments failed: ${res.status}`);
   const data = await res.json();
-  return Array.isArray(data) ? data : [];
+  const result = Array.isArray(data) ? data : [];
+  console.log("[document-store] listDocuments ←", result.length, "documents");
+  return result;
 }
 
 /**
@@ -81,10 +87,9 @@ export async function listDocuments(userId: string): Promise<any[]> {
  */
 export async function deleteDocument(md5: string, userId: string): Promise<void> {
   assertUserId(userId);
-  const res = await fetch(ENDPOINTS.delete, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ md5, user_id: userId }),
-  });
+  const res = await fetch(
+    `${ENDPOINTS.delete}?md5=${encodeURIComponent(md5)}&user_id=${encodeURIComponent(userId)}`,
+    { method: "DELETE" }
+  );
   if (!res.ok) throw new Error(`deleteDocument failed: ${res.status}`);
 }

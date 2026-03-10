@@ -32,19 +32,31 @@ export default function DashboardClient({
   const [showContextBuilder, setShowContextBuilder] = useState(false);
 
   const handleSelectSkill = useCallback((id: string) => {
-    setSelectedSkillId((prev) => (prev === id ? null : id));
+    setSelectedSkillId((prev) => {
+      const next = prev === id ? null : id;
+      console.log("[Dashboard] Skill selected:", next ?? "(none)");
+      return next;
+    });
   }, []);
 
   const handleSelectContext = useCallback((id: string) => {
-    setSelectedContextId((prev) => (prev === id ? null : id));
+    setSelectedContextId((prev) => {
+      const next = prev === id ? null : id;
+      console.log("[Dashboard] Context selected:", next ?? "(none)");
+      return next;
+    });
   }, []);
 
   const handleDeleteSkill = useCallback(
     async (id: string) => {
+      console.log("[Dashboard] DELETE /api/user-skills/" + id);
       const res = await fetch(`/api/user-skills/${id}`, { method: "DELETE" });
       if (res.ok) {
+        console.log("[Dashboard] Skill deleted:", id);
         if (selectedSkillId === id) setSelectedSkillId(null);
         router.refresh();
+      } else {
+        console.warn("[Dashboard] Skill delete failed: HTTP", res.status);
       }
     },
     [selectedSkillId, router]
@@ -52,21 +64,27 @@ export default function DashboardClient({
 
   const handleDeleteContext = useCallback(
     async (id: string) => {
+      console.log("[Dashboard] DELETE /api/context/profiles/" + id);
       const res = await fetch(`/api/context/profiles/${id}`, { method: "DELETE" });
       if (res.ok) {
+        console.log("[Dashboard] Context deleted:", id);
         if (selectedContextId === id) setSelectedContextId(null);
         router.refresh();
+      } else {
+        console.warn("[Dashboard] Context delete failed: HTTP", res.status);
       }
     },
     [selectedContextId, router]
   );
 
   const handleProfilesChanged = useCallback(() => {
+    console.log("[Dashboard] Profiles changed — refreshing");
     router.refresh();
   }, [router]);
 
   const handleContextCreated = useCallback(
     (profile: any) => {
+      console.log("[Dashboard] Context created — selecting:", profile.id, "status:", profile.status);
       setShowContextBuilder(false);
       setSelectedContextId(profile.id);
       router.refresh();

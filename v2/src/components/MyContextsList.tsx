@@ -28,6 +28,8 @@ export default function MyContextsList({
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
+    const ctx = contextProfiles.find((c) => c.id === id);
+    console.log("[MyContextsList] Deleting context:", ctx?.name ?? id);
     setDeletingId(id);
     try {
       await onDeleteContext(id);
@@ -125,7 +127,7 @@ export default function MyContextsList({
               }`}
             >
               <button
-                onClick={() => onSelectContext(ctx.id)}
+                onClick={() => { console.log("[MyContextsList] Clicked context:", ctx.name, "(id:", ctx.id + ", status:", ctx.status + ")"); onSelectContext(ctx.id); }}
                 className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-terminal-surface transition-colors text-left min-w-0 cursor-pointer"
               >
                 <div className="flex-1 min-w-0">
@@ -151,6 +153,7 @@ export default function MyContextsList({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  console.log("[MyContextsList] Delete requested for context:", ctx.name);
                   setConfirmingId(ctx.id);
                 }}
                 className="px-2 pr-4 py-3.5 text-terminal-border hover:text-red-500 transition-colors"

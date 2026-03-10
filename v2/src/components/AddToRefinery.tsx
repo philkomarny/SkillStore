@@ -16,14 +16,17 @@ export default function AddToRefinery({ skillSlug }: AddToRefineryProps) {
 
   const handleAdd = async () => {
     if (!session) {
+      console.log("[AddToRefinery] No session — redirecting to sign in");
       signIn("google");
       return;
     }
 
+    console.log("[AddToRefinery] Adding skill to refinery:", skillSlug);
     setLoading(true);
     setError(null);
 
     try {
+      console.log("[AddToRefinery] POST /api/skills/copy { skillSlug:", skillSlug, "}");
       const res = await fetch("/api/skills/copy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,12 +35,15 @@ export default function AddToRefinery({ skillSlug }: AddToRefineryProps) {
 
       if (res.ok) {
         const data = await res.json();
+        console.log("[AddToRefinery] Skill copied → userSkill.id:", data.userSkill.id, "— redirecting to dashboard");
         router.push(`/dashboard?skill=${data.userSkill.id}`);
       } else {
         const data = await res.json();
+        console.warn("[AddToRefinery] Copy failed:", data.error, `(HTTP ${res.status})`);
         setError(data.error || "Failed to add skill");
       }
-    } catch {
+    } catch (err: any) {
+      console.error("[AddToRefinery] Network error:", err?.message);
       setError("Something went wrong");
     } finally {
       setLoading(false);

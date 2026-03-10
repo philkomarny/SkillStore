@@ -37,11 +37,15 @@ export default function RefinePanel({
   const handleUpload = useCallback(
     async (fileList: FileList) => {
       if (!session) {
+        console.log("[RefinePanel] No session — redirecting to sign in");
         signIn("google");
         return;
       }
 
-      for (const file of Array.from(fileList)) {
+      const fileArray = Array.from(fileList);
+      console.log("[RefinePanel] Uploading", fileArray.length, "file(s):", fileArray.map((f) => f.name));
+
+      for (const file of fileArray) {
         const entry: UploadedFile = {
           name: file.name,
           size: file.size,
@@ -50,6 +54,7 @@ export default function RefinePanel({
         setFiles((prev) => [...prev, entry]);
 
         const markError = (msg: string) => {
+          console.warn("[RefinePanel] Upload failed:", file.name, "—", msg);
           setFiles((prev) =>
             prev.map((f) =>
               f.name === file.name ? { ...f, status: "error", errorMsg: msg } : f
@@ -59,6 +64,7 @@ export default function RefinePanel({
 
         try {
           // Step 1: Get a signed upload URL from the server (small JSON, no file body)
+          console.log("[RefinePanel] Step 1 — signing upload for:", file.name);
           const signRes = await fetch("/api/context/upload", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -79,6 +85,7 @@ export default function RefinePanel({
           }
 
           const { signedUrl, storagePath, contentType } = await signRes.json();
+          console.log("[RefinePanel] Step 2 — uploading to Supabase Storage:", storagePath);
 
           // Step 2: Upload file directly to Supabase (bypasses Vercel 4.5MB limit)
           const uploadRes = await fetch(signedUrl, {
@@ -94,6 +101,7 @@ export default function RefinePanel({
             continue;
           }
 
+          console.log("[RefinePanel] Step 3 — confirming upload in DB:", file.name);
           // Step 3: Tell the server to record in DB
           const confirmRes = await fetch("/api/context/upload", {
             method: "POST",
@@ -115,6 +123,7 @@ export default function RefinePanel({
             continue;
           }
 
+          console.log("[RefinePanel] Upload complete:", file.name);
           setFiles((prev) =>
             prev.map((f) =>
               f.name === file.name ? { ...f, status: "uploaded" } : f
@@ -129,6 +138,8 @@ export default function RefinePanel({
   );
 
   const handleRefine = async () => {
+    console.log("[RefinePanel] Starting refinement for skill:", skillName, "(id:", userSkillId + ")");
+    console.log("[RefinePanel] POST /api/skills/refine { userSkillId:", userSkillId, "}");
     setRefining(true);
     setError(null);
     try {
@@ -139,6 +150,7 @@ export default function RefinePanel({
       });
       if (res.ok) {
         const data = await res.json();
+        console.log("[RefinePanel] Refinement complete — version:", data.version, "summary:", data.contextSummary?.slice(0, 80));
         setResult(data);
         setFiles([]);
         // Refresh the page to show updated skill data
@@ -146,12 +158,15 @@ export default function RefinePanel({
       } else {
         try {
           const data = await res.json();
+          console.warn("[RefinePanel] Refinement failed:", data.error, `(HTTP ${res.status})`);
           setError(data.error || `Refinement failed (${res.status})`);
         } catch {
+          console.warn("[RefinePanel] Refinement failed: HTTP", res.status, res.statusText);
           setError(`Server error ${res.status}: ${res.statusText}`);
         }
       }
     } catch (err: any) {
+      console.error("[RefinePanel] Refinement error:", err?.message);
       setError(err?.message || "Something went wrong during refinement. The request may have timed out.");
     } finally {
       setRefining(false);

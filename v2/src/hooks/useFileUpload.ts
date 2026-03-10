@@ -21,6 +21,7 @@ export function useFileUpload() {
   const uploadFiles = useCallback(async (fileList: FileList) => {
     setIsUploading(true);
     const fileArray = Array.from(fileList);
+    console.log("[useFileUpload] Uploading", fileArray.length, "file(s):", fileArray.map((f) => f.name));
 
     // Register all files as uploading before any async work
     setFiles((prev) => [
@@ -31,10 +32,12 @@ export function useFileUpload() {
     // Upload all files in parallel — one round-trip each to Lambda document store
     await Promise.all(
       fileArray.map(async (file) => {
-        const markError = (msg: string) =>
+        const markError = (msg: string) => {
+          console.warn("[useFileUpload] Upload failed:", file.name, msg);
           setFiles((prev) =>
             prev.map((f) => (f.name === file.name ? { ...f, status: "error", errorMsg: msg } : f))
           );
+        };
 
         try {
           const form = new FormData();
@@ -53,6 +56,7 @@ export function useFileUpload() {
           }
 
           const { md5 } = await res.json();
+          console.log("[useFileUpload] Uploaded:", file.name, "→", md5);
           setFiles((prev) =>
             prev.map((f) => (f.name === file.name ? { ...f, status: "uploaded", md5 } : f))
           );

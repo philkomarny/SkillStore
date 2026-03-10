@@ -20,6 +20,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
   const handleCreateProfile = async () => {
     if (!name.trim()) return;
     setError(null);
+    console.log("[ContextBuilder] Creating profile:", name.trim());
 
     try {
       const res = await fetch("/api/context/profiles", {
@@ -30,13 +31,16 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
 
       if (!res.ok) {
         const d = await res.json();
+        console.warn("[ContextBuilder] Profile creation failed:", d.error);
         setError(d.error || "Failed to create profile");
         return;
       }
 
       const { profile } = await res.json();
+      console.log("[ContextBuilder] Profile created:", profile.id);
       setProfileId(profile.id);
     } catch (err: any) {
+      console.error("[ContextBuilder] Profile creation error:", err?.message);
       setError(err?.message || "Network error");
     }
   };
@@ -45,6 +49,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
     if (!profileId || md5s.length === 0) return;
     setBuilding(true);
     setError(null);
+    console.log("[ContextBuilder] Building context:", { name: name.trim(), documents: md5s });
 
     try {
       const res = await fetch("/api/context/process", {
@@ -62,11 +67,13 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
       }
 
       if (!res.ok) {
+        console.warn("[ContextBuilder] Build context failed:", data.error);
         setError(data.error || "Failed to build context.");
         setBuilding(false);
         return;
       }
 
+      console.log("[ContextBuilder] Context built:", { id: data.id, status: data.status });
       onCreated({
         id: data.id,
         name: name.trim(),
@@ -75,6 +82,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         context_markdown: null,
       });
     } catch (err: any) {
+      console.error("[ContextBuilder] Build context error:", err?.message);
       setError(err?.message || "Something went wrong.");
     } finally {
       setBuilding(false);

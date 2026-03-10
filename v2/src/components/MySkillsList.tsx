@@ -27,6 +27,8 @@ export default function MySkillsList({
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
+    const skill = skills.find((s) => s.id === id);
+    console.log("[MySkillsList] Deleting skill:", skill?.name ?? id);
     setDeletingId(id);
     try {
       await onDeleteSkill(id);
@@ -109,7 +111,7 @@ export default function MySkillsList({
               }`}
             >
               <button
-                onClick={() => onSelectSkill(skill.id)}
+                onClick={() => { console.log("[MySkillsList] Clicked skill:", skill.name, "(id:", skill.id + ")"); onSelectSkill(skill.id); }}
                 className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-terminal-surface transition-colors text-left min-w-0 cursor-pointer"
               >
                 <div className="flex-1 min-w-0">
@@ -151,6 +153,7 @@ export default function MySkillsList({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  console.log("[MySkillsList] Delete requested for skill:", skill.name);
                   setConfirmingId(skill.id);
                 }}
                 className="px-2 pr-4 py-3.5 text-terminal-border hover:text-red-500 transition-colors"

@@ -35,6 +35,7 @@ export default function RefineryWorkspace({
 
   const startRename = () => {
     if (!selectedSkill) return;
+    console.log("[Refinery] Renaming skill:", selectedSkill.name);
     setRenameValue(selectedSkill.name);
     setIsRenaming(true);
   };
@@ -44,6 +45,7 @@ export default function RefineryWorkspace({
       setIsRenaming(false);
       return;
     }
+    console.log("[Refinery] PUT /api/user-skills/" + selectedSkillId, "→ name:", renameValue.trim());
     setRenaming(true);
     try {
       const res = await fetch(`/api/user-skills/${selectedSkillId}`, {
@@ -52,7 +54,10 @@ export default function RefineryWorkspace({
         body: JSON.stringify({ name: renameValue.trim() }),
       });
       if (res.ok) {
+        console.log("[Refinery] Skill renamed to:", renameValue.trim());
         onProfilesChanged();
+      } else {
+        console.warn("[Refinery] Rename failed: HTTP", res.status);
       }
     } finally {
       setRenaming(false);
@@ -68,6 +73,8 @@ export default function RefineryWorkspace({
 
   const handleRefine = async () => {
     if (!selectedSkillId || !selectedContextId) return;
+    console.log("[Refinery] Starting refinement — skill:", selectedSkill?.name, "context:", selectedContext?.name);
+    console.log("[Refinery] POST /api/skills/refine { userSkillId:", selectedSkillId, ", contextProfileId:", selectedContextId, "}");
     setRefining(true);
     setRefineResult(null);
     setError(null);
@@ -84,17 +91,21 @@ export default function RefineryWorkspace({
 
       if (res.ok) {
         const data = await res.json();
+        console.log("[Refinery] Refinement complete — version:", data.version, "summary:", data.contextSummary?.slice(0, 80));
         setRefineResult(data);
         onProfilesChanged();
       } else {
         try {
           const data = await res.json();
+          console.warn("[Refinery] Refinement failed:", data.error, `(HTTP ${res.status})`);
           setError(data.error || `Refinement failed (${res.status})`);
         } catch {
+          console.warn("[Refinery] Refinement failed: HTTP", res.status, res.statusText);
           setError(`Server error ${res.status}: ${res.statusText}`);
         }
       }
     } catch (err: any) {
+      console.error("[Refinery] Refinement error:", err?.message);
       setError(
         err?.message || "Something went wrong during refinement. The request may have timed out."
       );
