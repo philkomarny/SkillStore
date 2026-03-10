@@ -4,8 +4,10 @@ Run: python3 tests/smoke_test.py
 
 Uses Firefox — headless Chromium is blocked by Cloudflare.
 """
+import os
 import sys
 import time
+from pathlib import Path
 from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
 
 BASE_URL = "https://www.eduskillsmp.com"
@@ -388,6 +390,113 @@ def test_newsletter_detail_content_quality(browser):
     p.close()
 
 
+# ── Test 21: Document upload pipeline (authenticated) ─────────────────
+#
+# Requires auth-state.json (run `make setup-auth` once to generate).
+# Tests the full document upload path post-#14:
+#   1. Dashboard loads
+#   2. Create a new context (POST /api/context/profiles → Supabase staging record)
+#   3. Upload a small text fixture via the file input
+#      → POST /api/context/upload → Lambda esm_live_upload_document_post
+#      → returns { md5, status }
+#   4. File shows "Ready" in the UI (status: "ready" or "processing" from Lambda)
+#
+# Does NOT click "Build Context" — scope is upload only, not synthesis.
+# Does NOT assert md5 value — only that the upload completed without error.
+
+AUTH_STATE = Path(__file__).parent / "auth-state.json"
+FIXTURE_DOC = Path(__file__).parent / "fixtures" / "test-doc.txt"
+
+
+def test_document_upload(browser):
+    print("\n── Document upload (authenticated, Lambda #14) ───")
+
+    if not AUTH_STATE.exists():
+        fail("auth-state.json not found — run `make setup-auth` first")
+        return
+
+    if not FIXTURE_DOC.exists():
+        fail(f"Fixture not found: {FIXTURE_DOC}")
+        return
+
+    ctx = browser.new_context(storage_state=str(AUTH_STATE))
+    p = ctx.new_page()
+    p.set_default_timeout(20000)
+
+    try:
+        # Step 1: Dashboard must load
+        p.goto(f"{BASE_URL}/dashboard", wait_until="networkidle")
+        body = p.inner_text("body")
+        check(
+            "Dashboard loaded (not redirected to sign-in)",
+            "sign" not in p.url.lower() and "auth" not in p.url.lower(),
+            p.url,
+        )
+
+        # Step 2: Open new context form
+        try:
+            p.locator("text=+ New").first.click(timeout=8000)
+            p.wait_for_selector("text=New Context File", timeout=5000)
+            check("New Context File form opened", True)
+        except PWTimeout:
+            fail("Could not open New Context File form")
+            return
+
+        # Step 3: Name the context and click Create
+        try:
+            p.locator("input[placeholder*='Admissions'], input[placeholder*='context'], input[type='text']").first.fill(
+                "Smoke Upload Test"
+            )
+            p.locator("button:has-text('Create')").first.click(timeout=5000)
+            # After Create, the upload drop zone appears and context name shows "created"
+            p.wait_for_selector("text=created", timeout=8000)
+            check("Context staging record created, upload zone visible", True)
+        except PWTimeout:
+            fail("Context name/create step timed out")
+            return
+
+        # Step 4: Upload the fixture file via the hidden file input
+        # The input is hidden; Playwright can set_input_files directly on hidden inputs.
+        try:
+            p.locator("#context-upload").set_input_files(str(FIXTURE_DOC), timeout=5000)
+        except PWTimeout:
+            fail("File input (#context-upload) not found")
+            return
+
+        # Step 5: Wait for the file to reach "Ready" or "Error" status
+        # "Ready" = Lambda returned { md5, status } successfully
+        # "Error" = Lambda rejected or network failure
+        try:
+            # Wait up to 30s — Lambda upload + text extraction can take a few seconds
+            p.wait_for_selector(
+                "text=Ready, text=Error",
+                timeout=30000,
+            )
+            body = p.inner_text("body")
+            check(
+                "test-doc.txt appears in file list",
+                "test-doc.txt" in body,
+                body[:200],
+            )
+            check(
+                "File reached Ready status (Lambda document store accepted upload)",
+                "Ready" in body,
+                body[:200],
+            )
+            check(
+                "No upload error reported",
+                "Error" not in body or "Ready" in body,
+                body[:200],
+            )
+        except PWTimeout:
+            body = p.inner_text("body")
+            fail("File did not reach Ready/Error within 30s", body[:200])
+
+    finally:
+        p.close()
+        ctx.close()
+
+
 # ── Runner ────────────────────────────────────────────────────────────
 
 def main():
@@ -415,6 +524,7 @@ def main():
             test_newsletter_detail_install_panel(browser)
             test_newsletter_detail_refinery_sidebar(browser)
             test_newsletter_detail_content_quality(browser)
+            test_document_upload(browser)
         finally:
             browser.close()
 
