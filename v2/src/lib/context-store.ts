@@ -42,11 +42,16 @@ function normalize(ctx: any) {
  * Requires: all MD5s must exist in the document store (#14).
  * user_id: Google OAuth subject ID (session.user.id)
  */
+function assertUserId(userId: string): void {
+  if (!userId || userId.length === 0) throw new Error("userId is required");
+}
+
 export async function createContext(
   name: string,
   documents: string[],
   userId: string
 ): Promise<{ id: string; status: string }> {
+  assertUserId(userId);
   const res = await fetch(ENDPOINTS.add, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -63,6 +68,7 @@ export async function createContext(
  * user_id: Google OAuth subject ID (session.user.id) — required for user-scoped S3 path.
  */
 export async function getContext(contextId: string, userId: string): Promise<any | null> {
+  assertUserId(userId);
   const res = await fetch(
     `${ENDPOINTS.get}?contextId=${encodeURIComponent(contextId)}&user_id=${encodeURIComponent(userId)}`
   );
@@ -76,6 +82,7 @@ export async function getContext(contextId: string, userId: string): Promise<any
  * user_id: Google OAuth subject ID (session.user.id)
  */
 export async function listContexts(userId: string): Promise<any[]> {
+  assertUserId(userId);
   const res = await fetch(`${ENDPOINTS.list}?user_id=${encodeURIComponent(userId)}`);
   if (!res.ok) throw new Error(`listContexts failed: ${res.status}`);
   const data = await res.json();
@@ -87,6 +94,7 @@ export async function listContexts(userId: string): Promise<any[]> {
  * user_id: Google OAuth subject ID (session.user.id) — required for user-scoped S3 path.
  */
 export async function deleteContext(contextId: string, userId: string): Promise<void> {
+  assertUserId(userId);
   const res = await fetch(
     `${ENDPOINTS.delete}?contextId=${encodeURIComponent(contextId)}&user_id=${encodeURIComponent(userId)}`,
     { method: "DELETE" }
