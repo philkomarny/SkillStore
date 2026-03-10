@@ -67,6 +67,17 @@ To roll back to GitHub/Supabase Storage: uncomment the `[SKILL-STORE]` blocks an
 | Add skill content | POST | `https://nm260lbj42.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_skill_content_post` |
 | Update skill content | POST | `https://eyq3dgqjs3.execute-api.us-west-2.amazonaws.com/prod/esm_live_update_skill_content_post` |
 
+**Context Lambda Endpoints** (`v2/src/lib/context-store.ts`):
+
+| Operation | Method | URL |
+|---|---|---|
+| Add context | POST | `https://vzy0yc5j2l.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_context_post` |
+| Get context | GET | `https://hgvubq1ga7.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_context_get` |
+| List contexts | GET | `https://pr0dbmvk19.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_contexts_get` |
+| Delete context | DELETE | `https://aj8uetqx8e.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_context_delete` |
+
+Context creation accepts an array of document MD5 hashes. Synthesis is synchronous via Bedrock (5–15s). All `user_id` params are Google OAuth subject IDs.
+
 All endpoints use no auth header. GET params as query string, POST params as JSON body.
 
 ### Key Files
@@ -80,6 +91,7 @@ All endpoints use no auth header. GET params as query string, POST params as JSO
 | `v2/src/lib/access.ts` | Access control logic |
 | `v2/src/lib/supabase.ts` | Supabase client |
 | `v2/src/lib/stripe.ts` | Stripe billing helpers |
+| `v2/src/lib/context-store.ts` | Lambda API wrapper — context CRUD (create/get/list/delete) |
 | `v2/src/lib/context-processor.ts` | Document text extraction + Claude context synthesis |
 
 ### Access Control Tiers
