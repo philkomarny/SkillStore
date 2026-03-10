@@ -1,25 +1,44 @@
-import { NextResponse } from "next/server";
-
-// [CONTEXT-STORE] entire route replaced — remove comment block to roll back to Supabase/Claude flow
-// This route will be superseded by createContext() in context-store.ts once document APIs (#14)
-// are wired. createContext() calls POST /contexts Lambda with name + MD5 array.
-// Until then, context creation still goes through the ContextBuilder → /api/context/profiles
-// (POST to create staging record) → /api/context/upload (file upload) → this route (synthesis).
-/*
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getUserProfile } from "@/lib/users";
-import { getClient } from "@/lib/supabase";
-import { extractText, generateContext, compressImageForClaude } from "@/lib/context-processor";
-*/
+// [CONTEXT-STORE] replaced — remove comment block to roll back to Supabase/Claude flow
+import { createContext } from "@/lib/context-store";
 
-// Allow up to 300s for file processing + Claude API call (Vercel Pro)
+// Allow up to 300s for Bedrock synthesis
 export const maxDuration = 300;
 
-export async function POST() {
-  return NextResponse.json(
-    { error: "Context synthesis is now handled by the Lambda context API. See issue #18." },
-    { status: 503 }
-  );
+/**
+ * POST /api/context/process
+ * Body: { name: string, documents: string[] }  — documents is an array of MD5 hashes
+ *
+ * Calls Lambda POST /contexts with name + MD5 array.
+ * Lambda fetches plain text for each MD5 from the document store (#14), runs Bedrock synthesis,
+ * and returns { contextId, status: "ready" } synchronously (5–15s typical).
+ */
+export async function POST(request: NextRequest) {
+  const session = await auth();
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // [CONTEXT-STORE] replaced — remove comment block to roll back
+  /*
+  // Original flow: contextProfileId → fetch files from Supabase Storage →
+  // extract text locally → call Claude for synthesis → update context_profiles record
+  // See POST_ORIGINAL below (preserved for rollback).
+  */
+  try {
+    const { name, documents } = await request.json();
+    if (!name || !Array.isArray(documents) || documents.length === 0) {
+      return NextResponse.json({ error: "name and documents[] are required" }, { status: 400 });
+    }
+
+    const result = await createContext(name, documents, session.user.id);
+    return NextResponse.json(result);
+  } catch (err: any) {
+    console.error("Context process error:", err?.message || err);
+    return NextResponse.json({ error: err?.message || "Failed to build context" }, { status: 500 });
+  }
+  // [/CONTEXT-STORE]
 }
 
 /*

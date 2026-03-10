@@ -15,9 +15,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
-  const { files, uploadFiles, hasUploadedFiles } = useFileUpload({
-    contextProfileId: profileId || "",
-  });
+  const { files, uploadFiles, hasUploadedFiles, md5s } = useFileUpload();
 
   const handleCreateProfile = async () => {
     if (!name.trim()) return;
@@ -44,7 +42,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
   };
 
   const handleBuildContext = async () => {
-    if (!profileId) return;
+    if (!profileId || md5s.length === 0) return;
     setBuilding(true);
     setError(null);
 
@@ -52,7 +50,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
       const res = await fetch("/api/context/process", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contextProfileId: profileId }),
+        body: JSON.stringify({ name: name.trim(), documents: md5s }),
       });
 
       let data: any;
@@ -64,20 +62,20 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
       }
 
       if (!res.ok) {
-        setError(data.error || "Failed to build context. The file may be too large.");
+        setError(data.error || "Failed to build context.");
         setBuilding(false);
         return;
       }
 
       onCreated({
-        id: profileId,
+        id: data.id,
         name: name.trim(),
-        status: "ready",
-        version: data.version || 1,
-        context_markdown: data.context,
+        status: data.status,
+        version: 1,
+        context_markdown: null,
       });
     } catch (err: any) {
-      setError(err?.message || "Something went wrong. The request may have timed out — try with a smaller file.");
+      setError(err?.message || "Something went wrong.");
     } finally {
       setBuilding(false);
     }
