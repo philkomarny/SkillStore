@@ -404,7 +404,7 @@ def test_newsletter_detail_content_quality(browser):
 # Does NOT click "Build Context" — scope is upload only, not synthesis.
 # Does NOT assert md5 value — only that the upload completed without error.
 
-AUTH_STATE = Path(__file__).parent / "auth-state.json"
+AUTH_STATE = Path(__file__).parent.parent / "auth-state.json"
 FIXTURE_DOC = Path(__file__).parent / "fixtures" / "test-doc.txt"
 
 

@@ -1,14 +1,28 @@
-[tool.poetry]
+[project]
 name = "skillstore-smoke"
 version = "0.1.0"
 description = "Playwright smoke tests for eduskillsmp.com"
-authors = []
-package-mode = false
+readme = "README.md"
+requires-python = ">=3.11,<4.0"
+dependencies = [
+    "playwright>=1.40",
+]
 
-[tool.poetry.dependencies]
-python = "^3.11"
-playwright = "^1.40"
+[tool.poetry]
+packages = [{include = "skillstore_smoke"}]
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.15.0"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+python_files = ["test_*.py", "*_test.py"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+timeout = 120
+
+[tool.ruff]
+line-length = 120

@@ -1,14 +1,39 @@
-.PHONY: all install test setup-auth
+# -------------------------------------------------------------------------
+# Makefile for skillstore-smoke
+# -------------------------------------------------------------------------
 
-all: install test
+# -------------------------------------------------------------------------
+# Full pipeline: install, lint, test
+# -------------------------------------------------------------------------
+all:
+	make install
+	make lint
+	make test
 
+# -------------------------------------------------------------------------
+# Install all dependencies
+# -------------------------------------------------------------------------
 install:
+	poetry lock
+	poetry check
+	poetry update
 	poetry install
 	poetry run playwright install firefox
 
+# -------------------------------------------------------------------------
+# Run all smoke tests
+# -------------------------------------------------------------------------
 test:
-	poetry run python smoke_test.py
+	poetry run python tests/smoke_test.py
 
+# -------------------------------------------------------------------------
+# Lint
+# -------------------------------------------------------------------------
+lint:
+	poetry run ruff check .
+
+# -------------------------------------------------------------------------
 # Run once to log in and save session to auth-state.json
+# -------------------------------------------------------------------------
 setup-auth:
 	env $$(cat .env.test | xargs) poetry run python setup_auth.py
