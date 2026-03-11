@@ -1,2 +1,2 @@
 #!/bin/bash
-../../resources/scripts/aws/lambdas/update-lambda.sh --repo-name esm-live-list-skills-repo --platform linux/arm64
+../../scripts/update-lambda.sh --repo-name esm-live-list-skills-repo --platform linux/arm64
