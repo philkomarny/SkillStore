@@ -24,7 +24,7 @@ install:
 # Run all smoke tests
 # -------------------------------------------------------------------------
 test:
-	poetry run python tests/smoke_test.py
+	poetry run python -m skillstore_smoke.runner
 
 # -------------------------------------------------------------------------
 # Lint

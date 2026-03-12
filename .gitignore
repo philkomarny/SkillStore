@@ -8,6 +8,10 @@
 # Dependencies
 web/node_modules/
 
+# Python
+__pycache__/
+*.pyc
+
 # Next.js
 web/.next/
 web/out/

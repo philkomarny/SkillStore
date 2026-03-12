@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11,<4.0"
 dependencies = [
     "playwright>=1.40",
+    "boto3>=1.34",
 ]
 
 [tool.poetry]
@@ -17,12 +18,6 @@ ruff = "^0.15.0"
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.pytest.ini_options]
-python_files = ["test_*.py", "*_test.py"]
-python_functions = ["test_*"]
-addopts = "-v --tb=short"
-timeout = 120
 
 [tool.ruff]
 line-length = 120
