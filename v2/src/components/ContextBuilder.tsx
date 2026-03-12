@@ -10,43 +10,21 @@ interface ContextBuilderProps {
 
 export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderProps) {
   const [name, setName] = useState("");
-  const [profileId, setProfileId] = useState<string | null>(null);
+  const [nameConfirmed, setNameConfirmed] = useState(false);
   const [building, setBuilding] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
 
   const { files, uploadFiles, hasUploadedFiles, md5s } = useFileUpload();
 
-  const handleCreateProfile = async () => {
+  const handleConfirmName = () => {
     if (!name.trim()) return;
-    setError(null);
-    console.log("[ContextBuilder] Creating profile:", name.trim());
-
-    try {
-      const res = await fetch("/api/context/profiles", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim() }),
-      });
-
-      if (!res.ok) {
-        const d = await res.json();
-        console.warn("[ContextBuilder] Profile creation failed:", d.error);
-        setError(d.error || "Failed to create profile");
-        return;
-      }
-
-      const { profile } = await res.json();
-      console.log("[ContextBuilder] Profile created:", profile.id);
-      setProfileId(profile.id);
-    } catch (err: any) {
-      console.error("[ContextBuilder] Profile creation error:", err?.message);
-      setError(err?.message || "Network error");
-    }
+    console.log("[ContextBuilder] Name confirmed:", name.trim());
+    setNameConfirmed(true);
   };
 
   const handleBuildContext = async () => {
-    if (!profileId || md5s.length === 0) return;
+    if (!nameConfirmed || md5s.length === 0) return;
     setBuilding(true);
     setError(null);
     console.log("[ContextBuilder] Building context:", { name: name.trim(), documents: md5s });
@@ -93,11 +71,11 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
     (e: React.DragEvent) => {
       e.preventDefault();
       setDragActive(false);
-      if (e.dataTransfer.files.length && profileId) {
+      if (e.dataTransfer.files.length && nameConfirmed) {
         uploadFiles(e.dataTransfer.files);
       }
     },
-    [profileId, uploadFiles]
+    [nameConfirmed, uploadFiles]
   );
 
   return (
@@ -116,7 +94,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
 
       <div className="px-4 py-4 space-y-4">
         {/* Step 1: Name the context */}
-        {!profileId && (
+        {!nameConfirmed && (
           <div>
             <label className="block text-xs font-medium text-muted mb-1.5">
               Name your context file
@@ -129,11 +107,11 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
                 placeholder='e.g. "Admissions 2024" or "Brand Guide"'
                 className="flex-1 rounded-lg border border-terminal-border px-3 py-2 text-sm text-[#1a1a1a] placeholder-tertiary focus:border-accent focus:ring-1 focus:ring-accent outline-none"
                 onKeyDown={(e) => {
-                  if (e.key === "Enter" && name.trim()) handleCreateProfile();
+                  if (e.key === "Enter" && name.trim()) handleConfirmName();
                 }}
               />
               <button
-                onClick={handleCreateProfile}
+                onClick={handleConfirmName}
                 disabled={!name.trim()}
                 className="rounded-lg bg-terminal-dark px-4 py-2 text-sm font-medium text-white hover:bg-terminal-titlebar disabled:opacity-40 transition-colors"
               >
@@ -144,7 +122,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
         )}
 
         {/* Step 2: Upload documents */}
-        {profileId && (
+        {nameConfirmed && (
           <>
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 rounded-full bg-success"></div>
