@@ -35,8 +35,8 @@ export default function AddToRefinery({ skillSlug }: AddToRefineryProps) {
 
       if (res.ok) {
         const data = await res.json();
-        console.log("[AddToRefinery] Skill copied → userSkill.id:", data.userSkill.id, "— redirecting to dashboard");
-        router.push(`/dashboard?skill=${data.userSkill.id}`);
+        console.log("[AddToRefinery] Skill copied → slug:", data.userSkill.slug, "— redirecting to dashboard");
+        router.push(`/dashboard?skill=${data.userSkill.slug}`);
       } else {
         const data = await res.json();
         console.warn("[AddToRefinery] Copy failed:", data.error, `(HTTP ${res.status})`);
