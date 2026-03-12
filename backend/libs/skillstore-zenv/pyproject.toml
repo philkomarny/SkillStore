@@ -1,0 +1,28 @@
+[project]
+name = "skillstore-zenv"
+version = "0.1.0"
+description = "Dummy venv for VS Code code completion across all Lambda functions"
+authors = [
+    {name = "Craig Trim",email = "ctrim@maryville.edu"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.38.15",
+    "python-docx>=1.1.0",
+    "python-pptx>=0.6.23",
+    "pdfplumber>=0.11.0",
+    "pdf2image>=1.17.0",
+    "pytesseract>=0.3.10",
+    "Pillow>=10.0.0",
+]
+
+[tool.poetry]
+packages = [{include = "skillstore_zenv", from = "src"}]
+
+[tool.poetry.dependencies]
+skillstore-base = {path = "../skillstore-base", develop = true}
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
