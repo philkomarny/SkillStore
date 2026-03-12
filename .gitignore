@@ -22,3 +22,5 @@ ghauth
 # Test secrets and session state — never commit
 skillstore-smoke/.env.test
 skillstore-smoke/auth-state.json
+backend/libs/skillstore-smoke/.env.test
+backend/libs/skillstore-smoke/auth-state.json
