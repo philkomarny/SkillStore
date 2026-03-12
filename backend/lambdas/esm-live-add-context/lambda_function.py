@@ -37,8 +37,9 @@ from skillstore_base import configure_logger, isnullstr, validate_google_sub
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-_S01_PREFIX = "eduskillsmp/documents/s01"
-_S02_PREFIX = "eduskillsmp/documents/s02"
+# S3 layout — https://github.com/philkomarny/SkillStore/issues/16
+_STORE_PREFIX = "eduskillsmp/documents/store"
+_TEXT_STORE_PREFIX = "eduskillsmp/documents/text-store"
 _CONTEXTS_PREFIX = "eduskillsmp/contexts"  # https://github.com/philkomarny/SkillStore/issues/26
 
 # Claude Haiku 4.5 via Bedrock cross-region inference
@@ -67,11 +68,11 @@ logger: Logger = configure_logger(__name__)
 # ---------------------------------------------------------------------------
 
 def _metadata_key(md5: str) -> str:
-    return f"{_S01_PREFIX}/{md5[:2]}/{md5}.json"
+    return f"{_STORE_PREFIX}/{md5[:2]}/{md5}.json"
 
 
 def _text_key(md5: str) -> str:
-    return f"{_S02_PREFIX}/{md5[:2]}/{md5}.txt"
+    return f"{_TEXT_STORE_PREFIX}/{md5[:2]}/{md5}.txt"
 
 
 def _context_metadata_key(user_id: str, context_id: str) -> str:

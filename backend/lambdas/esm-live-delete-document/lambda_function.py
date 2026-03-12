@@ -31,10 +31,10 @@ from skillstore_base import configure_logger, isnullstr
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-# S3 layout — see esm-live-upload-document for full structure diagram.
-# This Lambda only touches the user library; the global store is never modified.
-#   User library:  eduskillsmp/documents/library/<user_id>/<md5>.json
-_LIBRARY_PREFIX = "eduskillsmp/documents/library"
+# S3 layout — https://github.com/philkomarny/SkillStore/issues/16
+# This Lambda only touches the user store; the global store is never modified.
+#   user-store: eduskillsmp/documents/user-store/<user_id>/<md5>.json
+_USER_STORE_PREFIX = "eduskillsmp/documents/user-store"
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -48,7 +48,7 @@ logger: Logger = configure_logger(__name__)
 
 def _library_key(user_id: str, md5: str) -> str:
     """Return the S3 key for a user's library reference to a document."""
-    return f"{_LIBRARY_PREFIX}/{user_id}/{md5}.json"
+    return f"{_USER_STORE_PREFIX}/{user_id}/{md5}.json"
 
 
 def _in_library(user_id: str, md5: str) -> bool:

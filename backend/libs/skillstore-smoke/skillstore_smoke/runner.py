@@ -26,6 +26,7 @@ from . import (
     test_newsletter_refinery_sidebar,
     test_newsletter_content_quality,
     test_document_upload,
+    test_document_upload_lifecycle,
     test_user_skill_lifecycle,
 )
 from .helpers import report_and_exit
@@ -52,6 +53,7 @@ ALL_TESTS = [
     test_newsletter_refinery_sidebar,
     test_newsletter_content_quality,
     test_document_upload,
+    test_document_upload_lifecycle,
     test_user_skill_lifecycle,
 ]
 

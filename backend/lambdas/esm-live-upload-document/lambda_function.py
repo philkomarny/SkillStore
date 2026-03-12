@@ -74,13 +74,13 @@ _OCR_LAMBDA: dict[str, str] = {
 
 _SUPPORTED_EXTENSIONS: frozenset[str] = frozenset(_OCR_LAMBDA)
 
-# S3 layout (all under bucket BUCKET_NAME) — philkomarny/SkillStore#16:
-#   s01 — raw uploads:  eduskillsmp/documents/s01/<md5[:2]>/<md5>.json   ← metadata
-#                       eduskillsmp/documents/s01/<md5[:2]>/<md5>.<ext>  ← original file
-#   s02 — extracted:    eduskillsmp/documents/s02/<md5[:2]>/<md5>.txt    ← plain text
-#   User library:       eduskillsmp/documents/library/<user_id>/<md5>.json
-_S01_PREFIX = "eduskillsmp/documents/s01"
-_LIBRARY_PREFIX = "eduskillsmp/documents/library"
+# S3 layout (all under bucket BUCKET_NAME) — https://github.com/philkomarny/SkillStore/issues/16:
+#   store      — raw uploads:  eduskillsmp/documents/store/<md5[:2]>/<md5>.json   ← metadata
+#                               eduskillsmp/documents/store/<md5[:2]>/<md5>.<ext>  ← original file
+#   text-store — extracted:    eduskillsmp/documents/text-store/<md5[:2]>/<md5>.txt  ← plain text
+#   user-store — user library: eduskillsmp/documents/user-store/<user_id>/<md5>.json
+_STORE_PREFIX = "eduskillsmp/documents/store"
+_USER_STORE_PREFIX = "eduskillsmp/documents/user-store"
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -95,17 +95,17 @@ logger: Logger = configure_logger(__name__)
 
 def _metadata_key(md5: str) -> str:
     """Return the S3 key for a document's metadata JSON."""
-    return f"{_S01_PREFIX}/{md5[:2]}/{md5}.json"
+    return f"{_STORE_PREFIX}/{md5[:2]}/{md5}.json"
 
 
 def _original_key(md5: str, ext: str) -> str:
     """Return the S3 key for a document's original file bytes."""
-    return f"{_S01_PREFIX}/{md5[:2]}/{md5}{ext}"
+    return f"{_STORE_PREFIX}/{md5[:2]}/{md5}{ext}"
 
 
 def _library_key(user_id: str, md5: str) -> str:
     """Return the S3 key for a user's library reference to a document."""
-    return f"{_LIBRARY_PREFIX}/{user_id}/{md5}.json"
+    return f"{_USER_STORE_PREFIX}/{user_id}/{md5}.json"
 
 
 def _document_exists(md5: str) -> bool:

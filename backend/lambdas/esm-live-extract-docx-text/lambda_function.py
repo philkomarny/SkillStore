@@ -44,12 +44,12 @@ from skillstore_base import configure_logger, isnullstr
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-# S3 layout — philkomarny/SkillStore#16:
-#   s01 — raw uploads:  eduskillsmp/documents/s01/<md5[:2]>/<md5>.json
-#                       eduskillsmp/documents/s01/<md5[:2]>/<md5>.<ext>
-#   s02 — extracted:    eduskillsmp/documents/s02/<md5[:2]>/<md5>.txt
-_S01_PREFIX = "eduskillsmp/documents/s01"
-_S02_PREFIX = "eduskillsmp/documents/s02"
+# S3 layout — https://github.com/philkomarny/SkillStore/issues/16:
+#   store      — raw uploads:  eduskillsmp/documents/store/<md5[:2]>/<md5>.json
+#                               eduskillsmp/documents/store/<md5[:2]>/<md5>.<ext>
+#   text-store — extracted:    eduskillsmp/documents/text-store/<md5[:2]>/<md5>.txt
+_STORE_PREFIX = "eduskillsmp/documents/store"
+_TEXT_STORE_PREFIX = "eduskillsmp/documents/text-store"
 
 _SUPPORTED_EXTENSIONS = {".docx", ".pptx", ".txt", ".md"}
 
@@ -59,17 +59,17 @@ logger: Logger = configure_logger(__name__)
 
 def _metadata_key(md5: str) -> str:
     """Return the S3 key for a document's metadata.json."""
-    return f"{_S01_PREFIX}/{md5[:2]}/{md5}.json"
+    return f"{_STORE_PREFIX}/{md5[:2]}/{md5}.json"
 
 
 def _original_key(md5: str, ext: str) -> str:
     """Return the S3 key for a document's original file bytes."""
-    return f"{_S01_PREFIX}/{md5[:2]}/{md5}{ext}"
+    return f"{_STORE_PREFIX}/{md5[:2]}/{md5}{ext}"
 
 
 def _text_key(md5: str) -> str:
     """Return the S3 key for a document's extracted text."""
-    return f"{_S02_PREFIX}/{md5[:2]}/{md5}.txt"
+    return f"{_TEXT_STORE_PREFIX}/{md5[:2]}/{md5}.txt"
 
 
 def _text_already_extracted(md5: str) -> bool:

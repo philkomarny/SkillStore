@@ -39,11 +39,11 @@ from skillstore_base import configure_logger, isnullstr
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-# S3 layout — philkomarny/SkillStore#16:
-#   s01 — raw uploads:  eduskillsmp/documents/s01/<md5[:2]>/<md5>.json
-#   User library:       eduskillsmp/documents/library/<user_id>/<md5>.json
-_S01_PREFIX = "eduskillsmp/documents/s01"
-_LIBRARY_PREFIX = "eduskillsmp/documents/library"
+# S3 layout — https://github.com/philkomarny/SkillStore/issues/16:
+#   store      — raw uploads:  eduskillsmp/documents/store/<md5[:2]>/<md5>.json
+#   user-store — user library: eduskillsmp/documents/user-store/<user_id>/<md5>.json
+_STORE_PREFIX = "eduskillsmp/documents/store"
+_USER_STORE_PREFIX = "eduskillsmp/documents/user-store"
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -57,12 +57,12 @@ logger: Logger = configure_logger(__name__)
 
 def _metadata_key(md5: str) -> str:
     """Return the S3 key for a document's metadata JSON in the global store."""
-    return f"{_S01_PREFIX}/{md5[:2]}/{md5}.json"
+    return f"{_STORE_PREFIX}/{md5[:2]}/{md5}.json"
 
 
 def _library_prefix(user_id: str) -> str:
     """Return the S3 prefix for listing all of a user's library references."""
-    return f"{_LIBRARY_PREFIX}/{user_id}/"
+    return f"{_USER_STORE_PREFIX}/{user_id}/"
 
 
 def _read_status(md5: str) -> str:
