@@ -4,21 +4,38 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-SkillStore is an enterprise skill catalog for Claude Code, targeting higher education institutions. It has two parts:
+SkillStore is an enterprise skill catalog for Claude Code, targeting higher education institutions. It has three parts:
 1. **Skills content** — `SKILL.md` files organized under `skills/<department>/<skill-name>/`
 2. **Web catalog** — a Next.js app in `v2/` for browsing, discovering, and submitting skills
+3. **Backend** — Python Lambda functions in `backend/` that power the API (skill store, document store, context store)
 
-> **Note:** `web/` is legacy and inactive. All active development happens in `v2/`.
+> **Note:** `web/` is legacy and inactive. All active development happens in `v2/` and `backend/`.
 
 ## Development Commands
 
-All commands run from `v2/`:
+### Frontend (v2/)
 
 ```bash
 cd v2
 npm run dev      # Start dev server at localhost:3000
 npm run build    # Production build
 npm run lint     # ESLint
+```
+
+### Backend (backend/)
+
+```bash
+# Lambda integration tests (requires Poetry)
+cd backend/tests
+poetry install
+poetry run pytest                          # Run all Lambda integration tests
+poetry run pytest lambdas/test_document_api.py  # Run a single test file
+poetry run pytest -k test_upload           # Run tests matching a pattern
+
+# Shared library — propagate skillstore_base wheel to all Lambdas
+cd backend/lambdas
+make copy-wheels                           # Copy from default source Lambda
+make copy-wheels SOURCE=esm-live-list-skills  # Copy from a specific Lambda
 ```
 
 ## Environment Setup
@@ -67,6 +84,17 @@ To roll back to GitHub/Supabase Storage: uncomment the `[SKILL-STORE]` blocks an
 | Add skill content | POST | `https://nm260lbj42.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_skill_content_post` |
 | Update skill content | POST | `https://eyq3dgqjs3.execute-api.us-west-2.amazonaws.com/prod/esm_live_update_skill_content_post` |
 
+**Document Lambda Endpoints** (`v2/src/lib/document-store.ts`):
+
+| Operation | Method | URL |
+|---|---|---|
+| Upload document | POST | `https://plvh12o05c.execute-api.us-west-2.amazonaws.com/prod/esm_live_upload_document_post` |
+| Get document | GET | `https://ikt0pbkcx1.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_document_get` |
+| List documents | GET | `https://durik7cyze.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_documents_get` |
+| Delete document | DELETE | `https://l9h3c7vji5.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_document_delete` |
+
+Upload returns `{ md5, status }`. Text extraction (PDF, DOCX, images) is triggered automatically by Lambda-to-Lambda invocation — no separate extraction endpoint. `getDocument` returns `null` on 404; plain text is only available when `status: "ready"`. Delete removes from user's library only — the global content-addressable record (keyed by MD5) is preserved for other users.
+
 **Context Lambda Endpoints** (`v2/src/lib/context-store.ts`):
 
 | Operation | Method | URL |
@@ -91,8 +119,34 @@ All endpoints use no auth header. GET params as query string, POST params as JSO
 | `v2/src/lib/access.ts` | Access control logic |
 | `v2/src/lib/supabase.ts` | Supabase client |
 | `v2/src/lib/stripe.ts` | Stripe billing helpers |
+| `v2/src/lib/document-store.ts` | Lambda API wrapper — global content-addressable document store (upload/get/list/delete by MD5) |
 | `v2/src/lib/context-store.ts` | Lambda API wrapper — context CRUD (create/get/list/delete) |
 | `v2/src/lib/context-processor.ts` | Document text extraction + Claude context synthesis |
+| `v2/src/auth.ts` | next-auth config — Google OAuth, JWT session, user upsert on sign-in |
+
+### Next.js API Routes
+
+Routes in `v2/src/app/api/`:
+
+| Route | Purpose |
+|-------|---------|
+| `auth/[...nextauth]` | Google OAuth sign-in/sign-out |
+| `skills/` | List/search skills |
+| `skills/submit` | Submit new skill to catalog |
+| `skills/copy` | Copy base skill to user's Refinery |
+| `skills/refine` | AI refinement of skill + context |
+| `skills/[slug]/vouch` | Vouch for a skill |
+| `skills/[slug]/download` | Download skill as SKILL.md |
+| `user/` | Get/update user profile |
+| `user-skills/[id]` | CRUD for user's copied skills |
+| `context/upload` | Upload document for context creation |
+| `context/process` | Claude-powered context synthesis from documents |
+| `context/profiles` | CRUD for named context profiles |
+| `context/[slug]` | Legacy per-skill context |
+| `checkout/` | Stripe checkout session creation |
+| `billing/portal` | Stripe customer portal redirect |
+| `webhooks/stripe` | Stripe webhook handler |
+| `cron/review-queue` | Automated bot verification (Vercel cron) |
 
 ### Access Control Tiers
 
@@ -126,28 +180,51 @@ Key tables in `v2/supabase/schema.sql`:
 The `/dashboard` page is the Skills Refinery — users copy base skills, upload institutional documents to form contexts, then refine skills against those contexts.
 
 - **Contexts** are AI-synthesized markdown from uploaded documents, not the documents themselves
-- **Documents** are planned to become a global content-addressable store keyed by MD5 hash (see issue #14)
+- **Documents** are stored in a global content-addressable store keyed by MD5 hash
 - **Context formation** is currently handled by `POST /api/context/process` which calls Claude to synthesize uploaded files
 - **Skill refinement** calls `POST /api/skills/refine` with a skill + context
 
 ### Testing
 
-No Jest/Vitest. Two layers of validation:
+No Jest/Vitest in the frontend. Three layers of validation:
 
 ```bash
-cd v2 && npm run lint                   # TypeScript + ESLint
+# 1. Frontend lint
+cd v2 && npm run lint
 
-# Playwright E2E against https://www.eduskillsmp.com
-cd skillstore-smoke && make test        # Run smoke tests
-cd skillstore-smoke && make setup-auth  # One-time: save auth session for authenticated tests
-cd skillstore-smoke && make all         # Install deps + run tests
+# 2. Backend Lambda integration tests (pytest)
+cd backend/tests && poetry run pytest
+
+# 3. Playwright E2E smoke tests against https://www.eduskillsmp.com
+cd backend/libs/skillstore-smoke && make test        # Run smoke tests
+cd backend/libs/skillstore-smoke && make setup-auth  # One-time: save auth session
+cd backend/libs/skillstore-smoke && make all         # Install deps + run tests
 ```
 
 The smoke tests use Firefox (headless Chromium is blocked by Cloudflare). `auth-state.json` is gitignored — run `make setup-auth` once to generate it.
 
+### Vercel Cron
+
+A cron job runs `POST /api/cron/review-queue` every 5 minutes (configured in `vercel.json`) for automated bot verification of skills.
+
 ### Deployed Site
 
 `https://www.eduskillsmp.com` — hosted on Vercel, auto-deploys on push to `main`.
+
+### Backend Architecture
+
+`backend/` contains the Python Lambda functions behind the API Gateway endpoints:
+
+- **`backend/lambdas/`** — Each `esm-live-*` directory is a standalone Lambda (e.g., `esm-live-upload-document`, `esm-live-add-context`). Each has its own `lambda_function.py` entry point, `Dockerfile`, and `update.sh` deploy script.
+- **`backend/libs/skillstore-base/`** — Shared Python library (`skillstore_base` wheel) distributed to all Lambdas via `make copy-wheels`. Contains common utilities used across Lambdas.
+- **`backend/libs/skillstore-smoke/`** — Playwright-based E2E smoke tests against the production site.
+- **`backend/tests/`** — pytest integration tests that hit the live Lambda endpoints directly (30s timeout per test).
+
+Document upload triggers a Lambda-to-Lambda chain: upload → text extraction (PDF/DOCX/image-specific Lambdas) → stored as extracted text.
+
+Beyond the API-facing Lambdas listed above, internal Lambdas handle: text extraction (`esm-live-extract-pdf-text`, `esm-live-extract-docx-text`, `esm-live-extract-image-text`), Google auth mapping (`esm-live-add-google-auth`, `esm-live-get-google-auth`), bulk operations (`esm-live-bulk-import-skills`, `esm-live-export-skills`), and usage tracking (`esm-live-add-item-count`, `esm-live-get-item-count`).
+
+- **`backend/scripts/`** — Shell scripts for Lambda deployment automation (build, push to ECR, update function code).
 
 ### Enterprise Context Pattern
 
