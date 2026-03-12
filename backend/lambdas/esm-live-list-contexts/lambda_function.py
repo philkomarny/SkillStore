@@ -37,7 +37,7 @@ from skillstore_base import configure_logger, validate_google_sub
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-_CONTEXTS_PREFIX = "eduskillsmp/contexts"  # https://github.com/febelabs/skillflow/issues/139
+_CONTEXTS_PREFIX = "eduskillsmp/contexts"  # https://github.com/philkomarny/SkillStore/issues/26
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",
@@ -52,7 +52,7 @@ logger: Logger = configure_logger(__name__)
 def _list_contexts_for_user(user_id: str) -> list[dict]:
     """List all contexts for a user by scanning their S3 prefix.
 
-    https://github.com/febelabs/skillflow/issues/139
+    https://github.com/philkomarny/SkillStore/issues/26
     """
     prefix = f"{_CONTEXTS_PREFIX}/{user_id}/"
     paginator = s3_client.get_paginator("list_objects_v2")
@@ -104,8 +104,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     logger.info(f"Incoming Event: {dumps(event)}")
 
     qs = event.get("queryStringParameters") or {}
-    user_id: str = (qs.get("user_id") or "").strip()  # https://github.com/febelabs/skillflow/issues/139
-    err = validate_google_sub(user_id)  # https://github.com/febelabs/skillflow/issues/140
+    user_id: str = (qs.get("user_id") or "").strip()  # https://github.com/philkomarny/SkillStore/issues/26
+    err = validate_google_sub(user_id)  # https://github.com/philkomarny/SkillStore/issues/27
     if err:
         return _error(err, status=400)
 

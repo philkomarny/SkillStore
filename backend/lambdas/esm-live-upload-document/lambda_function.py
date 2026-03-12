@@ -47,7 +47,7 @@ from skillstore_base import configure_logger, isnullstr, validate_google_sub
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-# https://github.com/febelabs/skillflow/issues/138
+# https://github.com/philkomarny/SkillStore/issues/25
 # API Gateway REST hard limit is 10 MB; base64 adds ~33% overhead, leaving ~7.5 MB of usable
 # raw file capacity. Lambda direct-invoke caps at 6 MB (~4.5 MB raw). We enforce 7 MB here —
 # safely below the API Gateway ceiling — so the Lambda rejects oversized payloads with a clean
@@ -206,7 +206,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         return _error("Missing required parameter: 'filename'", status=400)
 
     user_id: str = (params.get("user_id") or "").strip()
-    err = validate_google_sub(user_id)  # https://github.com/febelabs/skillflow/issues/140
+    err = validate_google_sub(user_id)  # https://github.com/philkomarny/SkillStore/issues/27
     if err:
         return _error(err, status=400)
 
@@ -222,7 +222,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     except Exception as exc:
         return _error(f"'file_content' is not valid base64: {exc}", status=400)
 
-    if len(raw_bytes) > _MAX_FILE_BYTES:  # https://github.com/febelabs/skillflow/issues/138
+    if len(raw_bytes) > _MAX_FILE_BYTES:  # https://github.com/philkomarny/SkillStore/issues/25
         mb = len(raw_bytes) / (1024 * 1024)
         return _error(f"File too large: {mb:.1f} MB — limit is 7 MB", status=413)
 

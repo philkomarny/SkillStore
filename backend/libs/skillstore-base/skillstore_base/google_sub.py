@@ -6,12 +6,12 @@ It is a numeric string — digits only — typically around 21 characters long.
 The OpenID Connect spec (which Google implements) caps it at 255 ASCII chars.
 
 References:
-    https://github.com/febelabs/skillflow/issues/140
+    https://github.com/philkomarny/SkillStore/issues/27
     https://developers.google.com/identity/gsi/web/guides/verify-google-id-token
     https://openid.net/specs/openid-connect-core-1_0.html
 """
 
-# https://github.com/febelabs/skillflow/issues/140
+# https://github.com/philkomarny/SkillStore/issues/27
 _SENTINEL_VALUES: frozenset[str] = frozenset({
     "null",
     "undefined",
@@ -31,7 +31,7 @@ _MIN_LENGTH: int = 6
 def validate_google_sub(sub: str) -> str | None:
     """Validate a Google OAuth subject ID.
 
-    https://github.com/febelabs/skillflow/issues/140
+    https://github.com/philkomarny/SkillStore/issues/27
 
     Args:
         sub: The ``user_id`` value received from the caller (already stripped).

@@ -39,7 +39,7 @@ BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
 _S01_PREFIX = "eduskillsmp/documents/s01"
 _S02_PREFIX = "eduskillsmp/documents/s02"
-_CONTEXTS_PREFIX = "eduskillsmp/contexts"  # https://github.com/febelabs/skillflow/issues/139
+_CONTEXTS_PREFIX = "eduskillsmp/contexts"  # https://github.com/philkomarny/SkillStore/issues/26
 
 # Claude Haiku 4.5 via Bedrock cross-region inference
 _MODEL_ID = "us.anthropic.claude-haiku-4-5-20251001-v1:0"
@@ -75,12 +75,12 @@ def _text_key(md5: str) -> str:
 
 
 def _context_metadata_key(user_id: str, context_id: str) -> str:
-    # https://github.com/febelabs/skillflow/issues/139
+    # https://github.com/philkomarny/SkillStore/issues/26
     return f"{_CONTEXTS_PREFIX}/{user_id}/{context_id}/metadata.json"
 
 
 def _context_output_key(user_id: str, context_id: str) -> str:
-    # https://github.com/febelabs/skillflow/issues/139
+    # https://github.com/philkomarny/SkillStore/issues/26
     return f"{_CONTEXTS_PREFIX}/{user_id}/{context_id}/output.json"
 
 
@@ -204,8 +204,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if not isinstance(documents, list) or not documents:
         return _error("'documents' must be a non-empty list of MD5 hashes", status=400)
 
-    user_id: str = (params.get("user_id") or "").strip()  # https://github.com/febelabs/skillflow/issues/139
-    err = validate_google_sub(user_id)  # https://github.com/febelabs/skillflow/issues/140
+    user_id: str = (params.get("user_id") or "").strip()  # https://github.com/philkomarny/SkillStore/issues/26
+    err = validate_google_sub(user_id)  # https://github.com/philkomarny/SkillStore/issues/27
     if err:
         return _error(err, status=400)
 
