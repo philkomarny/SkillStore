@@ -30,7 +30,8 @@ export default function RefineryWorkspace({
   const [renameValue, setRenameValue] = useState("");
   const [renaming, setRenaming] = useState(false);
 
-  const selectedSkill = skills.find((s) => s.id === selectedSkillId);
+  // #30: skill identifier is now slug, not Supabase UUID
+  const selectedSkill = skills.find((s) => s.slug === selectedSkillId);
   const selectedContext = contextProfiles.find((c) => c.id === selectedContextId);
 
   const startRename = () => {

@@ -2,9 +2,9 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { getUserProfile } from "@/lib/users";
-// [CONTEXT-STORE] replaced — remove comment block to roll back
-// import { getClient } from "@/lib/supabase";
 import { listContexts } from "@/lib/context-store";
+// [USER-SKILL-STORE] replaced — https://github.com/philkomarny/SkillStore/issues/30
+import { listUserSkills } from "@/lib/user-skill-store";
 import DashboardClient from "@/components/DashboardClient";
 
 export const metadata = {
@@ -23,29 +23,9 @@ export default async function DashboardPage({
 
   const profile = await getUserProfile(session.user.id);
 
-  const supabase = (await import("@/lib/supabase")).getClient();
-
-  // Fetch user's skills
-  const { data: userSkills } = (await supabase
-    .from("user_skills")
-    .select("*")
-    .eq("user_id", profile?.id)
-    .order("updated_at", { ascending: false })) as { data: any[] | null };
-
-  // [CONTEXT-STORE] replaced — remove comment block to roll back
-  /*
-  const { data: contextProfiles } = (await supabase
-    .from("context_profiles")
-    .select("*")
-    .eq("user_id", profile?.id)
-    .order("updated_at", { ascending: false })) as { data: any[] | null };
-  const contexts = contextProfiles || [];
-  */
-  // user_id for Lambda = Google OAuth subject ID (session.user.id)
+  // [USER-SKILL-STORE] replaced — https://github.com/philkomarny/SkillStore/issues/30
+  const skills = await listUserSkills(session.user.id).catch(() => []);
   const contexts = await listContexts(session.user.id).catch(() => []);
-  // [/CONTEXT-STORE]
-
-  const skills = userSkills || [];
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12">

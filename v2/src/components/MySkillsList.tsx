@@ -27,7 +27,7 @@ export default function MySkillsList({
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const handleDelete = async (id: string) => {
-    const skill = skills.find((s) => s.id === id);
+    const skill = skills.find((s) => s.slug === id);
     console.log("[MySkillsList] Deleting skill:", skill?.name ?? id);
     setDeletingId(id);
     try {
@@ -69,15 +69,15 @@ export default function MySkillsList({
       </div>
       <div className="divide-y divide-terminal-border">
         {skills.map((skill) => {
-          const isSelected = skill.id === selectedSkillId;
-          const isConfirming = confirmingId === skill.id;
-          const isDeleting = deletingId === skill.id;
+          const isSelected = skill.slug === selectedSkillId;
+          const isConfirming = confirmingId === skill.slug;
+          const isDeleting = deletingId === skill.slug;
           const style = STATUS_STYLES[skill.status] || STATUS_STYLES.draft;
 
           if (isConfirming) {
             return (
               <div
-                key={skill.id}
+                key={skill.slug}
                 className="px-5 py-3.5 flex items-center justify-between bg-red-50"
               >
                 <span className="text-xs text-red-700">
@@ -85,7 +85,7 @@ export default function MySkillsList({
                 </span>
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => handleDelete(skill.id)}
+                    onClick={() => handleDelete(skill.slug)}
                     disabled={isDeleting}
                     className="rounded-lg bg-red-600 px-3 py-1 text-xs font-medium text-white hover:bg-red-700 disabled:opacity-50 transition-colors"
                   >
@@ -105,13 +105,13 @@ export default function MySkillsList({
 
           return (
             <div
-              key={skill.id}
+              key={skill.slug}
               className={`flex items-center transition-colors ${
                 isSelected ? "bg-accent/5 border-l-2 border-accent" : ""
               }`}
             >
               <button
-                onClick={() => { console.log("[MySkillsList] Clicked skill:", skill.name, "(id:", skill.id + ")"); onSelectSkill(skill.id); }}
+                onClick={() => { console.log("[MySkillsList] Clicked skill:", skill.name, "(id:", skill.slug + ")"); onSelectSkill(skill.slug); }}
                 className="flex-1 px-5 py-3.5 flex items-center justify-between hover:bg-terminal-surface transition-colors text-left min-w-0 cursor-pointer"
               >
                 <div className="flex-1 min-w-0">
@@ -140,7 +140,7 @@ export default function MySkillsList({
               </button>
 
               <Link
-                href={`/dashboard/skills/${skill.id}`}
+                href={`/dashboard/skills/${skill.slug}`}
                 className="px-2 py-3.5 text-tertiary hover:text-accent transition-colors"
                 title="View skill"
               >
@@ -154,7 +154,7 @@ export default function MySkillsList({
                 onClick={(e) => {
                   e.stopPropagation();
                   console.log("[MySkillsList] Delete requested for skill:", skill.name);
-                  setConfirmingId(skill.id);
+                  setConfirmingId(skill.slug);
                 }}
                 className="px-2 pr-4 py-3.5 text-terminal-border hover:text-red-500 transition-colors"
                 title="Delete skill"
