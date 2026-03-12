@@ -11,7 +11,7 @@
  * No public endpoint for extraction — it is triggered automatically by upload.
  *
  * Canonical endpoint inventory: https://github.com/philkomarny/SkillStore/issues/28
- * Related issues: #14 (document APIs), #15 (text extraction), #18 (context APIs that consume MD5s)
+ * Related issues: #14 (document APIs), #15 (text extraction), #18 (context APIs that consume MD5s), #35 (multipart upload)
  */
 
 const ENDPOINTS = {

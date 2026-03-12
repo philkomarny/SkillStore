@@ -10,7 +10,11 @@ asynchronously invokes the appropriate OCR/extraction Lambda based on file
 extension.  The caller should poll GET /documents/{md5} until
 ``status == "ready"``.
 
-Input (JSON body):
+Input — multipart/form-data (preferred):
+    file     (file, required): the document to upload.
+    user_id  (str,  required): caller's identity (Google OAuth subject ID).
+
+Input — JSON body (legacy, still supported):
     file_content  (str, required): base64-encoded file bytes.
     filename      (str, required): original filename, e.g. "lecture-notes.pdf".
     user_id       (str, required): caller's identity (Google OAuth subject ID).
@@ -24,14 +28,16 @@ Output (200 — duplicate):
     { "md5": "<hash>", "status": "<current_status>", "existed": true }
 
 Output (400):  missing / invalid parameters.
-Output (413):  file exceeds 7 MB size limit (API Gateway transport ceiling).
+Output (413):  file exceeds 10 MB size limit (API Gateway ceiling).
 Output (415):  unsupported file extension.
 Output (500):  storage failure.
 
-Related: philkomarny/SkillStore#14
+Related: philkomarny/SkillStore#14, #35
 """
 
 import base64
+from email import policy
+from email.parser import BytesParser
 import hashlib
 from json import dumps, loads
 import mimetypes
@@ -48,11 +54,10 @@ from skillstore_base import configure_logger, isnullstr, validate_google_sub
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
 # https://github.com/philkomarny/SkillStore/issues/25
-# API Gateway REST hard limit is 10 MB; base64 adds ~33% overhead, leaving ~7.5 MB of usable
-# raw file capacity. Lambda direct-invoke caps at 6 MB (~4.5 MB raw). We enforce 7 MB here —
-# safely below the API Gateway ceiling — so the Lambda rejects oversized payloads with a clean
-# 413 rather than AWS silently dropping the request before the handler is ever reached.
-_MAX_FILE_BYTES: int = 7 * 1024 * 1024  # 7 MB
+# API Gateway REST hard limit is 10 MB. With multipart (preferred path) there is no base64
+# overhead, so the full 10 MB is usable. We enforce 10 MB here so the Lambda rejects oversized
+# payloads with a clean 413 rather than AWS silently dropping the request.
+_MAX_FILE_BYTES: int = 10 * 1024 * 1024  # 10 MB
 
 # Supported extensions and the extraction Lambda that handles each group.
 _OCR_LAMBDA: dict[str, str] = {
@@ -176,11 +181,63 @@ def _error(message: str, status: int = 500) -> dict[str, Any]:
     return {"statusCode": status, "headers": _CORS_HEADERS, "body": dumps({"message": message})}
 
 
+def _parse_multipart(event: dict[str, Any]) -> dict[str, Any]:
+    """Parse a multipart/form-data body from API Gateway into {raw_bytes, filename, user_id, mime_type}.
+
+    Uses the stdlib email parser — no third-party dependencies required.
+    https://github.com/philkomarny/SkillStore/issues/35
+    """
+    content_type = ""
+    for k, v in (event.get("headers") or {}).items():
+        if k.lower() == "content-type":
+            content_type = v
+            break
+
+    body_str: str = event.get("body", "")
+    if event.get("isBase64Encoded"):
+        body_bytes = base64.b64decode(body_str)
+    else:
+        body_bytes = body_str.encode("utf-8") if isinstance(body_str, str) else body_str
+
+    # Build a MIME message so the stdlib parser can split parts for us.
+    mime_bytes = f"Content-Type: {content_type}\r\n\r\n".encode() + body_bytes
+    msg = BytesParser(policy=policy.default).parsebytes(mime_bytes)
+
+    raw_bytes: bytes | None = None
+    filename: str = ""
+    mime_type: str = ""
+    user_id: str = ""
+
+    for part in msg.iter_parts():
+        cd = part.get("Content-Disposition", "")
+        if 'name="file"' in cd or "name=file" in cd:
+            raw_bytes = part.get_payload(decode=True)
+            # Extract filename from Content-Disposition header
+            fn = part.get_filename()
+            if fn:
+                filename = fn
+            mime_type = part.get_content_type()
+        elif 'name="user_id"' in cd or "name=user_id" in cd:
+            payload = part.get_payload(decode=True)
+            if payload:
+                user_id = payload.decode("utf-8").strip()
+
+    return {"raw_bytes": raw_bytes, "filename": filename, "user_id": user_id, "mime_type": mime_type}
+
+
+def _is_multipart(event: dict[str, Any]) -> bool:
+    """Return True if the request Content-Type is multipart/form-data."""
+    for k, v in (event.get("headers") or {}).items():
+        if k.lower() == "content-type" and "multipart/form-data" in v.lower():
+            return True
+    return False
+
+
 def handler(event: dict[str, Any], _) -> dict[str, Any]:
     """Upload a document and register it in the caller's library.
 
     Args:
-        event: Lambda invocation event with JSON body fields.
+        event: API Gateway proxy event (multipart or JSON body).
 
     Returns:
         201 { md5, status, existed } for new documents.
@@ -190,22 +247,40 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     """
     logger.info(f"Incoming Event: {dumps(event)}")
 
-    params = event
-    if isinstance(event.get("body"), str):
+    # https://github.com/philkomarny/SkillStore/issues/35
+    if _is_multipart(event):
+        parsed = _parse_multipart(event)
+        raw_bytes: bytes | None = parsed["raw_bytes"]
+        if raw_bytes is None:
+            return _error("Multipart body missing 'file' field", status=400)
+        filename = parsed["filename"]
+        user_id = parsed["user_id"]
+        mime_type = parsed["mime_type"]
+    else:
+        # Legacy JSON path: base64-encoded file_content
+        params = event
+        if isinstance(event.get("body"), str):
+            try:
+                params = loads(event["body"])
+            except Exception as exc:
+                return _error(f"Invalid JSON body: {exc}", status=400)
+
+        file_content_b64: str = (params.get("file_content") or "").strip()
+        if isnullstr(file_content_b64):
+            return _error("Missing required parameter: 'file_content'", status=400)
+
+        filename = (params.get("filename") or "").strip()
+        user_id = (params.get("user_id") or "").strip()
+        mime_type = (params.get("mime_type") or "").strip()
+
         try:
-            params = loads(event["body"])
+            raw_bytes = base64.b64decode(file_content_b64)
         except Exception as exc:
-            return _error(f"Invalid JSON body: {exc}", status=400)
+            return _error(f"'file_content' is not valid base64: {exc}", status=400)
 
-    file_content_b64: str = (params.get("file_content") or "").strip()
-    if isnullstr(file_content_b64):
-        return _error("Missing required parameter: 'file_content'", status=400)
-
-    filename: str = (params.get("filename") or "").strip()
     if isnullstr(filename):
         return _error("Missing required parameter: 'filename'", status=400)
 
-    user_id: str = (params.get("user_id") or "").strip()
     err = validate_google_sub(user_id)  # https://github.com/philkomarny/SkillStore/issues/27
     if err:
         return _error(err, status=400)
@@ -217,16 +292,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
             status=415,
         )
 
-    try:
-        raw_bytes = base64.b64decode(file_content_b64)
-    except Exception as exc:
-        return _error(f"'file_content' is not valid base64: {exc}", status=400)
-
     if len(raw_bytes) > _MAX_FILE_BYTES:  # https://github.com/philkomarny/SkillStore/issues/25
         mb = len(raw_bytes) / (1024 * 1024)
-        return _error(f"File too large: {mb:.1f} MB — limit is 7 MB", status=413)
+        return _error(f"File too large: {mb:.1f} MB — limit is 10 MB", status=413)
 
-    mime_type: str = (params.get("mime_type") or "").strip()
     if not mime_type:
         mime_type, _ = mimetypes.guess_type(filename)
         mime_type = mime_type or "application/octet-stream"
