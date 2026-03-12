@@ -7,6 +7,7 @@
 const ENDPOINTS = {
   copy:   "https://6dhf9kowj6.execute-api.us-west-2.amazonaws.com/prod/esm_live_copy_user_skill_post",
   list:   "https://38gypl4b5l.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_user_skills_get",
+  get:    "https://kp8js1awf0.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_user_skill_get",
   delete: "https://20t9eyz0he.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_user_skill_delete",
 };
 
@@ -40,6 +41,33 @@ export async function listUserSkills(userId: string): Promise<any[]> {
   const skills = Array.isArray(data.skills) ? data.skills : [];
   console.log("[user-skill-store] listUserSkills ←", skills.length, "skills");
   return skills;
+}
+
+export async function getUserSkill(
+  slug: string,
+  userId: string
+): Promise<{
+  slug: string;
+  name: string;
+  description: string;
+  category: string;
+  tags: string[];
+  version: number;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  content: string;
+} | null> {
+  assertUserId(userId);
+  console.log("[user-skill-store] getUserSkill →", slug, "user:", userId);
+  const res = await fetch(
+    `${ENDPOINTS.get}?slug=${encodeURIComponent(slug)}&user_id=${encodeURIComponent(userId)}`
+  );
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error(`getUserSkill failed: ${res.status}`);
+  const data = await res.json();
+  console.log("[user-skill-store] getUserSkill ←", data.slug, "v" + data.version);
+  return data;
 }
 
 export async function deleteUserSkill(slug: string, userId: string): Promise<void> {

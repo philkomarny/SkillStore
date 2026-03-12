@@ -1,10 +1,10 @@
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/auth";
-import { getUserProfile } from "@/lib/users";
-import { getClient } from "@/lib/supabase";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import InstallPanel from "@/components/InstallPanel";
+// [USER-SKILL-STORE] replaced — https://github.com/philkomarny/SkillStore/issues/32
+import { getUserSkill } from "@/lib/user-skill-store";
 
 export async function generateMetadata({
   params,
@@ -14,17 +14,7 @@ export async function generateMetadata({
   const session = await auth();
   if (!session?.user?.id) return {};
 
-  const profile = await getUserProfile(session.user.id);
-  if (!profile) return {};
-
-  const supabase = getClient();
-  const { data: skill } = (await supabase
-    .from("user_skills")
-    .select("name")
-    .eq("id", params.id)
-    .eq("user_id", profile.id)
-    .single()) as { data: any };
-
+  const skill = await getUserSkill(params.id, session.user.id).catch(() => null);
   return {
     title: skill ? `${skill.name} — Your Skills Refinery` : "Skill — Your Skills Refinery",
   };
@@ -40,35 +30,11 @@ export default async function SkillViewPage({
     redirect("/api/auth/signin");
   }
 
-  const profile = await getUserProfile(session.user.id);
-  if (!profile) {
-    redirect("/api/auth/signin");
-  }
-
-  const supabase = getClient();
-
-  // Fetch the user skill (verify ownership)
-  const { data: userSkill, error } = (await supabase
-    .from("user_skills")
-    .select("*")
-    .eq("id", params.id)
-    .eq("user_id", profile.id)
-    .single()) as { data: any; error: any };
-
-  if (error || !userSkill) {
+  // [USER-SKILL-STORE] replaced — https://github.com/philkomarny/SkillStore/issues/32
+  // params.id is the skill slug (was Supabase UUID before #30)
+  const userSkill = await getUserSkill(params.id, session.user.id).catch(() => null);
+  if (!userSkill) {
     notFound();
-  }
-
-  // Fetch the actual skill content from storage
-  let content = "";
-  if (userSkill.storage_path) {
-    const { data: fileData } = await supabase.storage
-      .from("refined-skills")
-      .download(userSkill.storage_path);
-
-    if (fileData) {
-      content = await fileData.text();
-    }
   }
 
   return (
@@ -108,8 +74,8 @@ export default async function SkillViewPage({
 
           {/* Skill content — rendered markdown */}
           <div className="prose-skill border-t border-terminal-border pt-6">
-            {content ? (
-              <MarkdownRenderer content={content} />
+            {userSkill.content ? (
+              <MarkdownRenderer content={userSkill.content} />
             ) : (
               <p className="text-sm text-tertiary">No content available.</p>
             )}
@@ -158,9 +124,9 @@ export default async function SkillViewPage({
 
           {/* Install panel — same as marketplace */}
           <InstallPanel
-            skillName={userSkill.skill_slug || userSkill.name}
-            skillSlug={userSkill.skill_slug || userSkill.name}
-            rawContent={content}
+            skillName={userSkill.name}
+            skillSlug={userSkill.slug}
+            rawContent={userSkill.content}
             source=""
           />
         </div>
