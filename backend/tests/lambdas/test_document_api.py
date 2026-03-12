@@ -10,7 +10,7 @@ Covers positive and negative cases for:
 All calls hit real deployed API Gateways. No mocks.
 
 Related:
-    https://github.com/febelabs/skillflow/issues/141
+    https://github.com/philkomarny/SkillStore/issues/28
     https://github.com/philkomarny/SkillStore/issues/14
 
 Run with:
@@ -26,14 +26,14 @@ import time
 
 import requests
 
-# ── API Gateway URLs (febelabs/skillflow#141) ──────────────────────────────────
+# ── API Gateway URLs (SkillStore#28) ──────────────────────────────────
 
 _URL_UPLOAD = "https://plvh12o05c.execute-api.us-west-2.amazonaws.com/prod/esm_live_upload_document_post"
 _URL_GET    = "https://ikt0pbkcx1.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_document_get"
 _URL_LIST   = "https://durik7cyze.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_documents_get"
 _URL_DELETE = "https://l9h3c7vji5.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_document_delete"
 
-_TEST_USER = "999000000000000000001"  # https://github.com/febelabs/skillflow/issues/140
+_TEST_USER = "999000000000000000001"  # https://github.com/philkomarny/SkillStore/issues/27
 
 # An MD5-shaped hex string guaranteed to have no document in the store.
 _FAKE_MD5 = "a" * 32

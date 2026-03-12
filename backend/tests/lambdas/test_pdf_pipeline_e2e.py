@@ -25,13 +25,13 @@ import requests
 
 _FIXTURES = Path(__file__).parent.parent / "fixtures"
 
-# ── API Gateway URLs (febelabs/skillflow#141) ──────────────────────────────────
+# ── API Gateway URLs (SkillStore#28) ──────────────────────────────────
 
 _URL_UPLOAD = "https://plvh12o05c.execute-api.us-west-2.amazonaws.com/prod/esm_live_upload_document_post"
 _URL_GET    = "https://ikt0pbkcx1.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_document_get"
 _URL_DELETE = "https://l9h3c7vji5.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_document_delete"
 
-_TEST_USER = "999000000000000000001"  # https://github.com/febelabs/skillflow/issues/140
+_TEST_USER = "999000000000000000001"  # https://github.com/philkomarny/SkillStore/issues/27
 _TEST_FILE = "integration-test.pdf"
 _LONG_PDF_FILE = "2403.05440v1.pdf"
 _MAX_PDF_FILE = "jurafsky-nlp-max.pdf"

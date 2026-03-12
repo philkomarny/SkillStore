@@ -11,10 +11,10 @@ Workflow:
     7. Delete the context via HTTP DELETE (expect 204).
     8. Re-fetch the deleted context via HTTP GET and assert 404.
 
-All phases use API Gateway HTTP endpoints (febelabs/skillflow#141).
+All phases use API Gateway HTTP endpoints (SkillStore#28).
 
 Related:
-    https://github.com/febelabs/skillflow/issues/137
+    https://github.com/philkomarny/SkillStore/issues/24
     https://github.com/philkomarny/SkillStore/issues/18
 
 Run with:
@@ -33,15 +33,15 @@ import requests
 
 _FIXTURES = Path(__file__).parent.parent / "fixtures"
 
-_TEST_USER = "999000000000000000001"  # https://github.com/febelabs/skillflow/issues/140
+_TEST_USER = "999000000000000000001"  # https://github.com/philkomarny/SkillStore/issues/27
 
 _PDF_FILES = [
     "integration-test.pdf",
     "2403.05440v1.pdf",
-    "jurafsky-ch22.pdf",  # https://github.com/febelabs/skillflow/issues/138
+    "jurafsky-ch22.pdf",  # https://github.com/philkomarny/SkillStore/issues/25
 ]
 
-# ── API Gateway URLs (febelabs/skillflow#141) ──────────────────────────────────
+# ── API Gateway URLs (SkillStore#28) ──────────────────────────────────
 
 _URL_UPLOAD   = "https://plvh12o05c.execute-api.us-west-2.amazonaws.com/prod/esm_live_upload_document_post"
 _URL_GET_DOC  = "https://ikt0pbkcx1.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_document_get"
@@ -115,7 +115,7 @@ def _poll_until_ready(md5: str, timeout_s: int = 600, interval_s: int = 5) -> di
 
 
 def test_context_pipeline_e2e():
-    # https://github.com/febelabs/skillflow/issues/137
+    # https://github.com/philkomarny/SkillStore/issues/24
 
     # ── Phase 1: compute MD5s and pre-delete ──────────────────────────────────
     print("\n  === Phase 1: Pre-delete documents ===")

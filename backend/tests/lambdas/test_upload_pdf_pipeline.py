@@ -31,7 +31,7 @@ _REGION = os.environ.get("AWS_REGION", "us-west-2")
 _SESSION = boto3.Session(profile_name=_PROFILE, region_name=_REGION)
 _LAMBDA = _SESSION.client("lambda")
 
-_TEST_USER = "999000000000000000001"  # https://github.com/febelabs/skillflow/issues/140
+_TEST_USER = "999000000000000000001"  # https://github.com/philkomarny/SkillStore/issues/27
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
