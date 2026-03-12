@@ -1,0 +1,16 @@
+Smoke Test Document
+===================
+
+This is a minimal plain-text document used by the smoke test suite to verify
+the document upload pipeline (Lambda document store, issue #14).
+
+Institution: Test University
+Department: Admissions
+Year: 2024
+
+Key policies:
+- All applicants must submit official transcripts
+- Test scores are optional for the 2024-2025 cycle
+- Deadline for early decision is November 1
+
+This file is intentionally small to keep test latency low.
