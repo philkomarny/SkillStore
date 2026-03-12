@@ -39,5 +39,5 @@ Each catalog entry:
 
 ## S3 Layout
 
-- Standard reads: `eduskillsmp/skill-catalog/_index.json`
+- Standard reads: `eduskillsmp/skills/catalog/_index.json`
 - Admin view (`?status=all`): rebuilds index on-the-fly from all `*/metadata.json` files

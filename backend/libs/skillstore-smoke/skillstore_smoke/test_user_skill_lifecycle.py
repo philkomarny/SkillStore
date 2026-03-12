@@ -9,7 +9,7 @@ from botocore.exceptions import ClientError
 from .helpers import BASE_URL, AUTH_STATE, check, fail, ok, PWTimeout
 
 BUCKET = "mskillsiq"
-S3_PREFIX = "eduskillsmp/user-skills"
+S3_PREFIX = "eduskillsmp/skills/user"
 TEST_SKILL_SLUG = "irb-protocol-writer"
 TEST_SKILL_CATEGORY = "compliance-accreditation"
 

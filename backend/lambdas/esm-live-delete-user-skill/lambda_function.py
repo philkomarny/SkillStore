@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """Remove a skill from a user's personal Refinery.
 
-Deletes all objects under ``eduskillsmp/user-skills/<user_id>/<slug>/``
+Deletes all objects under ``eduskillsmp/skills/user/<user_id>/<slug>/``
 (metadata.json and all version files v1.md, v2.md, etc.).
 
 Input (query string or JSON body):
@@ -30,11 +30,11 @@ from skillstore_base import configure_logger, isnullstr, validate_google_sub
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-# S3 layout — philkomarny/SkillStore#30:
-#   eduskillsmp/user-skills/<user_id>/<slug>/metadata.json
-#   eduskillsmp/user-skills/<user_id>/<slug>/v1.md
-#   eduskillsmp/user-skills/<user_id>/<slug>/v2.md  (after refinement)
-_USER_SKILLS_PREFIX = "eduskillsmp/user-skills"
+# S3 layout — https://github.com/philkomarny/SkillStore/issues/36:
+#   eduskillsmp/skills/user/<user_id>/<slug>/metadata.json
+#   eduskillsmp/skills/user/<user_id>/<slug>/v1.md
+#   eduskillsmp/skills/user/<user_id>/<slug>/v2.md  (after refinement)
+_USER_SKILLS_PREFIX = "eduskillsmp/skills/user"
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",

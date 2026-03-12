@@ -28,5 +28,5 @@ See [philkomarny/SkillStore#11 — implementation comment](https://github.com/ph
 
 HEAD request on:
 ```
-s3://mskillsiq/eduskillsmp/skill-catalog/<slug>/metadata.json
+s3://mskillsiq/eduskillsmp/skills/catalog/<slug>/metadata.json
 ```

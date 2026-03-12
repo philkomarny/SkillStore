@@ -3,7 +3,7 @@
 
 Reads ``metadata.json`` for the skill's metadata and ``v<n>.md`` for the
 current version's markdown content from the user's Refinery prefix
-(``eduskillsmp/user-skills/<user_id>/<slug>/``).
+(``eduskillsmp/skills/user/<user_id>/<slug>/``).
 
 Input (GET query params):
     slug     (str, required): kebab-case skill identifier.
@@ -36,7 +36,7 @@ from skillstore_base import (
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-_USER_SKILLS_PREFIX = "eduskillsmp/user-skills"
+_USER_SKILLS_PREFIX = "eduskillsmp/skills/user"
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",

@@ -27,5 +27,5 @@ See [philkomarny/SkillStore#11 — implementation comment](https://github.com/ph
 ## S3 Read
 
 ```
-s3://mskillsiq/eduskillsmp/skill-catalog/<slug>/content.md
+s3://mskillsiq/eduskillsmp/skills/catalog/<slug>/content.md
 ```

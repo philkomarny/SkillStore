@@ -16,7 +16,9 @@ LAMBDAS := $(shell ls -d esm-live-*)
 .PHONY: copy-wheels
 copy-wheels:
 	@echo "Source wheel: $(SOURCE)/lib/"
-	@WHEEL=$$(ls $(SOURCE)/lib/skillstore_base-*.whl 2>/dev/null | head -1); \
+	@rm -f $(SOURCE)/lib/skillstore_base-*.whl; \
+	cp $$(ls -t ../libs/skillstore-base/dist/skillstore_base-*.whl | head -1) $(SOURCE)/lib/; \
+	WHEEL=$$(ls $(SOURCE)/lib/skillstore_base-*.whl 2>/dev/null | head -1); \
 	if [ -z "$$WHEEL" ]; then \
 		echo "ERROR: no skillstore_base wheel found in $(SOURCE)/lib/"; \
 		exit 1; \

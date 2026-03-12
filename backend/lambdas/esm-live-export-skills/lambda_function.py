@@ -3,7 +3,7 @@
 
 Reads all skill slugs in parallel (metadata + content + lineage) and writes
 a single JSON array to:
-    s3://mskillsiq/eduskillsmp/skill-catalog/_exports/<YYYYMMDD>-<uuid>.json
+    s3://mskillsiq/eduskillsmp/skills/catalog/_exports/<YYYYMMDD>-<uuid>.json
 
 Used for backups and for enterprise fork operators seeding a fresh instance.
 The export key is returned in the response so callers can download directly

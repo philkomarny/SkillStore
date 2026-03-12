@@ -24,7 +24,7 @@ No input required.
 ## S3 Output
 
 ```
-s3://mskillsiq/eduskillsmp/skill-catalog/_exports/<YYYYMMDD>-<uuid>.json
+s3://mskillsiq/eduskillsmp/skills/catalog/_exports/<YYYYMMDD>-<uuid>.json
 ```
 
 Each entry in the export array:

@@ -2,9 +2,9 @@
 """Copy a catalog skill into a user's personal Refinery.
 
 Reads the skill's content.md and metadata.json from the global catalog
-(``eduskillsmp/skill-catalog/<slug>/``), then writes an initial v1.md
+(``eduskillsmp/skills/catalog/<slug>/``), then writes an initial v1.md
 and metadata.json to the user's Refinery prefix
-(``eduskillsmp/user-skills/<user_id>/<slug>/``).
+(``eduskillsmp/skills/user/<user_id>/<slug>/``).
 
 If the user already has this skill, returns the existing metadata with
 ``already_exists: true`` — no duplicate storage.
@@ -45,12 +45,12 @@ from skillstore_base import (
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-# S3 layout — philkomarny/SkillStore#30:
-#   Catalog source:   eduskillsmp/skill-catalog/<slug>/content.md
-#                     eduskillsmp/skill-catalog/<slug>/metadata.json
-#   User Refinery:    eduskillsmp/user-skills/<user_id>/<slug>/metadata.json
-#                     eduskillsmp/user-skills/<user_id>/<slug>/v1.md
-_USER_SKILLS_PREFIX = "eduskillsmp/user-skills"
+# S3 layout — https://github.com/philkomarny/SkillStore/issues/36:
+#   Catalog source:   eduskillsmp/skills/catalog/<slug>/content.md
+#                     eduskillsmp/skills/catalog/<slug>/metadata.json
+#   User Refinery:    eduskillsmp/skills/user/<user_id>/<slug>/metadata.json
+#                     eduskillsmp/skills/user/<user_id>/<slug>/v1.md
+_USER_SKILLS_PREFIX = "eduskillsmp/skills/user"
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",

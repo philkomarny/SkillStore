@@ -29,7 +29,7 @@ See [philkomarny/SkillStore#11 — implementation comment](https://github.com/ph
 ## S3 Writes
 
 ```
-s3://mskillsiq/eduskillsmp/skill-catalog/<slug>/metadata.json  (status → deprecated)
-s3://mskillsiq/eduskillsmp/skill-catalog/<slug>/lineage.json   (appended)
-s3://mskillsiq/eduskillsmp/skill-catalog/_index.json           (rebuilt)
+s3://mskillsiq/eduskillsmp/skills/catalog/<slug>/metadata.json  (status → deprecated)
+s3://mskillsiq/eduskillsmp/skills/catalog/<slug>/lineage.json   (appended)
+s3://mskillsiq/eduskillsmp/skills/catalog/_index.json           (rebuilt)
 ```

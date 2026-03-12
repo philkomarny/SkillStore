@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """List all skills in a user's personal Refinery.
 
-Scans ``eduskillsmp/user-skills/<user_id>/`` for metadata.json files and
+Scans ``eduskillsmp/skills/user/<user_id>/`` for metadata.json files and
 returns an array of skill metadata, sorted by ``updated_at`` descending
 (newest first).
 
@@ -44,9 +44,9 @@ from skillstore_base import configure_logger, isnullstr, validate_google_sub
 
 BUCKET_NAME: str = os.getenv("BUCKET_NAME", "mskillsiq")
 
-# S3 layout — philkomarny/SkillStore#30:
-#   eduskillsmp/user-skills/<user_id>/<slug>/metadata.json
-_USER_SKILLS_PREFIX = "eduskillsmp/user-skills"
+# S3 layout — https://github.com/philkomarny/SkillStore/issues/36:
+#   eduskillsmp/skills/user/<user_id>/<slug>/metadata.json
+_USER_SKILLS_PREFIX = "eduskillsmp/skills/user"
 
 _CORS_HEADERS = {
     "Access-Control-Allow-Origin": "*",

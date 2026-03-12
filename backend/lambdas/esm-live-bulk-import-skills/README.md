@@ -44,8 +44,8 @@ JSON array of skill objects:
 ## S3 Writes (per slug)
 
 ```
-s3://mskillsiq/eduskillsmp/skill-catalog/<slug>/content.md
-s3://mskillsiq/eduskillsmp/skill-catalog/<slug>/metadata.json
-s3://mskillsiq/eduskillsmp/skill-catalog/<slug>/lineage.json
-s3://mskillsiq/eduskillsmp/skill-catalog/_index.json  (rebuilt once at end)
+s3://mskillsiq/eduskillsmp/skills/catalog/<slug>/content.md
+s3://mskillsiq/eduskillsmp/skills/catalog/<slug>/metadata.json
+s3://mskillsiq/eduskillsmp/skills/catalog/<slug>/lineage.json
+s3://mskillsiq/eduskillsmp/skills/catalog/_index.json  (rebuilt once at end)
 ```

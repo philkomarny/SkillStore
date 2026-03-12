@@ -12,9 +12,9 @@ Shared catalog files:
   - _index.json                      pre-built published skill list; rebuilt on every write
   - _exports/<YYYYMMDD>-<uuid>.json  point-in-time snapshots
 
-S3 layout
+S3 layout — https://github.com/philkomarny/SkillStore/issues/36
 ---------
-  s3://mskillsiq/eduskillsmp/skill-catalog/
+  s3://mskillsiq/eduskillsmp/skills/catalog/
     <slug>/content.md
     <slug>/metadata.json
     <slug>/lineage.json
@@ -23,7 +23,7 @@ S3 layout
 
 Related GitHub Issues
 ---------------------
-  philkomarny/SkillStore#11
+  philkomarny/SkillStore#11, philkomarny/SkillStore#36
 """
 
 from __future__ import annotations
@@ -37,7 +37,7 @@ from logging import Logger
 from botocore.exceptions import ClientError
 
 _CATALOG_BUCKET = "mskillsiq"
-_CATALOG_PREFIX = "eduskillsmp/skill-catalog"
+_CATALOG_PREFIX = "eduskillsmp/skills/catalog"
 
 
 # ---------------------------------------------------------------------------
@@ -349,7 +349,7 @@ def export_catalog(
     """Snapshot the full catalog (metadata + content + lineage) to _exports/.
 
     Reads all slugs in parallel and writes a single JSON array to:
-        eduskillsmp/skill-catalog/_exports/<YYYYMMDD>-<uuid>.json
+        eduskillsmp/skills/catalog/_exports/<YYYYMMDD>-<uuid>.json
 
     Returns:
         The S3 key of the written snapshot.
