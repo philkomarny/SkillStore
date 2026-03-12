@@ -226,6 +226,24 @@ Beyond the API-facing Lambdas listed above, internal Lambdas handle: text extrac
 
 - **`backend/scripts/`** — Shell scripts for Lambda deployment automation (build, push to ECR, update function code).
 
+#### Lambda Deployment Commands
+
+```bash
+# Update an existing Lambda (auto-increments version, builds Docker, pushes to ECR, updates function)
+cd backend/scripts
+./update-lambda.sh --repo-name esm-live-upload-document-repo
+
+# Full automation for a NEW Lambda (interactive — prompts for architecture)
+# Creates ECR repo, builds image, creates Lambda function, polls for readiness
+./full-automation.sh --repo-name esm-live-my-new-lambda-repo
+
+# Per-Lambda deploy (each Lambda directory has its own update script)
+cd backend/lambdas/esm-live-upload-document
+./update.sh
+```
+
+> **Note:** `full-automation.sh` uses interactive prompts (`read -p`) and cannot be run non-interactively.
+
 ### Enterprise Context Pattern
 
 Enterprise forks can add `context.md` files alongside each `SKILL.md` to inject institution-specific data (school name, programs, voice). The web catalog detects these automatically. A separate enterprise context repo is also supported.
