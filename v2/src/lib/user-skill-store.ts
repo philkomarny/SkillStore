@@ -8,6 +8,7 @@ const ENDPOINTS = {
   copy:   "https://6dhf9kowj6.execute-api.us-west-2.amazonaws.com/prod/esm_live_copy_user_skill_post",
   list:   "https://38gypl4b5l.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_user_skills_get",
   get:    "https://kp8js1awf0.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_user_skill_get",
+  update: "https://ghqaj19k8a.execute-api.us-west-2.amazonaws.com/prod/esm_live_update_user_skill_post",
   delete: "https://20t9eyz0he.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_user_skill_delete",
 };
 
@@ -67,6 +68,35 @@ export async function getUserSkill(
   if (!res.ok) throw new Error(`getUserSkill failed: ${res.status}`);
   const data = await res.json();
   console.log("[user-skill-store] getUserSkill ←", data.slug, "v" + data.version);
+  return data;
+}
+
+// Update a user-skill's content and metadata via Lambda (#39)
+export async function updateUserSkill(
+  slug: string,
+  userId: string,
+  content: string,
+  version: number,
+  status: string = "refined",
+  contextSummary?: string
+): Promise<{ slug: string; version: number; status: string; updated_at: string }> {
+  assertUserId(userId);
+  console.log("[user-skill-store] updateUserSkill →", slug, "v" + version, "user:", userId);
+  const res = await fetch(ENDPOINTS.update, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      slug,
+      user_id: userId,
+      content,
+      version,
+      status,
+      context_summary: contextSummary,
+    }),
+  });
+  if (!res.ok) throw new Error(`updateUserSkill failed: ${res.status}`);
+  const data = await res.json();
+  console.log("[user-skill-store] updateUserSkill ←", data.slug, "v" + data.version);
   return data;
 }
 

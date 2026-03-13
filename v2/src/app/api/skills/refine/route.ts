@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { getUserProfile } from "@/lib/users";
-import { getClient } from "@/lib/supabase";
+import { getUserSkill, updateUserSkill } from "@/lib/user-skill-store";
+import { getContext } from "@/lib/context-store";
 import { refineSkillWithContext } from "@/lib/context-processor";
 
 // Allow up to 300s for Claude API call (Vercel Pro)
@@ -22,34 +22,15 @@ export async function POST(req: Request) {
       );
     }
 
-    const profile = await getUserProfile(session.user.id);
-    if (!profile) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
-    }
-
-    const supabase = getClient();
-
-    // Fetch the user_skill record
-    const { data: userSkill, error: skillError } = (await supabase
-      .from("user_skills")
-      .select("*")
-      .eq("id", userSkillId)
-      .eq("user_id", profile.id)
-      .single()) as { data: any; error: any };
-
-    if (skillError || !userSkill) {
+    // Fetch skill from Lambda/S3 (#39 — was Supabase, now Lambda)
+    const userSkill = await getUserSkill(userSkillId, session.user.id);
+    if (!userSkill) {
       return NextResponse.json({ error: "Skill not found" }, { status: 404 });
     }
 
-    // Fetch the context profile
-    const { data: contextProfile, error: ctxError } = (await supabase
-      .from("context_profiles")
-      .select("*")
-      .eq("id", contextProfileId)
-      .eq("user_id", profile.id)
-      .single()) as { data: any; error: any };
-
-    if (ctxError || !contextProfile) {
+    // Fetch context from Lambda/S3 (#39)
+    const contextProfile = await getContext(contextProfileId, session.user.id);
+    if (!contextProfile) {
       return NextResponse.json({ error: "Context profile not found" }, { status: 404 });
     }
 
@@ -60,26 +41,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Mark skill as refining
-    await (supabase.from("user_skills") as any)
-      .update({ status: "refining", updated_at: new Date().toISOString() })
-      .eq("id", userSkillId);
-
-    // Get current skill content from storage
-    let currentContent = "";
-    if (userSkill.storage_path) {
-      const { data: fileData } = await supabase.storage
-        .from("refined-skills")
-        .download(userSkill.storage_path);
-      if (fileData) {
-        currentContent = await fileData.text();
-      }
-    }
-
+    const currentContent = userSkill.content;
     if (!currentContent) {
-      await (supabase.from("user_skills") as any)
-        .update({ status: userSkill.status, updated_at: new Date().toISOString() })
-        .eq("id", userSkillId);
       return NextResponse.json({ error: "No skill content found" }, { status: 400 });
     }
 
@@ -90,36 +53,16 @@ export async function POST(req: Request) {
       contextProfile.context_markdown
     );
 
-    // Store new version in storage
+    // Store new version via Lambda/S3 (#39)
     const newVersion = (userSkill.version || 1) + 1;
-    const storagePath = `${profile.id}/${userSkill.base_skill_slug}/v${newVersion}.md`;
-
-    const { error: storageError } = await supabase.storage
-      .from("refined-skills")
-      .upload(storagePath, refinedContent, {
-        contentType: "text/markdown",
-        upsert: true,
-      });
-
-    if (storageError) {
-      console.error("Storage error:", storageError);
-      await (supabase.from("user_skills") as any)
-        .update({ status: "draft", updated_at: new Date().toISOString() })
-        .eq("id", userSkillId);
-      return NextResponse.json({ error: "Failed to store refined skill" }, { status: 500 });
-    }
-
-    // Update user_skills record
-    await (supabase.from("user_skills") as any)
-      .update({
-        version: newVersion,
-        status: "refined",
-        storage_path: storagePath,
-        context_summary: contextSummary,
-        last_context_profile_id: contextProfileId,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", userSkillId);
+    await updateUserSkill(
+      userSkillId,
+      session.user.id,
+      refinedContent,
+      newVersion,
+      "refined",
+      contextSummary
+    );
 
     return NextResponse.json({
       refinedContent,

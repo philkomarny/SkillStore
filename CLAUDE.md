@@ -106,6 +106,18 @@ Upload returns `{ md5, status }`. Text extraction (PDF, DOCX, images) is trigger
 
 Context creation accepts an array of document MD5 hashes. Synthesis is synchronous via Bedrock (5–15s). All `user_id` params are Google OAuth subject IDs.
 
+**User Skill Lambda Endpoints** (`v2/src/lib/user-skill-store.ts`):
+
+| Operation | Method | URL |
+|---|---|---|
+| Copy skill | POST | `https://6dhf9kowj6.execute-api.us-west-2.amazonaws.com/prod/esm_live_copy_user_skill_post` |
+| List skills | GET | `https://38gypl4b5l.execute-api.us-west-2.amazonaws.com/prod/esm_live_list_user_skills_get` |
+| Get skill | GET | `https://kp8js1awf0.execute-api.us-west-2.amazonaws.com/prod/esm_live_get_user_skill_get` |
+| Update skill | POST | `https://ghqaj19k8a.execute-api.us-west-2.amazonaws.com/prod/esm_live_update_user_skill_post` |
+| Delete skill | DELETE | `https://20t9eyz0he.execute-api.us-west-2.amazonaws.com/prod/esm_live_delete_user_skill_delete` |
+
+Copy reads from the catalog (`eduskillsmp/skills/catalog/<slug>/`) and writes v1 to the user's Refinery prefix (`eduskillsmp/skills/user/<user_id>/<slug>/`). Update writes a new version markdown + updated metadata.json. Identifier is the skill slug (kebab-case), not a UUID.
+
 All endpoints use no auth header. GET params as query string, POST params as JSON body.
 
 ### Key Files
@@ -119,6 +131,7 @@ All endpoints use no auth header. GET params as query string, POST params as JSO
 | `v2/src/lib/access.ts` | Access control logic |
 | `v2/src/lib/supabase.ts` | Supabase client |
 | `v2/src/lib/stripe.ts` | Stripe billing helpers |
+| `v2/src/lib/user-skill-store.ts` | Lambda API wrapper — user-skills Refinery CRUD (copy/list/get/update/delete) |
 | `v2/src/lib/document-store.ts` | Lambda API wrapper — global content-addressable document store (upload/get/list/delete by MD5) |
 | `v2/src/lib/context-store.ts` | Lambda API wrapper — context CRUD (create/get/list/delete) |
 | `v2/src/lib/context-processor.ts` | Document text extraction + Claude context synthesis |

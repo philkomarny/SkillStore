@@ -17,6 +17,20 @@ FIXTURE_DOC = Path(__file__).parent / "fixtures" / "test-doc.txt"
 CONTEXT_NAME = "Smoke Context Test"
 
 
+def _cleanup_named_context(page, name):
+    """Best-effort: delete a context by name from My Contexts if present."""
+    try:
+        btn = page.locator("button").filter(has_text=name).first
+        if btn.is_visible(timeout=2000):
+            row = btn.locator("xpath=..")
+            trash = row.locator("button[title='Delete context']")
+            trash.click(timeout=3000)
+            page.get_by_role("button", name="Yes, delete").click(timeout=3000)
+            page.wait_for_timeout(2000)
+    except Exception:
+        pass
+
+
 def run(browser):
     print("\n── Context lifecycle (create → ready → delete) ───")
 
@@ -40,6 +54,14 @@ def run(browser):
             "sign" not in page.url.lower() and "auth" not in page.url.lower(),
             page.url,
         )
+
+        # ── Pre-cleanup: remove leftover contexts from prior runs (#38) ──
+        body = page.inner_text("body")
+        while CONTEXT_NAME in body:
+            print("    pre-cleanup: removing leftover test context")
+            _cleanup_named_context(page, CONTEXT_NAME)
+            page.wait_for_load_state("networkidle")
+            body = page.inner_text("body")
 
         # ── Step 1: Open New Context File form ──
         print("\n  [1/7] Open New Context File form")
@@ -126,10 +148,15 @@ def run(browser):
             body[:300],
         )
 
-        # ── Step 6: Delete the context ──
+        # ── Step 6: Delete the context (#38) ──
         print("\n  [6/7] Delete context")
         try:
-            trash_btn = page.locator("button[title='Delete context']").first
+            # Target the trash button in the same row as our context name.
+            # The selection button contains the name; its immediate parent is
+            # the row div which also holds the delete button.
+            ctx_btn = page.locator("button").filter(has_text=CONTEXT_NAME).first
+            ctx_row = ctx_btn.locator("xpath=..")
+            trash_btn = ctx_row.locator("button[title='Delete context']")
             trash_btn.click(timeout=8000)
             page.get_by_role("button", name="Yes, delete").click(timeout=8000)
             page.wait_for_timeout(3000)
@@ -141,6 +168,8 @@ def run(browser):
 
         # ── Step 7: Verify context is gone ──
         print("\n  [7/7] Verify context removed from list")
+        # Reload to ensure we see fresh server state after delete
+        page.goto(f"{BASE_URL}/dashboard", wait_until="networkidle")
         body = page.inner_text("body")
         context_gone = CONTEXT_NAME not in body
         check(
