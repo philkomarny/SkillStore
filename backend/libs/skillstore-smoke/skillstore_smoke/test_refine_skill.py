@@ -127,8 +127,10 @@ def run(browser):
         try:
             page.get_by_role("button", name="Build Context").click(timeout=5000)
             page.wait_for_selector("text=Building context with AI", timeout=5000)
-            # Wait for synthesis to finish — context appears in My Contexts list
-            page.wait_for_selector(f"text={CONTEXT_NAME}", timeout=60000)
+            # Wait for spinner to disappear — build complete, onCreated fires (#39).
+            # Cannot use text={CONTEXT_NAME} because it's already visible in the
+            # ContextBuilder form before the build starts.
+            page.wait_for_selector("text=Building context with AI", state="hidden", timeout=60000)
             page.wait_for_load_state("networkidle")
             check("Context built successfully", True)
         except PWTimeout:
@@ -179,6 +181,19 @@ def run(browser):
 
         # ── Step 5: Click Refine Skill (#39) ──
         print("\n  [5/7] Refine skill with context")
+        # Capture the /api/skills/refine response for diagnostics
+        refine_response = {}
+
+        def _on_response(response):
+            if "/api/skills/refine" in response.url:
+                refine_response["status"] = response.status
+                try:
+                    refine_response["body"] = response.text()
+                except Exception:
+                    refine_response["body"] = "(could not read)"
+
+        page.on("response", _on_response)
+
         try:
             refine_btn = page.get_by_role("button", name="Refine Skill")
             # Log button state and Refinery text for debugging
@@ -198,20 +213,25 @@ def run(browser):
         # ── Step 6: Wait for refinement to complete (#39) ──
         print("\n  [6/7] Wait for refinement result")
         try:
-            # Wait for either success ("Refinement Complete") or error text
-            page.wait_for_selector(
-                "xpath=//*[contains(text(),'Refinement Complete') or contains(@class,'text-red')]",
-                timeout=120000,
-            )
-            body = page.inner_text("body")
-            if "Refinement Complete" in body:
-                check("Refinement Complete shown", True, body[:300])
-            else:
-                fail("Refinement returned an error", body[:500])
-                return
+            # Wait for the "Refining with AI..." spinner to disappear.
+            # This fires when the API returns (success or error).
+            page.wait_for_selector("text=Refining with AI", state="hidden", timeout=120000)
         except PWTimeout:
-            body = page.inner_text("body")
-            # Dump the full Refinery section for diagnostics
+            # Dump API response if captured
+            if refine_response:
+                print(f"    API: HTTP {refine_response.get('status')} → {refine_response.get('body', '')[:300]}")
+            fail("Refinement did not complete within 120s")
+            return
+
+        # Dump API response for diagnostics
+        if refine_response:
+            print(f"    API: HTTP {refine_response.get('status')} → {refine_response.get('body', '')[:300]}")
+
+        body = page.inner_text("body")
+        if "Refinement Complete" in body:
+            check("Refinement Complete shown", True, body[:300])
+        else:
+            # Check for visible error text
             try:
                 ref_el = page.locator("text=Your Skills Refinery").locator(
                     "xpath=ancestor::div[contains(@class,'rounded-xl')]"
@@ -220,7 +240,7 @@ def run(browser):
                 print(f"    Refinery section: {ref_text[:400]}")
             except Exception:
                 pass
-            fail("Refinement did not complete within 120s", body[:500])
+            fail("Refinement failed — no 'Refinement Complete' shown", body[:500])
             return
 
         # ── Step 7: Clean up ──
