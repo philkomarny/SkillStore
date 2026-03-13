@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import MySkillsList from "@/components/MySkillsList";
 import MyContextsList from "@/components/MyContextsList";
@@ -15,12 +15,20 @@ interface DashboardClientProps {
 }
 
 export default function DashboardClient({
-  skills,
-  contextProfiles,
+  skills: serverSkills,
+  contextProfiles: serverContextProfiles,
   initialSkillId,
   userName,
 }: DashboardClientProps) {
   const router = useRouter();
+
+  // Local state mirrors server props for optimistic updates
+  const [skills, setSkills] = useState(serverSkills);
+  const [contextProfiles, setContextProfiles] = useState(serverContextProfiles);
+
+  // Sync local state when server props change (e.g. after router.refresh())
+  useEffect(() => { setSkills(serverSkills); }, [serverSkills]);
+  useEffect(() => { setContextProfiles(serverContextProfiles); }, [serverContextProfiles]);
 
   // Selection state for refinement
   const [selectedSkillId, setSelectedSkillId] = useState<string | null>(
@@ -53,6 +61,7 @@ export default function DashboardClient({
       const res = await fetch(`/api/user-skills/${id}`, { method: "DELETE" });
       if (res.ok) {
         console.log("[Dashboard] Skill deleted:", id);
+        setSkills((prev) => prev.filter((s: any) => s.slug !== id));
         if (selectedSkillId === id) setSelectedSkillId(null);
         router.refresh();
       } else {
@@ -68,6 +77,7 @@ export default function DashboardClient({
       const res = await fetch(`/api/context/profiles/${id}`, { method: "DELETE" });
       if (res.ok) {
         console.log("[Dashboard] Context deleted:", id);
+        setContextProfiles((prev) => prev.filter((c: any) => c.id !== id));
         if (selectedContextId === id) setSelectedContextId(null);
         router.refresh();
       } else {
