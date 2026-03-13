@@ -57,6 +57,10 @@ def catalog_lineage_key(slug: str) -> str:
     return f"{_CATALOG_PREFIX}/{slug}/lineage.json"
 
 
+def catalog_screening_key(slug: str) -> str:
+    return f"{_CATALOG_PREFIX}/{slug}/screening.json"
+
+
 def catalog_index_key() -> str:
     return f"{_CATALOG_PREFIX}/_index.json"
 
@@ -282,45 +286,57 @@ def rebuild_catalog_index(
     prefix = f"{_CATALOG_PREFIX}/"
     paginator = s3_client.get_paginator("list_objects_v2")
 
-    meta_keys: list[str] = []
+    slugs: list[str] = []
     for page in paginator.paginate(Bucket=bucket, Prefix=prefix, Delimiter="/"):
         for cp in page.get("CommonPrefixes", []):
             slug = cp["Prefix"].rstrip("/").split("/")[-1]
             if slug.startswith("_"):
                 continue
-            meta_keys.append(f"{cp['Prefix']}metadata.json")
+            slugs.append(slug)
 
-    logger.info(f"rebuild_catalog_index: found {len(meta_keys)} slug(s)")
+    logger.info(f"rebuild_catalog_index: found {len(slugs)} slug(s)")
 
     def _load(key: str) -> dict | None:
         return _get_json(s3_client, bucket, key)
 
-    entries: list[dict] = []
+    # Load metadata and screening files in parallel (#48)
+    meta_keys = [f"{prefix}{s}/metadata.json" for s in slugs]
+    screen_keys = [f"{prefix}{s}/screening.json" for s in slugs]
+    all_keys = meta_keys + screen_keys
+
+    results: dict[str, dict | None] = {}
     with ThreadPoolExecutor(max_workers=20) as pool:
-        futures = {pool.submit(_load, k): k for k in meta_keys}
+        futures = {pool.submit(_load, k): k for k in all_keys}
         for fut in as_completed(futures):
             key = futures[fut]
             try:
-                meta = fut.result()
+                results[key] = fut.result()
             except Exception as exc:
                 logger.warning(f"rebuild_catalog_index: failed to read {key}: {exc}")
-                continue
-            if meta is None:
-                continue
-            status = meta.get("status", "approved")
-            if not include_all_statuses and status != "approved":
-                continue
-            slug = meta.get("slug", key.split("/")[-2])
-            entries.append({
-                "slug": slug,
-                "name": meta.get("name", ""),
-                "description": meta.get("description", ""),
-                "category": meta.get("category", ""),
-                "tags": meta.get("tags", []),
-                "version": meta.get("version", "1.0.0"),
-                "verificationLevel": meta.get("verification_level", 0),
-                "status": status,
-            })
+                results[key] = None
+
+    entries: list[dict] = []
+    for slug in slugs:
+        meta = results.get(f"{prefix}{slug}/metadata.json")
+        if meta is None:
+            continue
+        status = meta.get("status", "approved")
+        if not include_all_statuses and status != "approved":
+            continue
+        screening = results.get(f"{prefix}{slug}/screening.json")
+        # None means not yet screened (backward compat — treat as passed)
+        screening_passed = screening.get("passed", True) if screening else None
+        entries.append({
+            "slug": meta.get("slug", slug),
+            "name": meta.get("name", ""),
+            "description": meta.get("description", ""),
+            "category": meta.get("category", ""),
+            "tags": meta.get("tags", []),
+            "version": meta.get("version", "1.0.0"),
+            "verificationLevel": meta.get("verification_level", 0),
+            "status": status,
+            "screeningPassed": screening_passed,
+        })
 
     entries.sort(key=lambda x: x["slug"])
     _put_json(s3_client, bucket, catalog_index_key(), entries)

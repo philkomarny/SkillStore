@@ -39,6 +39,7 @@ from .skill_catalog import (
     catalog_meta_key,
     catalog_content_key,
     catalog_lineage_key,
+    catalog_screening_key,
     catalog_index_key,
     catalog_export_key,
     skill_exists,
