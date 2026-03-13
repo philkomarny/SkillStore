@@ -30,6 +30,7 @@ from . import (
     test_user_skill_lifecycle,
     test_context_lifecycle,
     test_refine_skill,
+    test_clap_lifecycle,
 )
 from .helpers import report_and_exit
 
@@ -59,6 +60,7 @@ ALL_TESTS = [
     test_user_skill_lifecycle,
     test_context_lifecycle,
     test_refine_skill,
+    test_clap_lifecycle,
 ]
 
 
