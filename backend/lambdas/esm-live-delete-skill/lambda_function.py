@@ -93,6 +93,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
 
     note: str | None = (params.get("note") or "").strip() or None
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'by': by, 'note': note})}")
+
     if not skill_exists(s3_client, logger, slug, bucket=BUCKET_NAME):
         return _error(f"Skill not found: {slug}", status=404)
 
@@ -113,8 +115,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     rebuild_catalog_index(s3_client, logger, bucket=BUCKET_NAME)
 
     logger.info(f"Skill deprecated: {slug} by {by}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps({"slug": slug}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

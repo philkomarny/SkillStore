@@ -122,6 +122,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if err:
         return _error(err, status=400)
 
+    logger.info(f"Resolved Params: {dumps({'context_id': context_id, 'user_id': user_id})}")
+
     metadata = _s3_read_json(_context_metadata_key(user_id, context_id))
     if metadata is None:
         return _error(f"Context not found: {context_id}", status=404)
@@ -140,8 +142,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         response["createdAt"] = metadata.get("createdAt", "")
 
     logger.info(f"Returning context {context_id} status={status}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps(response),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

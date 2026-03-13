@@ -111,7 +111,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         404 { message } when document not found.
         500 { message } on storage failure.
     """
-    logger.info(f"Incoming Event (keys): {list(event.keys())}")
+    logger.info(f"Incoming Event: {dumps(event)}")
 
     # Resolve md5 from path parameters, query string, or body.
     path_params = event.get("pathParameters") or {}
@@ -128,6 +128,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         return _error("Missing required parameter: 'md5'", status=400)
 
     user_id: str = (qs.get("user_id") or params.get("user_id") or "").strip()
+
+    logger.info(f"Resolved Params: {dumps({'md5': md5, 'user_id': user_id})}")
 
     # Optional library membership check.
     if user_id and not _in_library(user_id, md5):
@@ -154,9 +156,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         "text": text,
     }
 
-    logger.info(f"Returning document md5={md5} status={response_body['status']}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps(response_body),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

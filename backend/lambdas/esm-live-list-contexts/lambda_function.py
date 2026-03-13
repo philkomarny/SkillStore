@@ -109,11 +109,14 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if err:
         return _error(err, status=400)
 
+    logger.info(f"Resolved Params: {dumps({'user_id': user_id})}")
+
     entries = _list_contexts_for_user(user_id)
 
-    logger.info(f"Returning {len(entries)} context(s) for user_id={user_id!r}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps(entries),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

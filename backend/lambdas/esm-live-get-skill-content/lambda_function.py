@@ -70,13 +70,17 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if isnullstr(slug):
         return _error("Missing required parameter: 'slug'", status=400)
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug})}")
+
     content = read_skill_content(s3_client, logger, slug, bucket=BUCKET_NAME)
     if content is None:
         return _error(f"Skill not found: {slug}", status=404)
 
     logger.info(f"Returning content for slug={slug} ({len(content)} bytes)")
-    return {
+    result = {
         "statusCode": 200,
         "headers": {**_CORS_HEADERS, "Content-Type": "text/markdown; charset=utf-8"},
         "body": content,
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

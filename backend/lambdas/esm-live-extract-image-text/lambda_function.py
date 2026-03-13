@@ -154,7 +154,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         422 { message } when OCR yields no text.
         500 { message } on failure.
     """
-    logger.info(f"Incoming Event (keys): {list(event.keys())}")
+    logger.info(f"Incoming Event: {dumps(event)}")
 
     params = event
     if isinstance(event.get("body"), str):
@@ -166,6 +166,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     md5: str = (params.get("md5") or "").strip().lower()
     if isnullstr(md5):
         return _error("Missing required parameter: 'md5'", status=400)
+
+    logger.info(f"Resolved Params: {dumps({'md5': md5})}")
 
     # Idempotency: skip if text.txt already exists.
     if _text_already_extracted(md5):
@@ -213,4 +215,6 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     _update_metadata(md5, metadata, "ready")
 
     logger.info(f"Image OCR complete: md5={md5} ext={ext} chars={len(text)}")
-    return {"statusCode": 200, "body": dumps({"md5": md5, "status": "ready", "char_count": len(text)})}
+    result = {"statusCode": 200, "body": dumps({"md5": md5, "status": "ready", "char_count": len(text)})}
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

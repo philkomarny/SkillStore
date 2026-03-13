@@ -108,7 +108,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         404 { message } when skill not in Refinery.
         500 { message } on storage failure.
     """
-    logger.info(f"Incoming Event (keys): {list(event.keys())}")
+    logger.info(f"Incoming Event: {dumps(event)}")
 
     qs = event.get("queryStringParameters") or {}
     params = event
@@ -127,14 +127,18 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if err:
         return _error(err, status=400)
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'user_id': user_id})}")
+
     if not _skill_exists(user_id, slug):
         return _error(f"Skill {slug} not found in Refinery for user {user_id}", status=404)
 
     count = _delete_all(user_id, slug)
 
     logger.info(f"Deleted user-skill: slug={slug} user={user_id} objects={count}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps({"slug": slug, "removed": True}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

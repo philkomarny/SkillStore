@@ -210,6 +210,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if err:
         return _error(err, status=400)
 
+    logger.info(f"Resolved Params: {dumps({'name': name, 'documents': documents, 'user_id': user_id})}")
+
     # Validate all documents exist and are ready.
     doc_infos: list[dict] = []
     not_ready: list[str] = []
@@ -274,9 +276,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     metadata["status"] = "ready"
     _s3_write_json(_context_metadata_key(user_id, context_id), metadata)
 
-    logger.info(f"Context {context_id} ready — {len(markdown)} chars")
-    return {
+    result = {
         "statusCode": 201,
         "headers": _CORS_HEADERS,
         "body": dumps({"contextId": context_id, "status": "ready"}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

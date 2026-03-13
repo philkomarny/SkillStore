@@ -120,6 +120,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         logger.error("Validation failed: missing required parameter 'user_image_url'")
         return _missing_param("user_image_url")
 
+    logger.info(f"Resolved Params: {dumps({'user_id': user_id, 'user_name': user_name, 'user_email': user_email, 'user_image_url': user_image_url})}")
+
     record = {
         "user-id": user_id,
         "user-name": user_name,
@@ -145,4 +147,6 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         return {"statusCode": 500, "headers": _CORS_HEADERS, "body": dumps({"message": msg})}
 
     logger.info(f"Profile saved: user_id={user_id} email={user_email}")
-    return {"statusCode": 200, "headers": _CORS_HEADERS, "body": None}
+    result = {"statusCode": 200, "headers": _CORS_HEADERS, "body": None}
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

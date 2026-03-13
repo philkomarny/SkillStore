@@ -72,10 +72,14 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if isnullstr(slug):
         return _error("Missing required parameter: 'slug'", status=400)
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug})}")
+
     exists = skill_exists(s3_client, logger, slug, bucket=BUCKET_NAME)
     status_code = 200 if exists else 404
-    return {
+    result = {
         "statusCode": status_code,
         "headers": _CORS_HEADERS,
         "body": dumps({"slug": slug, "exists": exists}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

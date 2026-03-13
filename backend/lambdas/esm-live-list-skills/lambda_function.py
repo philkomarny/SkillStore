@@ -68,6 +68,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     params = event.get("queryStringParameters") or {}
     include_all = (params.get("status") or "").strip().lower() == "all"
 
+    logger.info(f"Resolved Params: {dumps({'include_all': include_all})}")
+
     # If admin view requested, rebuild on the fly to ensure freshness.
     # For standard catalog reads, serve the pre-built index.
     if include_all:
@@ -78,9 +80,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if not include_all:
         entries = [e for e in entries if e.get("status") == "approved"]
 
-    logger.info(f"Returning {len(entries)} catalog entries (status_filter={'all' if include_all else 'approved'})")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps(entries),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

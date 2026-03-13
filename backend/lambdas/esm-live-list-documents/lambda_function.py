@@ -112,7 +112,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         400 { message } for missing user_id.
         500 { message } on storage failure.
     """
-    logger.info(f"Incoming Event (keys): {list(event.keys())}")
+    logger.info(f"Incoming Event: {dumps(event)}")
 
     # Support both query string and JSON body.
     qs = event.get("queryStringParameters") or {}
@@ -126,6 +126,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     user_id: str = (qs.get("user_id") or params.get("user_id") or "").strip()
     if isnullstr(user_id):
         return _error("Missing required parameter: 'user_id'", status=400)
+
+    logger.info(f"Resolved Params: {dumps({'user_id': user_id})}")
 
     refs = _list_library(user_id)
 
@@ -144,8 +146,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     documents.sort(key=lambda d: d.get("added_at", ""), reverse=True)
 
     logger.info(f"Listed {len(documents)} documents for user={user_id}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps({"documents": documents}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

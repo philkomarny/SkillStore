@@ -137,7 +137,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         200 { imported, failed, failures } on completion (partial success included).
         500 { message } on parse or validation error.
     """
-    logger.info(f"Incoming Event (truncated): {dumps(event)[:500]}")
+    logger.info(f"Incoming Event: {dumps(event)}")
 
     items: list[dict] = []
     body = event.get("body") or event
@@ -152,6 +152,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if not items:
         return _error("Request body must be a non-empty JSON array", status=400)
 
+    logger.info(f"Resolved Params: {dumps({'item_count': len(items)})}")
     logger.info(f"Importing {len(items)} skill(s)")
 
     imported: list[str] = []
@@ -174,7 +175,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     rebuild_catalog_index(s3_client, logger, bucket=BUCKET_NAME)
 
     logger.info(f"Bulk import complete: {len(imported)} imported, {len(failures)} failed")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps({
@@ -183,3 +184,5 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
             "failures": failures,
         }),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

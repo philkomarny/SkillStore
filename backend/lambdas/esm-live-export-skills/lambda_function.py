@@ -56,6 +56,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     """
     logger.info(f"Incoming Event: {dumps(event)}")
 
+    logger.info(f"Resolved Params: {dumps({})}")
+
     export_key = export_catalog(s3_client, logger, bucket=BUCKET_NAME)
 
     # Derive skill count from the key name isn't reliable; read it back.
@@ -69,9 +71,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     except Exception:
         skill_count = -1
 
-    logger.info(f"Export complete: {export_key} ({skill_count} skills)")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps({"export_key": export_key, "skill_count": skill_count}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

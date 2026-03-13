@@ -74,6 +74,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if err:
         return _error(err, status=400)
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'user_id': user_id})}")
+
     # Read metadata.
     try:
         obj = s3_client.get_object(Bucket=BUCKET_NAME, Key=_metadata_key(user_id, slug))
@@ -106,9 +108,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         "content": content,
     }
 
-    logger.info(f"Returning skill {slug} v{version} for user {user_id}")
-    return {
+    result_response = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps(result),
     }
+    logger.info(f"Return Value: {dumps(result_response)}")
+    return result_response

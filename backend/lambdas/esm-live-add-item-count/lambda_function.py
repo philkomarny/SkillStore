@@ -150,6 +150,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
 
     user_id: str | None = (params.get("user_id") or "").strip() or None
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'count_type': count_type, 'ip_address': ip_address, 'count': raw_count, 'user_id': user_id})}")
+
     record = {
         "count": raw_count,
         "ip-address": ip_address,
@@ -172,4 +174,6 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         return _error(f"S3 write FAILED for key '{s3_key}': {exc}")
 
     logger.info(f"Count event saved: {count_type}/{slug} count={raw_count} user_id={user_id}")
-    return {"statusCode": 200, "headers": _CORS_HEADERS, "body": None}
+    result = {"statusCode": 200, "headers": _CORS_HEADERS, "body": None}
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

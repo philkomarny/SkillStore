@@ -119,11 +119,13 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if err:
         return _error(err, status=400)
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'user_id': user_id})}")
+
     # Dedup: if user already has this skill, return existing.
     existing = _user_skill_exists(user_id, slug)
     if existing:
         logger.info(f"User {user_id} already has skill {slug}")
-        return {
+        result = {
             "statusCode": 200,
             "headers": _CORS_HEADERS,
             "body": dumps({
@@ -132,6 +134,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
                 "already_exists": True,
             }),
         }
+        logger.info(f"Return Value: {dumps(result)}")
+        return result
 
     # Read catalog skill.
     catalog_meta = read_skill_metadata(s3_client, logger, slug, bucket=BUCKET_NAME)
@@ -171,9 +175,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         ContentType="application/json",
     )
 
-    logger.info(f"Copied skill {slug} to Refinery for user {user_id}")
-    return {
+    result = {
         "statusCode": 201,
         "headers": _CORS_HEADERS,
         "body": dumps({"slug": slug, "version": 1, "already_exists": False}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

@@ -123,6 +123,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     author_name: str | None = (params.get("author_name") or "").strip() or None
     version: str = (params.get("version") or "1.0.0").strip()
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'name': name, 'description': description, 'category': category, 'tags': tags, 'author_id': author_id, 'author_name': author_name, 'version': version})}")
+
     if skill_exists(s3_client, logger, slug, bucket=BUCKET_NAME):
         return _error(f"Skill already exists: {slug}", status=409)
 
@@ -154,8 +156,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     rebuild_catalog_index(s3_client, logger, bucket=BUCKET_NAME)
 
     logger.info(f"Skill created: {slug} by {author_id}")
-    return {
+    result = {
         "statusCode": 201,
         "headers": _CORS_HEADERS,
         "body": dumps({"slug": slug}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

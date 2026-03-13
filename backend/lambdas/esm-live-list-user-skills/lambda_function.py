@@ -101,7 +101,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         400 { message } for missing user_id.
         500 { message } on storage failure.
     """
-    logger.info(f"Incoming Event (keys): {list(event.keys())}")
+    logger.info(f"Incoming Event: {dumps(event)}")
 
     qs = event.get("queryStringParameters") or {}
     params = event
@@ -116,14 +116,18 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if err:
         return _error(err, status=400)
 
+    logger.info(f"Resolved Params: {dumps({'user_id': user_id})}")
+
     skills = _list_user_skills(user_id)
 
     # Sort by updated_at descending (newest first).
     skills.sort(key=lambda s: s.get("updated_at", ""), reverse=True)
 
     logger.info(f"Listed {len(skills)} user-skills for user={user_id}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps({"skills": skills}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

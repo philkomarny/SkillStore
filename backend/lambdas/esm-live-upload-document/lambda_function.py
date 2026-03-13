@@ -302,16 +302,20 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
 
     md5 = hashlib.md5(raw_bytes).hexdigest()  # noqa: S324 — used for dedup, not security
 
+    logger.info(f"Resolved Params: {dumps({'filename': filename, 'user_id': user_id, 'mime_type': mime_type, 'md5': md5, 'size_bytes': len(raw_bytes)})}")
+
     # Idempotency: if document already in global store, just update library ref.
     if _document_exists(md5):
         existing = _read_metadata(md5)
         _add_to_library(user_id, md5, filename)
         logger.info(f"Duplicate upload; md5={md5} already in store; user={user_id}")
-        return {
+        result = {
             "statusCode": 200,
             "headers": _CORS_HEADERS,
             "body": dumps({"md5": md5, "status": existing.get("status", "processing"), "existed": True}),
         }
+        logger.info(f"Return Value: {dumps(result)}")
+        return result
 
     metadata = {
         "md5": md5,
@@ -329,9 +333,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     _add_to_library(user_id, md5, filename)
     _trigger_extraction(md5, ext)
 
-    logger.info(f"Document stored: md5={md5} filename={filename} size={len(raw_bytes)} user={user_id}")
-    return {
+    result = {
         "statusCode": 201,
         "headers": _CORS_HEADERS,
         "body": dumps({"md5": md5, "status": "processing", "existed": False}),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

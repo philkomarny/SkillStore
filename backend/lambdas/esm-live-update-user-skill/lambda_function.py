@@ -97,6 +97,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     status: str = (params.get("status") or "refined").strip()
     context_summary: str = (params.get("context_summary") or "").strip()
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'user_id': user_id, 'version': version, 'status': status, 'context_summary': context_summary})}")
+
     # Verify the skill exists by reading current metadata.
     try:
         obj = s3_client.get_object(Bucket=BUCKET_NAME, Key=_metadata_key(user_id, slug))
@@ -129,7 +131,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     )
 
     logger.info(f"Updated skill {slug} to v{version} for user {user_id}")
-    return {
+    result = {
         "statusCode": 200,
         "headers": _CORS_HEADERS,
         "body": dumps({
@@ -139,3 +141,5 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
             "updated_at": now,
         }),
     }
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

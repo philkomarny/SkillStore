@@ -161,6 +161,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
 
     verbose: bool = str(params.get("verbose") or "").strip().lower() == "true"
 
+    logger.info(f"Resolved Params: {dumps({'slug': slug, 'count_type': count_type, 'verbose': verbose})}")
+
     prefix = f"{_KEY_PREFIX}/{count_type}/{slug}/"
     logger.info(f"Listing keys under s3://{BUCKET_NAME}/{prefix} (verbose={verbose})")
 
@@ -191,4 +193,6 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if verbose:
         body["records"] = [list(r) for r in records]
 
-    return {"statusCode": 200, "headers": _CORS_HEADERS, "body": dumps(body)}
+    result = {"statusCode": 200, "headers": _CORS_HEADERS, "body": dumps(body)}
+    logger.info(f"Return Value: {dumps(result)}")
+    return result

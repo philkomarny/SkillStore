@@ -94,6 +94,8 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         logger.error("Validation failed: missing required parameter 'user_id'")
         return _missing_param("user_id")
 
+    logger.info(f"Resolved Params: {dumps({'user_id': user_id})}")
+
     s3_key = f"{_KEY_PREFIX}/{user_id}.json"
     logger.info(f"Reading profile from s3://{BUCKET_NAME}/{s3_key}")
 
@@ -113,5 +115,6 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         logger.error(msg)
         return {"statusCode": 500, "headers": _CORS_HEADERS, "body": dumps({"message": msg})}
 
-    logger.info(f"Retrieved profile for user: {user_id}")
-    return {"statusCode": 200, "headers": _CORS_HEADERS, "body": dumps(record)}
+    result = {"statusCode": 200, "headers": _CORS_HEADERS, "body": dumps(record)}
+    logger.info(f"Return Value: {dumps(result)}")
+    return result
