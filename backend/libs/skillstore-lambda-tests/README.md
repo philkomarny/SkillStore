@@ -1,11 +1,11 @@
-# skillstore-smoke-back
+# skillstore-lambda-tests
 
-Backend smoke tests for SkillStore Lambda functions and Step Function pipelines.
+Integration tests for SkillStore Lambda functions and Step Function pipelines.
 
 ## Setup
 
 ```bash
-cd backend/libs/skillstore-smoke-back
+cd backend/libs/skillstore-lambda-tests
 make install
 ```
 
@@ -13,14 +13,14 @@ make install
 
 ```bash
 make test                    # All tests
-make test-one FILE=skillstore_smoke_back/tests/test_screen_skills.py  # Single file
+make test-one FILE=skillstore_lambda_tests/tests/test_screen_skills.py  # Single file
 poetry run pytest -k "safe"  # Pattern match
 ```
 
 ## Structure
 
 ```
-skillstore_smoke_back/
+skillstore_lambda_tests/
 ├── conftest.py          # Shared fixtures (Lambda client, invoke helper)
 ├── fixtures/
 │   └── skills.py        # Test skill markdown fixtures
@@ -30,6 +30,6 @@ skillstore_smoke_back/
 
 ## Adding Tests
 
-1. Create `skillstore_smoke_back/tests/test_<feature>.py`
+1. Create `skillstore_lambda_tests/tests/test_<feature>.py`
 2. Use the `invoke` fixture to call Lambdas: `result = invoke("lambda-name", payload)`
-3. For test data, add fixtures under `skillstore_smoke_back/fixtures/`
+3. For test data, add fixtures under `skillstore_lambda_tests/fixtures/`

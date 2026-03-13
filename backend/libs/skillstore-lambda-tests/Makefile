@@ -1,5 +1,5 @@
 # -------------------------------------------------------------------------
-# Makefile for skillstore-smoke-back
+# Makefile for skillstore-lambda-tests
 # -------------------------------------------------------------------------
 
 # -------------------------------------------------------------------------
@@ -28,7 +28,7 @@ test:
 # -------------------------------------------------------------------------
 # Run a single test file
 # -------------------------------------------------------------------------
-# Usage: make test-one FILE=skillstore_smoke_back/tests/test_screen_skills.py
+# Usage: make test-one FILE=skillstore_lambda_tests/tests/test_screen_skills.py
 test-one:
 	poetry run pytest $(FILE)
 

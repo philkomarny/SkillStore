@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "skillstore-smoke-back"
+name = "skillstore-lambda-tests"
 version = "0.1.0"
-description = "Backend smoke tests for SkillStore Lambda functions and Step Function pipelines"
+description = "Integration tests for SkillStore Lambda functions and Step Function pipelines"
 authors = ["Craig Trim <ctrim@maryville.edu>"]
 readme = "README.md"
-packages = [{include = "skillstore_smoke_back"}]
+packages = [{include = "skillstore_lambda_tests"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<4.0"
@@ -20,7 +20,7 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-testpaths = ["skillstore_smoke_back/tests"]
+testpaths = ["skillstore_lambda_tests/tests"]
 python_files = ["test_*.py"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short -s"

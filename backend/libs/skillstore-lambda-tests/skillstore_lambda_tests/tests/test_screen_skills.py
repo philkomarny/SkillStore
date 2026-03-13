@@ -9,11 +9,11 @@ Each test case provides a skill markdown fixture with an expected decision
 on the Express Step Function, which chains the three inner Lambdas.
 
 Run:
-    cd backend/libs/skillstore-smoke-back
+    cd backend/libs/skillstore-lambda-tests
     make test
 
     # or a single test:
-    poetry run pytest skillstore_smoke_back/tests/test_screen_skills.py -k "safe_enrollment" -v -s
+    poetry run pytest skillstore_lambda_tests/tests/test_screen_skills.py -k "safe_enrollment" -v -s
 
 Related: https://github.com/philkomarny/SkillStore/issues/40
 Renamed: https://github.com/philkomarny/SkillStore/issues/46
@@ -29,7 +29,7 @@ from typing import Any
 import boto3
 import pytest
 
-from skillstore_smoke_back.fixtures.skills import (
+from skillstore_lambda_tests.fixtures.skills import (
     ALL_FIXTURES,
     BORDERLINE_SKILL,
     DATA_EXFILTRATION,
