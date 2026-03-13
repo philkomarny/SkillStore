@@ -31,6 +31,7 @@ from . import (
     test_context_lifecycle,
     test_refine_skill,
     test_clap_lifecycle,
+    test_catalog_excludes_smoke,
 )
 from .helpers import report_and_exit
 
@@ -61,6 +62,7 @@ ALL_TESTS = [
     test_context_lifecycle,
     test_refine_skill,
     test_clap_lifecycle,
+    test_catalog_excludes_smoke,
 ]
 
 
