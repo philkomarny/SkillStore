@@ -13,7 +13,7 @@ import hashlib
 import boto3
 from botocore.exceptions import ClientError
 
-from .helpers import BASE_URL, AUTH_STATE, FIXTURE_DOC, check, fail, ok, PWTimeout
+from .helpers import BASE_URL, AUTH_STATE, FIXTURE_DOC, check, fail, goto, ok, PWTimeout
 
 BUCKET = "mskillsiq"
 # S3 layout — https://github.com/philkomarny/SkillStore/issues/16
@@ -102,8 +102,7 @@ def run(browser):
     try:
         # ── Get user ID from session ──
         print(f"    fetching session from {BASE_URL}/api/auth/session")
-        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, f"{BASE_URL}/dashboard")
         user_id = _get_user_id(page)
         if not user_id:
             fail("Could not extract user ID from /api/auth/session")

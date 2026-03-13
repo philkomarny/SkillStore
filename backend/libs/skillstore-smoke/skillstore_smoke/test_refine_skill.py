@@ -11,7 +11,7 @@ Authenticated test that exercises the full refine flow (#39):
 """
 from pathlib import Path
 
-from .helpers import BASE_URL, AUTH_STATE, check, fail, ok, PWTimeout
+from .helpers import BASE_URL, AUTH_STATE, check, fail, goto, ok, PWTimeout
 
 FIXTURE_DOC = Path(__file__).parent / "fixtures" / "test-doc.txt"
 
@@ -61,8 +61,7 @@ def run(browser):
 
     try:
         # ── Pre-cleanup: remove leftover skill/context from prior runs ──
-        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, f"{BASE_URL}/dashboard")
         check(
             "Dashboard loaded",
             "sign" not in page.url.lower() and "auth" not in page.url.lower(),
@@ -84,8 +83,7 @@ def run(browser):
         # ── Step 1: Copy skill to Refinery ──
         print("\n  [1/7] Copy skill to Refinery")
         skill_url = f"{BASE_URL}/skills/{TEST_SKILL_CATEGORY}/{TEST_SKILL_SLUG}"
-        page.goto(skill_url, wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, skill_url)
         check("Skill detail page loaded", TEST_SKILL_SLUG in page.url, page.url)
 
         try:
@@ -143,8 +141,7 @@ def run(browser):
         # auto-selects the context via handleContextCreated — clicking it again
         # would toggle it OFF since DashboardClient uses toggle selection).
         print("\n  [3/7] Reload dashboard and select skill")
-        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, f"{BASE_URL}/dashboard")
 
         # Click the skill selection button (#39). The row contains:
         #   <button class="flex-1 ...">name</button>  ← selection (first child)
@@ -249,13 +246,7 @@ def run(browser):
         # ── Step 7: Clean up ──
         print("\n  [7/7] Clean up test skill and context")
         # After a long refinement the page/frame may be stale; retry navigation.
-        for _attempt in range(3):
-            try:
-                page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-                page.wait_for_load_state("networkidle")
-                break
-            except Exception:
-                page.wait_for_timeout(1000)
+        goto(page, f"{BASE_URL}/dashboard")
         _cleanup_skill(page)
         page.wait_for_load_state("networkidle")
         _cleanup_context(page)

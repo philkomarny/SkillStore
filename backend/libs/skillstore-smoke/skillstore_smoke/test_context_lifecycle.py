@@ -11,7 +11,7 @@ Authenticated test that exercises the full Build Context flow (#38):
 """
 from pathlib import Path
 
-from .helpers import BASE_URL, AUTH_STATE, check, fail, ok, PWTimeout
+from .helpers import BASE_URL, AUTH_STATE, check, fail, goto, ok, PWTimeout
 
 FIXTURE_DOC = Path(__file__).parent / "fixtures" / "test-doc.txt"
 CONTEXT_NAME = "Smoke Context Test"
@@ -48,8 +48,7 @@ def run(browser):
 
     try:
         # ── Navigate to dashboard ──
-        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, f"{BASE_URL}/dashboard")
         check(
             "Dashboard loaded (not redirected to sign-in)",
             "sign" not in page.url.lower() and "auth" not in page.url.lower(),
@@ -170,8 +169,7 @@ def run(browser):
         # ── Step 7: Verify context is gone ──
         print("\n  [7/7] Verify context removed from list")
         # Reload to ensure we see fresh server state after delete
-        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, f"{BASE_URL}/dashboard")
         body = page.inner_text("body")
         context_gone = CONTEXT_NAME not in body
         check(

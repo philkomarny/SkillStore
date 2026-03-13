@@ -41,6 +41,7 @@ from . import (
     test_download_lifecycle,
     test_catalog_excludes_smoke,
     test_verification_level,
+    test_skill_metadata_lifecycle,
 )
 from .helpers import report_and_exit
 
@@ -74,6 +75,7 @@ ALL_TESTS = [
     test_download_lifecycle,
     test_catalog_excludes_smoke,
     test_verification_level,
+    test_skill_metadata_lifecycle,
 ]
 
 

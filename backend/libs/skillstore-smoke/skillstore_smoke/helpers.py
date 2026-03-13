@@ -40,6 +40,22 @@ def new_page(browser):
     return p
 
 
+def goto(page, url, *, retries=3):
+    """Navigate with retry — Firefox sometimes raises NS_BINDING_ABORTED
+    when auth redirects or long-running operations detach the frame."""
+    for attempt in range(1, retries + 1):
+        try:
+            page.goto(url, wait_until="domcontentloaded")
+            page.wait_for_load_state("networkidle")
+            return
+        except Exception as exc:
+            if "NS_BINDING_ABORTED" in str(exc) and attempt < retries:
+                print(f"    ⟳ NS_BINDING_ABORTED (attempt {attempt}/{retries}), retrying…")
+                page.wait_for_timeout(1000)
+                continue
+            raise
+
+
 def report_and_exit():
     print(f"\n{'─' * 50}")
     if failures:

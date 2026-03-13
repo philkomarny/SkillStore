@@ -6,7 +6,7 @@ and validates S3 state directly via boto3.
 import boto3
 from botocore.exceptions import ClientError
 
-from .helpers import BASE_URL, AUTH_STATE, check, fail, ok, PWTimeout
+from .helpers import BASE_URL, AUTH_STATE, check, fail, goto, ok, PWTimeout
 
 BUCKET = "mskillsiq"
 S3_PREFIX = "eduskillsmp/skills/user"
@@ -81,8 +81,7 @@ def run(browser):
     try:
         # ── Get user ID from session ──
         print(f"    fetching session from {BASE_URL}/api/auth/session")
-        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, f"{BASE_URL}/dashboard")
         user_id = _get_user_id(page)
         if not user_id:
             fail("Could not extract user ID from /api/auth/session")
@@ -99,8 +98,7 @@ def run(browser):
         skill_url = f"{BASE_URL}/skills/{TEST_SKILL_CATEGORY}/{TEST_SKILL_SLUG}"
         print("\n  [1/5] Copy skill to refinery")
         print(f"    navigating to {skill_url}")
-        page.goto(skill_url, wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, skill_url)
         check("Skill detail page loaded", TEST_SKILL_SLUG in page.url, page.url)
 
         try:
@@ -161,8 +159,7 @@ def run(browser):
         # ── Step 4: Delete skill from refinery ──
         print("\n  [4/5] Delete skill from refinery")
         page.wait_for_timeout(2000)
-        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-        page.wait_for_load_state("networkidle")
+        goto(page, f"{BASE_URL}/dashboard")
         print("    back on dashboard, clicking trash icon")
 
         try:
@@ -170,16 +167,17 @@ def run(browser):
             trash_btn.click(timeout=8000)
             print("    confirming deletion")
             page.get_by_role("button", name="Yes, delete").click(timeout=8000)
-            # Wait for the skill row to disappear from the DOM after
-            # router.refresh() re-renders the server component.
+            # Wait for "Deleting..." to appear then disappear — confirms the
+            # API call completed and the optimistic removal took effect.
             try:
-                page.locator(f"a[href='/dashboard/skills/{TEST_SKILL_SLUG}']").wait_for(
-                    state="hidden", timeout=10000,
-                )
+                page.get_by_text("Deleting...").wait_for(state="visible", timeout=5000)
             except PWTimeout:
-                # Row didn't disappear — reload and re-check
-                page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
-                page.wait_for_load_state("networkidle")
+                pass  # May have already finished
+            try:
+                page.get_by_text("Deleting...").wait_for(state="hidden", timeout=15000)
+            except PWTimeout:
+                # Delete didn't complete in time — reload and re-check
+                goto(page, f"{BASE_URL}/dashboard")
 
             body = page.inner_text("body")
             skill_gone = TEST_SKILL_SLUG not in body and "irb-protocol-writer" not in body.lower()
