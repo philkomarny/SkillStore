@@ -40,6 +40,7 @@ from . import (
     test_clap_lifecycle,
     test_download_lifecycle,
     test_catalog_excludes_smoke,
+    test_verification_level,
 )
 from .helpers import report_and_exit
 
@@ -72,6 +73,7 @@ ALL_TESTS = [
     test_clap_lifecycle,
     test_download_lifecycle,
     test_catalog_excludes_smoke,
+    test_verification_level,
 ]
 
 
