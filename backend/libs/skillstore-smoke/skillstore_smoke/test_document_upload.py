@@ -18,7 +18,8 @@ def run(browser):
     p.set_default_timeout(20000)
 
     try:
-        p.goto(f"{BASE_URL}/dashboard", wait_until="networkidle")
+        p.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
+        p.wait_for_load_state("networkidle")
         check(
             "Dashboard loaded (not redirected to sign-in)",
             "sign" not in p.url.lower() and "auth" not in p.url.lower(),

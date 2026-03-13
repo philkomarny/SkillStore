@@ -48,7 +48,8 @@ def run(browser):
 
     try:
         # ── Navigate to dashboard ──
-        page.goto(f"{BASE_URL}/dashboard", wait_until="networkidle")
+        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
+        page.wait_for_load_state("networkidle")
         check(
             "Dashboard loaded (not redirected to sign-in)",
             "sign" not in page.url.lower() and "auth" not in page.url.lower(),
@@ -169,7 +170,8 @@ def run(browser):
         # ── Step 7: Verify context is gone ──
         print("\n  [7/7] Verify context removed from list")
         # Reload to ensure we see fresh server state after delete
-        page.goto(f"{BASE_URL}/dashboard", wait_until="networkidle")
+        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
+        page.wait_for_load_state("networkidle")
         body = page.inner_text("body")
         context_gone = CONTEXT_NAME not in body
         check(

@@ -81,7 +81,8 @@ def run(browser):
     try:
         # ── Get user ID from session ──
         print(f"    fetching session from {BASE_URL}/api/auth/session")
-        page.goto(f"{BASE_URL}/dashboard", wait_until="networkidle")
+        page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
+        page.wait_for_load_state("networkidle")
         user_id = _get_user_id(page)
         if not user_id:
             fail("Could not extract user ID from /api/auth/session")
@@ -98,7 +99,8 @@ def run(browser):
         skill_url = f"{BASE_URL}/skills/{TEST_SKILL_CATEGORY}/{TEST_SKILL_SLUG}"
         print("\n  [1/5] Copy skill to refinery")
         print(f"    navigating to {skill_url}")
-        page.goto(skill_url, wait_until="networkidle")
+        page.goto(skill_url, wait_until="domcontentloaded")
+        page.wait_for_load_state("networkidle")
         check("Skill detail page loaded", TEST_SKILL_SLUG in page.url, page.url)
 
         try:
@@ -168,8 +170,16 @@ def run(browser):
             trash_btn.click(timeout=8000)
             print("    confirming deletion")
             page.get_by_role("button", name="Yes, delete").click(timeout=8000)
-            page.wait_for_timeout(3000)
-            page.wait_for_load_state("networkidle")
+            # Wait for the skill row to disappear from the DOM after
+            # router.refresh() re-renders the server component.
+            try:
+                page.locator(f"a[href='/dashboard/skills/{TEST_SKILL_SLUG}']").wait_for(
+                    state="hidden", timeout=10000,
+                )
+            except PWTimeout:
+                # Row didn't disappear — reload and re-check
+                page.goto(f"{BASE_URL}/dashboard", wait_until="domcontentloaded")
+                page.wait_for_load_state("networkidle")
 
             body = page.inner_text("body")
             skill_gone = TEST_SKILL_SLUG not in body and "irb-protocol-writer" not in body.lower()
