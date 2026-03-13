@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Orchestrator for the skill safety screening Step Function pipeline.
+"""Orchestrator for the esm-live-screen-skills Step Function (#46).
 
 Thin wrapper that validates input and calls StartSyncExecution on the
 Express Step Function.  Returns the screening decision to the caller.
@@ -50,7 +50,7 @@ def _error(message: str, status: int = 500) -> dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 def handler(event: dict[str, Any], _) -> dict[str, Any]:
-    """Start a synchronous screening pipeline execution.
+    """Start a synchronous esm-live-screen-skills execution.
 
     This Lambda is called via API Gateway, so it uses HTTP-style
     request/response format (statusCode + body).  The inner pipeline
@@ -83,7 +83,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
         "author_id": author_id,
     }
 
-    logger.info(f"Starting screening pipeline: slug={slug} chars={len(content)}")
+    logger.info(f"Starting esm-live-screen-skills: slug={slug} chars={len(content)}")
 
     try:
         response = _sfn_client.start_sync_execution(
@@ -97,7 +97,7 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     if status != "SUCCEEDED":
         error_detail = response.get("error", "unknown")
         cause = response.get("cause", "")
-        return _error(f"Screening pipeline {status}: {error_detail} — {cause}")
+        return _error(f"esm-live-screen-skills {status}: {error_detail} — {cause}")
 
     sfn_result = loads(response["output"])
 

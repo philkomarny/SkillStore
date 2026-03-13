@@ -1,5 +1,5 @@
 {
-  "Comment": "Skill safety screening pipeline — classify → score (if needed) → decide. Express Step Function. Issue #40.",
+  "Comment": "esm-live-screen-skills — classify → score (if needed) → decide. Express Step Function. #40, renamed #46.",
   "StartAt": "Classify",
   "States": {
     "Classify": {

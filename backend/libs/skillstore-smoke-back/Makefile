@@ -28,7 +28,7 @@ test:
 # -------------------------------------------------------------------------
 # Run a single test file
 # -------------------------------------------------------------------------
-# Usage: make test-one FILE=skillstore_smoke_back/tests/test_screening_pipeline.py
+# Usage: make test-one FILE=skillstore_smoke_back/tests/test_screen_skills.py
 test-one:
 	poetry run pytest $(FILE)
 

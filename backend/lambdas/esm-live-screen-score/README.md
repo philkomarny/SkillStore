@@ -1,8 +1,8 @@
 # esm-live-screen-score
 
-Stage 2 of the skill safety screening pipeline (#40).
+Stage 2 of `esm-live-screen-skills` (#40, renamed #46).
 
-Scores the severity of a non-safe skill classification (1–5) using Claude Haiku via Bedrock. Only invoked when Stage 1 classifies as non-helpful. Invoked by the `screening-pipeline` Step Function — accepts and returns native JSON.
+Scores the severity of a non-safe skill classification (1–5) using Claude Haiku via Bedrock. Only invoked when Stage 1 classifies as non-helpful. Invoked by the `esm-live-screen-skills` Step Function — accepts and returns native JSON.
 
 ## Severity Scale
 

@@ -1,8 +1,8 @@
 #!/bin/bash
-# Deploy the screening pipeline Express Step Function.
+# Deploy the esm-live-screen-skills Express Step Function (#46).
 #
 # Usage:
-#   ./deploy-screening-pipeline.sh --account-id 123456789012 --role-arn arn:aws:iam::123456789012:role/stepfunction-ex
+#   ./deploy-esm-live-screen-skills.sh --account-id 123456789012 --role-arn arn:aws:iam::123456789012:role/stepfunction-ex
 #
 # On first run, creates the state machine.  On subsequent runs, updates it.
 
@@ -10,7 +10,7 @@ set -euo pipefail
 
 REGION="us-west-2"
 PROFILE="transcriptiq_lambdaserviceuser"
-SM_NAME="screening-pipeline"
+SM_NAME="esm-live-screen-skills"
 SM_TYPE="EXPRESS"
 
 # Parse arguments
@@ -29,7 +29,7 @@ if [[ -z "${ACCOUNT_ID:-}" || -z "${ROLE_ARN:-}" ]]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEFINITION_FILE="${SCRIPT_DIR}/screening-pipeline.json"
+DEFINITION_FILE="${SCRIPT_DIR}/esm-live-screen-skills.json"
 
 # Substitute account ID placeholder in the definition
 DEFINITION=$(sed "s/\${AWS_ACCOUNT_ID}/${ACCOUNT_ID}/g" "${DEFINITION_FILE}")

@@ -1,4 +1,4 @@
-"""Test skill fixtures for the screening pipeline.
+"""Test skill fixtures for esm-live-screen-skills (#46).
 
 Each fixture is a dict with:
     content   (str): full skill markdown (frontmatter + body).

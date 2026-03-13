@@ -1,8 +1,8 @@
 # esm-live-screen-orchestrate
 
-Entry point for the skill safety screening pipeline (#40).
+Entry point for the `esm-live-screen-skills` Express Step Function (#40, renamed #46).
 
-Validates input and executes the `screening-pipeline` Express Step Function synchronously. Returns the final screening decision to the caller.
+Validates input and executes `esm-live-screen-skills` synchronously. Returns the final screening decision to the caller.
 
 ## Input
 
@@ -24,7 +24,7 @@ Validates input and executes the `screening-pipeline` Express Step Function sync
 
 | Variable | Required | Purpose |
 |----------|----------|---------|
-| `SCREENING_STATE_MACHINE_ARN` | Yes | ARN of the screening-pipeline Express Step Function |
+| `SCREENING_STATE_MACHINE_ARN` | Yes | ARN of the esm-live-screen-skills Express Step Function |
 
 ## Pipeline Flow
 

@@ -1,8 +1,8 @@
 # esm-live-screen-classify
 
-Stage 1 of the skill safety screening pipeline (#40).
+Stage 1 of `esm-live-screen-skills` (#40, renamed #46).
 
-Classifies skill content into one of six safety buckets using Claude Haiku via Bedrock. Invoked by the `screening-pipeline` Step Function — accepts and returns native JSON (not HTTP-style responses).
+Classifies skill content into one of six safety buckets using Claude Haiku via Bedrock. Invoked by the `esm-live-screen-skills` Step Function — accepts and returns native JSON (not HTTP-style responses).
 
 ## Buckets
 

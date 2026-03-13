@@ -1,9 +1,10 @@
 #!/usr/bin/env python
-"""Stage 3 — Accept/review/reject decision and audit record.
+"""Stage 3 — Accept/review/reject decision, audit record, and screening gate.
 
 Takes the classification bucket, severity score, and skill metadata
 from Stages 1-2 and produces a final screening decision.  Writes an
-audit record to S3 for traceability.
+audit record to S3 for traceability, and a screening.json gate file
+to the skill's catalog prefix for visibility filtering.
 
 Designed for Step Function invocation — accepts and returns native JSON.
 
@@ -22,9 +23,10 @@ Input (from prior stages):
     author_id      (str, optional): submitter's Google OAuth subject ID.
 
 Output:
-    { "decision": "accept"|"review"|"reject", "audit_key": "<S3 key>" }
+    { "decision": "accept"|"review"|"reject", "audit_key": "<S3 key>", "screening_key": "<S3 key>" }
 
 Related: https://github.com/philkomarny/SkillStore/issues/40
+Screening gate: https://github.com/philkomarny/SkillStore/issues/48
 """
 
 from json import dumps
@@ -45,6 +47,9 @@ _REJECT_THRESHOLD = int(os.getenv("REJECT_THRESHOLD", "4"))
 # S3 layout for screening audit records
 # https://github.com/philkomarny/SkillStore/issues/40
 _SCREENING_PREFIX = "eduskillsmp/skills/screening"
+
+# S3 path for the per-skill screening gate file (#48)
+_CATALOG_PREFIX = "eduskillsmp/skills/catalog"
 
 _ALL_BUCKETS = frozenset([
     "helpful-skill",
@@ -68,7 +73,12 @@ def _audit_key(slug: str, ts: str) -> str:
     return f"{_SCREENING_PREFIX}/{slug}/{ts}.json"
 
 
-def _write_audit(key: str, record: dict) -> None:
+def _screening_key(slug: str) -> str:
+    """S3 key for the per-skill screening gate file (#48)."""
+    return f"{_CATALOG_PREFIX}/{slug}/screening.json"
+
+
+def _write_json(key: str, record: dict) -> None:
     s3_client.put_object(
         Bucket=BUCKET_NAME,
         Key=key,
@@ -142,8 +152,20 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
     }
 
     key = _audit_key(slug, ts)
-    _write_audit(key, audit_record)
+    _write_json(key, audit_record)
 
-    output = {"decision": decision, "audit_key": key}
+    # Write screening gate file to the skill's catalog prefix (#48)
+    sk = _screening_key(slug)
+    screening_record = {
+        "passed": decision == "accept",
+        "decision": decision,
+        "bucket": bucket,
+        "score": score,
+        "screened_at": now.isoformat(),
+        "audit_key": key,
+    }
+    _write_json(sk, screening_record)
+
+    output = {"decision": decision, "audit_key": key, "screening_key": sk}
     logger.info(f"Return Value: {dumps(output)}")
     return output

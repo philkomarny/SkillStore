@@ -13,7 +13,7 @@ make install
 
 ```bash
 make test                    # All tests
-make test-one FILE=skillstore_smoke_back/tests/test_screening_pipeline.py  # Single file
+make test-one FILE=skillstore_smoke_back/tests/test_screen_skills.py  # Single file
 poetry run pytest -k "safe"  # Pattern match
 ```
 
@@ -25,7 +25,7 @@ skillstore_smoke_back/
 ├── fixtures/
 │   └── skills.py        # Test skill markdown fixtures
 └── tests/
-    └── test_screening_pipeline.py   # Screening pipeline E2E tests
+    └── test_screen_skills.py        # esm-live-screen-skills E2E tests
 ```
 
 ## Adding Tests

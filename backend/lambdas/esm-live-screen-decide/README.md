@@ -1,8 +1,8 @@
 # esm-live-screen-decide
 
-Stage 3 of the skill safety screening pipeline (#40).
+Stage 3 of `esm-live-screen-skills` (#40, renamed #46).
 
-Makes the final accept/review/reject decision and writes an audit record to S3. Invoked by the `screening-pipeline` Step Function — accepts native JSON, returns the final result.
+Makes the final accept/review/reject decision, writes an audit record to S3, and writes a `screening.json` gate file to the skill's catalog prefix (#48). Invoked by the `esm-live-screen-skills` Step Function — accepts native JSON, returns the final result.
 
 ## Decision Matrix
 
@@ -13,9 +13,10 @@ Makes the final accept/review/reject decision and writes an audit record to S3. 
 | Score 3 | review (held for manual review) |
 | Score >= `REJECT_THRESHOLD` (default 4) | reject |
 
-## S3 Audit Records
+## S3 Outputs
 
-Written to `eduskillsmp/skills/screening/<slug>/<timestamp>.json`.
+- **Audit record**: `eduskillsmp/skills/screening/<slug>/<timestamp>.json` — full audit trail
+- **Screening gate**: `eduskillsmp/skills/catalog/<slug>/screening.json` — binary `passed` flag for catalog visibility (#48)
 
 ## Input (from Step Function — enriched by Stages 1-2)
 
@@ -26,7 +27,7 @@ Written to `eduskillsmp/skills/screening/<slug>/<timestamp>.json`.
 ## Output
 
 ```json
-{ "decision": "reject", "audit_key": "eduskillsmp/skills/screening/skill-name/20260312T143000Z.json" }
+{ "decision": "reject", "audit_key": "eduskillsmp/skills/screening/skill-name/20260312T143000Z.json", "screening_key": "eduskillsmp/skills/catalog/skill-name/screening.json" }
 ```
 
 ## Environment Variables
