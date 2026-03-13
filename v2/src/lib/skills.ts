@@ -97,7 +97,7 @@ export async function getSkillDetail(
   const [raw, contextContent, dbSkill] = await Promise.all([
     storeGetSkillContent(slug),
     userId ? getUserContext(userId, slug) : Promise.resolve(null),
-    Promise.resolve(supabase.from("skills").select("vouch_count, verification_level, submitted_by").eq("slug", slug).single()).then((r: any) => r.data).catch(() => null),
+    Promise.resolve(supabase.from("skills").select("verification_level, submitted_by").eq("slug", slug).single()).then((r: any) => r.data).catch(() => null),
   ]);
 
   const { data, content } = matter(raw);
@@ -105,7 +105,7 @@ export async function getSkillDetail(
   return {
     ...entry,
     downloadCount: 0,
-    vouchCount: dbSkill?.vouch_count ?? entry.vouchCount ?? 0,
+    clapCount: 0,
     verificationLevel: dbSkill?.verification_level ?? entry.verificationLevel ?? 0,
     submittedBy: dbSkill?.submitted_by ?? entry.submittedBy,
     content,

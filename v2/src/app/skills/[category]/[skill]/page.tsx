@@ -7,7 +7,7 @@ import { CATEGORIES } from "@/lib/types";
 import MarkdownRenderer from "@/components/MarkdownRenderer";
 import InstallPanel from "@/components/InstallPanel";
 import VerificationBadge from "@/components/VerificationBadge";
-import VouchButton from "@/components/VouchButton";
+import ClapButton from "@/components/ClapButton";
 import DownloadBadge from "@/components/DownloadBadge";
 import AddToRefinery from "@/components/AddToRefinery";
 
@@ -58,9 +58,9 @@ export default async function SkillDetailPage({
               <h1 className="text-2xl font-bold font-mono text-[#1a1a1a] mb-2">{skill.name}</h1>
               <p className="text-muted">{skill.description}</p>
             </div>
-            <VouchButton
+            <ClapButton
               skillSlug={skill.slug}
-              initialCount={skill.vouchCount || 0}
+              initialCount={skill.clapCount || 0}
             />
           </div>
 

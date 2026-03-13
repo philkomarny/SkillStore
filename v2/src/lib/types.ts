@@ -104,7 +104,7 @@ export interface SkillEntry {
   tags: string[];
   verificationLevel?: number;
   downloadCount?: number;
-  vouchCount?: number;
+  clapCount?: number;
   submittedBy?: string;
   isFeatured?: boolean;
 }
@@ -178,7 +178,7 @@ export interface UserSkill {
   storagePath?: string;
   contextSummary?: string;
   isShareable: boolean;
-  vouchCount: number;
+  clapCount: number;
   createdAt: string;
   updatedAt: string;
 }

@@ -3,12 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 
-interface VouchButtonProps {
+interface ClapButtonProps {
   skillSlug: string;
   initialCount: number;
 }
 
-export default function VouchButton({ skillSlug, initialCount }: VouchButtonProps) {
+export default function ClapButton({ skillSlug, initialCount }: ClapButtonProps) {
   const { data: session } = useSession();
   const [count, setCount] = useState(initialCount);
   const [animating, setAnimating] = useState(false);
