@@ -1,0 +1,41 @@
+{
+  "Comment": "Skill safety screening pipeline — classify → score (if needed) → decide. Express Step Function. Issue #40.",
+  "StartAt": "Classify",
+  "States": {
+    "Classify": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:${AWS_ACCOUNT_ID}:function:esm-live-screen-classify",
+      "ResultPath": "$",
+      "Next": "IsHelpful"
+    },
+    "IsHelpful": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.bucket",
+          "StringEquals": "helpful-skill",
+          "Next": "SkipScore"
+        }
+      ],
+      "Default": "Score"
+    },
+    "SkipScore": {
+      "Type": "Pass",
+      "Result": 0,
+      "ResultPath": "$.score",
+      "Next": "Decide"
+    },
+    "Score": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:${AWS_ACCOUNT_ID}:function:esm-live-screen-score",
+      "ResultPath": "$",
+      "Next": "Decide"
+    },
+    "Decide": {
+      "Type": "Task",
+      "Resource": "arn:aws:lambda:us-west-2:${AWS_ACCOUNT_ID}:function:esm-live-screen-decide",
+      "ResultPath": "$",
+      "End": true
+    }
+  }
+}

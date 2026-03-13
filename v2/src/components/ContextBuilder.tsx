@@ -17,6 +17,7 @@ export default function ContextBuilder({ onCreated, onCancel }: ContextBuilderPr
 
   const { files, uploadFiles, hasUploadedFiles, md5s } = useFileUpload();
 
+  // Name held in React state only — no Supabase staging record (#38)
   const handleConfirmName = () => {
     if (!name.trim()) return;
     console.log("[ContextBuilder] Name confirmed:", name.trim());
