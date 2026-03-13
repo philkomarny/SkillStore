@@ -49,7 +49,6 @@ export default function InstallPanel({
 
   const trackDownload = () => {
     window.dispatchEvent(new CustomEvent("skill-downloaded"));
-    fetch(`/api/skills/${skillSlug}/download`, { method: "POST" }).catch(() => {});
     fetch("https://sivvn9tsil.execute-api.us-west-2.amazonaws.com/prod/esm_live_add_item_count_post", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
