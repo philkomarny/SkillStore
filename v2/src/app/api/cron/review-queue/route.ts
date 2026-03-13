@@ -3,6 +3,9 @@ import Anthropic from "@anthropic-ai/sdk";
 import { getClient } from "@/lib/supabase";
 import { getSkillContent } from "@/lib/skill-store";
 
+const UPDATE_METADATA_ENDPOINT =
+  "https://kfg8xwezk5.execute-api.us-west-2.amazonaws.com/prod/esm_live_update_skill_metadata_post";
+
 let _anthropic: Anthropic | null = null;
 function getAnthropic(): Anthropic {
   if (!_anthropic) {
@@ -138,6 +141,22 @@ export async function POST(request: NextRequest) {
             updated_at: new Date().toISOString(),
           })
           .eq("id", item.skill_id);
+
+        // Dual-write: promote verification_level in S3 metadata + rebuild _index.json
+        try {
+          const metaRes = await fetch(UPDATE_METADATA_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ slug, by: "review-queue-cron", verification_level: 1, status: "approved" }),
+          });
+          if (!metaRes.ok) {
+            console.error(`[review] slug=${slug} S3 metadata update failed: ${metaRes.status}`);
+          } else {
+            console.log(`[review] slug=${slug} S3 metadata updated: verification_level=1`);
+          }
+        } catch (metaErr) {
+          console.error(`[review] slug=${slug} S3 metadata update error:`, metaErr);
+        }
 
         await supabase
           .from("verification_queue")

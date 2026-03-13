@@ -1,7 +1,6 @@
 import matter from "gray-matter";
 import { listSkills as storeListSkills, getSkillContent as storeGetSkillContent } from "./skill-store";
 import { getUserContext } from "./users";
-import { supabase } from "./supabase";
 import type { SkillEntry, SkillDetail } from "./types";
 
 // [SKILL-STORE] replaced — uncomment below to roll back
@@ -94,10 +93,9 @@ export async function getSkillDetail(
   const rawPromise = isCommunity ? getSkillContentFromStorage(entry.source) : getSkillContent(entry.source);
   */
   // [/SKILL-STORE]
-  const [raw, contextContent, dbSkill] = await Promise.all([
+  const [raw, contextContent] = await Promise.all([
     storeGetSkillContent(slug),
     userId ? getUserContext(userId, slug) : Promise.resolve(null),
-    Promise.resolve(supabase.from("skills").select("verification_level, submitted_by").eq("slug", slug).single()).then((r: any) => r.data).catch(() => null),
   ]);
 
   const { data, content } = matter(raw);
@@ -106,8 +104,8 @@ export async function getSkillDetail(
     ...entry,
     downloadCount: 0,
     clapCount: 0,
-    verificationLevel: dbSkill?.verification_level ?? entry.verificationLevel ?? 0,
-    submittedBy: dbSkill?.submitted_by ?? entry.submittedBy,
+    verificationLevel: entry.verificationLevel ?? 0,
+    submittedBy: entry.submittedBy,
     content,
     rawContent: raw,
     contextContent,

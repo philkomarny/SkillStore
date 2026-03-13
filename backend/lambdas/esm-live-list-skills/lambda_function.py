@@ -79,6 +79,10 @@ def handler(event: dict[str, Any], _) -> dict[str, Any]:
 
     if not include_all:
         entries = [e for e in entries if e.get("status") == "approved"]
+        # Exclude skills that failed screening (#48).
+        # screeningPassed=None means not yet screened (backward compat — visible).
+        # screeningPassed=False means failed — hidden from catalog.
+        entries = [e for e in entries if e.get("screeningPassed") is not False]
 
     result = {
         "statusCode": 200,
